@@ -1,0 +1,18 @@
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Index
+{% endblock %}
+
+{% block body_block %}
+    <h1>Football Fives Finder</h1>
+    <div>
+    {% if user.is_authenticated %}
+        Welcome {{ user.username }}!
+    {% else %}
+        Sign up to participate!
+    {% endif %}
+    <p>visits: {{ visits }}</p>
+    </div>
+{% endblock %}
