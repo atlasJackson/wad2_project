@@ -1,0 +1,7 @@
+# Ignore database and migrations
+db.sqlite3
+migrations
+
+# Ignore .pyc files
+*.pyc
+__ pycache __
