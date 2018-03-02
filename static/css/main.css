@@ -1,0 +1,126 @@
+
+* {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+body {
+    margin: 0px; /* Remove default value(8px). */
+    font-size: 14px;
+}
+
+#header-wrapper {
+    color: white;
+    background-color: #2874a6;
+    height: 40px;
+    line-height: 40px; /* Setting line-height equal to height will center the text vertically. */
+
+    /* Fix header always visible at top of site. */
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: auto;
+}
+
+#header-content {
+    padding-left: 100px;
+    padding-right: 115px; /* Add same amount of padding-left from main-menu list element.*/
+}
+
+#main-menu {
+    font-size: 15px;
+    float: left; /* Take away if make use of "main-menu-li-right". */
+    background-color: inherit;
+}
+
+#login-account {
+    font-size: 12px;
+    float: right;
+    background-color: inherit;
+}
+
+#body-wrapper {
+    background-color: #f2f2f2;
+    padding-right: 100px;
+    padding-left: 100px;
+}
+
+#body-content {
+    background-color: #f2f2f2;
+    padding: 70px 0px 70px 0px; /* padding-bottom: Add height of footer. */
+}
+
+#footer {
+    font-size: 10px;
+    text-align: center;
+    line-height: 50px;
+    color: grey;
+    background-color: #333;
+    clear: both;
+
+    /* Fix footer always visible at bottom of site. */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+}
+
+#footer-content { /* Needed to have two lines without line height of parent element. */
+    padding-top: 10px;
+    line-height: 15px;
+}
+
+ul.main-menu-ul {
+    list-style-type: none; /* Removes any bullets. */
+    margin: 0px;
+    padding: 0px;
+}
+
+li.main-menu-li {
+    float: left;
+}
+
+li.main-menu-li-right {
+    float: right;
+}
+
+a {
+    text-decoration: none;
+}
+
+a.main-menu-a {
+    display: block; /* background-color will apply to whole block. */
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+a.main-menu-a:hover {
+    background-color: #4CAF50; /*  Blue: #3498db, Green: #4CAF50 */
+}
+
+a.main-menu-a:hover:not(.active) {
+    background-color: #4CAF50;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+.account-a {
+    color: white;
+}
+
+.account-a:hover {
+    text-decoration: underline;
+}
+
+tr.tr-match-bottom-border {
+    border-bottom: 1px solid black
+}
+
+table.match-table-display {
+    width: 100%;
+    border-collapse: collapse;
+}

@@ -4,32 +4,52 @@
 <html>
     <head lang="en">
         <meta charset = "UTF-8" />
+        <!-- NOTE: Change hard coded url to css file. -->
+        <link rel="stylesheet" type="text/css" href="static/css/main.css">
+
         <title>
-            Football Fives Finder | 
+            Football Fives Finder |
             {% block title_block %}
                 Join or create five-a-side matches!
             {% endblock %}
         </title>
     </head>
     <body>
-        <div>
-            {% block sidebar_block %}
-            {% endblock %}
-        </div>
-        <div>
-            {% block body_block %}
-            {% endblock %}
-        </div>
-        <hr />
-        <div>
-            <ul>
-            {%if user.is_authenticated %}
-                
-            {% else %}
-                
-            {% endif %}
-                
-            </ul>
-        </div>
+        <div id="header-wrapper">
+			<div id="header-content">
+				<div id="main-menu">
+					<ul class="main-menu-ul">
+						<li class="main-menu-li"><a class="main-menu-a" href="">Home</a></li>
+						<li class="main-menu-li"><a class="main-menu-a" href="">Match List</a></li>
+						{% if user.is_authenticated %}
+							<li class="main-menu-li"><a class="main-menu-a" href="">Create Match</a></li>
+						{% endif %}
+						<li class="main-menu-li"><a class="main-menu-a" href="">About us</a></li>
+					</ul>
+				</div>
+				<div id="login-account">
+					{% if user.is_authenticated %}
+						<a class="account-a" href="">Login</a>&nbsp;|&nbsp;
+						<a class="account-a" href="">Sign up</a>
+					{% else %}
+						{{ user.firstname }}&nbsp;|&nbsp;
+						<a class="account-a" href="">My Account</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div id="body-wrapper">
+			<div id="body-content">
+				{% block body_block %}
+				{% endblock %}
+			</div>
+		</div>
+		<div id="footer">
+			<div id="footer-content">
+				Gordon Daffurn&nbsp;&nbsp;|&nbsp;&nbsp;Hangil Ko&nbsp;&nbsp;|&nbsp;&nbsp;Nicola Mössner
+				<br />
+				Football Fives Finder &copy; 2018
+			</div>
+		</div>
     </body>
 </html>
