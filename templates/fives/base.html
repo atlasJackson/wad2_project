@@ -28,9 +28,9 @@
 				</div>
 				<div id="login-account">
 					{% if user.is_authenticated %}
-                        {{ user.firstname }}&nbsp;|&nbsp;<a class="account-a" href="">My Account</a>
+                        {{ user.firstname }}&nbsp;|&nbsp;<a class="account-a" href="{% url 'my_account' %}">My Account</a>
 					{% else %}
-                        <a class="account-a" href="">Login</a>&nbsp;|&nbsp;<a class="account-a" href="">Sign up</a>
+                        <a class="account-a" href="{% url 'login' %}">Login</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'sign_up' %}">Sign up</a>
 					{% endif %}
 				</div>
 			</div>

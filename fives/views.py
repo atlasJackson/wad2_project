@@ -21,3 +21,13 @@ def create_match(request):
     context_dict = {}
     response = render(request, 'fives/create_match.html', context=context_dict)
     return response
+
+def login(request):
+    context_dict = {}
+    response = render(request, 'fives/login.html', context=context_dict)
+    return response
+
+def sign_up(request):
+    context_dict = {}
+    response = render(request, 'fives/sign_up.html', context=context_dict)
+    return response
