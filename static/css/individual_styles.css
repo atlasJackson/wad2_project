@@ -1,5 +1,4 @@
-/*          CHOSEN-MATCH.HTML           */
-
+/* chosen_match.html START */
 .match-head-wrapper {
     border-bottom: solid thin lightblue;
     clear: both;
@@ -47,5 +46,15 @@
     clear: both;
     border: solid thin lightblue;
 }
+/* chosen_match.html END */
 
-/*          CHOSEN-MATCH.HTML     END      */
+
+/* login.html START */
+#login_form label.error {
+    font-size: 11px;
+    font-style: normal;
+    color: red;
+    padding-left: 10px;
+}
+
+/* login.html END */

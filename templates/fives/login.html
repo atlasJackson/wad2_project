@@ -1,6 +1,28 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
- 
+
+{% block js_block %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#login_form").validate({
+                rules: {
+                    username: { // Must match the name attribute of the input field.
+                        required: true,
+                        minlength: 4
+                    },
+                    password: "required"
+                },
+                messages: {
+                    username: {
+                        required: "Please enter your username",
+                        minlength: "Must be at least 4 characters long"
+                    },
+                    password: "Please enter your password"
+                }
+            });
+        });
+    </script>
+{% endblock %}
 
 {% block title_block %}
     Login
@@ -10,10 +32,18 @@
 <h1>Login to Football Fives Finder</h1>
 <form id="login_form" method="post" action="{% url 'login' %}">
     {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
-    <br />
-    Password: <input type="password" name="password" value="" size="50" />
-    <br />
+
+    <p>
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" value=""/>
+    </p>
+    <p>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" value=""/>
+    </p>
+
     <input type="submit" value="submit" />
+
 </form>
+
 {% endblock %}
