@@ -1,16 +1,46 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 
+{% block js_block %}
+    <script>
+        $(document).ready(function() {
+            $( ".datepicker" ).datepicker();
+        });
+    </script>
+{% endblock %}
+
 {% block title_block %}
     Create Match
 {% endblock %}
 
 {% block body_block %}
-    TODO: Edit template: create_match.html
-
     {% if user.is_authenticated %}
 
     {% else %}
+        <form id="create_match_form" method="post" action="{% url 'create_match' %}">
+            {% csrf_token %}
+			{% for hidden in form.hidden_fields %}
+				{{ hidden }}
+           	{% endfor %}
+            {% for field in form.visible_fields %}
+                <p>
+                    {{ field.label }}
+                    {{ field }}&nbsp;{{ field.errors }}
+                </p>
+			{% endfor %}
+
+            <hr />
+            <!-- NOTE: I might implement this by listing each field separate, to use client side validation. -->
+            <p>
+                <label for="{{ form.game_type.label }}">{{ form.game_type.label }}</label>
+                <input id="form.game_type.label" type="text" name="form.game_type.label" value=""/>
+            </p>
+
+
+            <input type="submit" name="submit" value="Create Match" />
+        </form>
+
+
         Sign up or Login to create your own match!
     {% endif %}
 
