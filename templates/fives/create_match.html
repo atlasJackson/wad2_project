@@ -1,0 +1,17 @@
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Create Match
+{% endblock %}
+
+{% block body_block %}
+    TODO: Edit template: create_match.html
+
+    {% if user.is_authenticated %}
+
+    {% else %}
+        Sign up or Login to create your own match!
+    {% endif %}
+
+{% endblock %}

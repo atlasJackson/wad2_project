@@ -1,0 +1,40 @@
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Chosen Match
+{% endblock %}
+
+{% block body_block %}
+<div class="match-head-wrapper">
+    <div class="match-head-title">
+        {{ match.host.name }}, {{ match.date }}, {{ match.time }}
+    </div>
+    <div class="match-head-host">
+        Host {{ match.host.name }}
+    </div>
+</div>
+<div class="match-info">
+    Date: {{ match.date }}<br />
+    Time: {{ match.time }}<br />
+    Pitch:
+    {% if match.pitchBooked %}
+        <span style="color:Green">Booked</span><br />
+    {% else %}
+        <span style="color:Red">Not Booked</span><br />
+    {% endif %}
+    Price/person: {{ match.price }}
+</div>
+<div class="match-address">
+    Address:<br />
+    {{ match.street }}<br />
+    {{ match.place }}<br />
+    {{ match.postcode }}
+</div>
+<div class="match-map">
+    Google Maps
+</div>
+<div class="match-player-list">
+    My Player 1 <br />My Player 2 <br />My Player 3 <br />My Player 4 <br />
+</div>
+{% endblock %}

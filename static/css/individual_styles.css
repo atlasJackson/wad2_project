@@ -1,0 +1,51 @@
+/*          CHOSEN-MATCH.HTML           */
+
+.match-head-wrapper {
+    border-bottom: solid thin lightblue;
+    clear: both;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    overflow: auto; /* Keeps floating children divs inside this container. Otherwise they float beneath it. */
+    height: 100%; /* Needed for IE, so children divs stay inside container. */
+}
+
+.match-head-title {
+    float: left;
+}
+
+.match-head-host {
+    float: right;
+}
+
+.match-info {
+    float: left;
+    width: 33%;
+    line-height: 25px;
+    margin-bottom: 10px;
+    padding-right: 10px;
+    border-right: solid thin lightblue;
+}
+
+.match-address {
+    float: left;
+    width: 33%;
+    line-height: 25px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px
+    border-right: solid thin lightblue;
+}
+
+.match-map {
+    float: left;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-left: solid thin lightblue;
+}
+
+.match-player-list {
+    clear: both;
+    border: solid thin lightblue;
+}
+
+/*          CHOSEN-MATCH.HTML     END      */
