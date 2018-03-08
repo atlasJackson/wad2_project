@@ -64,15 +64,16 @@ class Game(models.Model):
     end_time = models.TimeField(default=datetime.time.max)
     
     # Duration of 1 hour is false, 2 hours is true. Used to calculate endtime in form.
-    ONEHOUR = False
-    TWOHOURS = True
+    ONE_HOUR = 0
+    TWO_HOURS = 1
 
     DURATION_CHOICES = (
-        (ONEHOUR, "1 hour"),
-        (TWOHOURS, "2 hours"),
+        (ONE_HOUR, "1 hour"),
+        (TWO_HOURS, "2 hours"),
     )
 
-    duration = models.BooleanField(choices=DURATION_CHOICES, default=True)
+    # Changed from boolean to integer to allow future expansion.
+    duration = models.IntegerField(choices=DURATION_CHOICES, default=ONE_HOUR)
 
     # Address entries
     street = models.CharField(max_length=128)

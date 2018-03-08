@@ -13,7 +13,7 @@ class UserForm(forms.ModelForm):
 
 class PlayerForm(forms.ModelForm):
 
-    gender = forms.ChoiceField(choices=Player.GENDER_CHOICES, label="Gender")
+    gender = forms.ChoiceField(choices=Player.GENDER_CHOICES, label="Gender: ")
 
     class Meta:
         model=Player
@@ -22,20 +22,20 @@ class PlayerForm(forms.ModelForm):
 
 class GameForm(forms.ModelForm):
    
-    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, label="Match type:");
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, label="Match type: ");
 
-    date = forms.DateField(widget=forms.SelectDateWidget(), label="Date:")
+    date = forms.DateField(widget=forms.SelectDateWidget(), label="Date: ")
 
-    start_time = forms.TimeField(widget=forms.TimeInput(), label="Start time:")
-    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, label="Duration")
-    #end_time = Calculate
+    # Calculate end_time from start_time and duration
+    start_time = forms.TimeField(widget=forms.TimeInput(), label="Start time: ")
+    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, label="Duration: ")
 
     street = forms.CharField(max_length=128, label="Street & number: ")
     place = forms.CharField(max_length=128, label="City/Town: ")
     postcode = forms.CharField(max_length=128, label="Postocde: ")
 
-    price = forms.DecimalField(widget=forms.TextInput(), label="Price/person")
-    booked = forms.BooleanField(widget=forms.CheckboxInput(), label="Pitch booked?")
+    price = forms.DecimalField(widget=forms.TextInput(), label="Price/person: ")
+    booked = forms.BooleanField(widget=forms.CheckboxInput(), label="Pitch booked? ")
 
     class Meta:
         model = Game

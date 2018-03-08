@@ -14,8 +14,25 @@
 {% endblock %}
 
 {% block body_block %}
-    {% if user.is_authenticated %}
 
+    <h1>Create a New Match</h1>
+     <!-- {% if user.is_authenticated %} -->
+    <form id="game_form" method="post" action="{% url 'create_match' %}"
+          enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <!-- Display each form -->
+    {{ game_form.as_p }}
+
+    <!-- Provide a button to click to submit form -->
+    <input type="submit" name="submit" value="Create Match" />
+    </form>
+
+
+
+
+    <!-- Else should be unnecessary since authentication is required in views.py 
     {% else %}
         <form id="create_match_form" method="post" action="{% url 'create_match' %}">
             {% csrf_token %}
@@ -30,7 +47,7 @@
 			{% endfor %}
 
             <hr />
-            <!-- NOTE: I might implement this by listing each field separate, to use client side validation. -->
+            <!-- NOTE: I might implement this by listing each field separate, to use client side validation. 
             <p>
                 <label for="{{ form.game_type.label }}">{{ form.game_type.label }}</label>
                 <input id="form.game_type.label" type="text" name="form.game_type.label" value=""/>
@@ -42,6 +59,6 @@
 
 
         Sign up or Login to create your own match!
-    {% endif %}
+    {% endif %} -->
 
 {% endblock %}

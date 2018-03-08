@@ -23,17 +23,18 @@ def match_list(request):
     response = render(request, 'fives/match_list.html', context=context_dict)
     return response
 
+@login_required 
 def create_match(request):
-    form = GameForm()
+    game_form = GameForm()
 
     # An HTTP POST?
     if request.method == 'POST':
-        form = GameForm(request.POST)
+        game_form = GameForm(request.POST)
 
         # Have we been provided with a valid form?
-        if form.is_valid():
+        if game_form.is_valid():
             # Save the new Match to the database
-            match = form.save(commit=True)
+            match = game_form.save(commit=True)
             print(match)
             # Now that the Match is saved
             # We could give a confirmation message
@@ -43,10 +44,9 @@ def create_match(request):
         else:
             # The supplied form contained errors -
             # just print them to the terminal.
-            print(form.errors)
+            print(game_form.errors)
 
-    response = render(request, 'fives/create_match.html', {'form': form})
-    return response
+    return render(request, 'fives/create_match.html', {'game_form': game_form})
 
 def user_login(request):
     # If the request is a HTTP POST, try to pull out the relevant information.
