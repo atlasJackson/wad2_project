@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from fives.models import Player, Game
+import datetime
 
 
 class UserForm(forms.ModelForm):
@@ -13,7 +14,7 @@ class UserForm(forms.ModelForm):
 
 class PlayerForm(forms.ModelForm):
 
-    gender = forms.ChoiceField(choices=Player.GENDER_CHOICES, label="Gender: ")
+    gender = forms.ChoiceField(choices=Player.GENDER_CHOICES, label="Gender")
 
     class Meta:
         model=Player
@@ -21,21 +22,21 @@ class PlayerForm(forms.ModelForm):
 
 
 class GameForm(forms.ModelForm):
-   
-    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, label="Match type: ");
 
-    date = forms.DateField(widget=forms.SelectDateWidget(), label="Date: ")
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Match type");
+
+    date = forms.DateField(label="Date")
 
     # Calculate end_time from start_time and duration
-    start_time = forms.TimeField(widget=forms.TimeInput(), label="Start time: ")
-    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, label="Duration: ")
+    start_time = forms.TimeField(label="Start time")
+    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration")
 
-    street = forms.CharField(max_length=128, label="Street & number: ")
-    place = forms.CharField(max_length=128, label="City/Town: ")
-    postcode = forms.CharField(max_length=128, label="Postocde: ")
+    street = forms.CharField(max_length=128, label="Street & number")
+    place = forms.CharField(max_length=128, label="City/Town")
+    postcode = forms.CharField(max_length=128, label="Postocde")
 
-    price = forms.DecimalField(widget=forms.TextInput(), label="Price/person: ")
-    booked = forms.BooleanField(widget=forms.CheckboxInput(), label="Pitch booked? ")
+    price = forms.DecimalField(widget=forms.TextInput(), label="Price/person")
+    booked = forms.BooleanField(widget=forms.CheckboxInput(), initial=False, label="Pitch booked?")
 
     class Meta:
         model = Game

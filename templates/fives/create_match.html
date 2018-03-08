@@ -2,9 +2,30 @@
 {% load staticfiles %}
 
 {% block js_block %}
-    <script>
+
+    <script type="text/javascript">
         $(document).ready(function() {
-            $( ".datepicker" ).datepicker();
+            $("#match_form").validate({
+                rules: {
+                    date: {date: true},
+                    start_time: {required: true},
+                    street: {required: true, maxlength: 128},
+                    place: {required: true, maxlength: 128},
+                    postcode: {required: true, minlength: 5, maxlength: 8},
+                    price: {required: true, range: [0, 20]},
+                    booked: {required: false},
+                }
+            });
+
+            $("#id_date").datepicker({
+                showButtonPanel: true, // Display button "Today" and "Done".
+                minDate: 0, // Can't select dates in the past.
+                maxDate: 60, // Can only select dates within 60 days from today.
+                dateFormat: "dd/mm/yy",
+            });
+            $('#id_date').datepicker('setDate', new Date()); // .datepicker('setDate', date) sets the current date for the datepicker.
+
+            // $("#id_street").timepicker({});
         });
     </script>
 {% endblock %}
@@ -16,9 +37,7 @@
 {% block body_block %}
 
     <h1>Create a New Match</h1>
-     <!-- {% if user.is_authenticated %} -->
-    <form id="game_form" method="post" action="{% url 'create_match' %}"
-          enctype="multipart/form-data">
+    <form id="match_form" class="jquery_validation_form" method="post" action="{% url 'create_match' %}">
 
     {% csrf_token %}
 
@@ -28,37 +47,5 @@
     <!-- Provide a button to click to submit form -->
     <input type="submit" name="submit" value="Create Match" />
     </form>
-
-
-
-
-    <!-- Else should be unnecessary since authentication is required in views.py 
-    {% else %}
-        <form id="create_match_form" method="post" action="{% url 'create_match' %}">
-            {% csrf_token %}
-			{% for hidden in form.hidden_fields %}
-				{{ hidden }}
-           	{% endfor %}
-            {% for field in form.visible_fields %}
-                <p>
-                    {{ field.label }}
-                    {{ field }}&nbsp;{{ field.errors }}
-                </p>
-			{% endfor %}
-
-            <hr />
-            <!-- NOTE: I might implement this by listing each field separate, to use client side validation. 
-            <p>
-                <label for="{{ form.game_type.label }}">{{ form.game_type.label }}</label>
-                <input id="form.game_type.label" type="text" name="form.game_type.label" value=""/>
-            </p>
-
-
-            <input type="submit" name="submit" value="Create Match" />
-        </form>
-
-
-        Sign up or Login to create your own match!
-    {% endif %} -->
 
 {% endblock %}

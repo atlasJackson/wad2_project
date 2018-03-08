@@ -23,7 +23,7 @@ def match_list(request):
     response = render(request, 'fives/match_list.html', context=context_dict)
     return response
 
-@login_required 
+@login_required
 def create_match(request):
     game_form = GameForm()
 
@@ -54,9 +54,9 @@ def user_login(request):
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
         # We use request.POST.get('<variable>') as opposed
-        # to request.POST['<variable>'] because the 
+        # to request.POST['<variable>'] because the
         # request.POST.get('<variable>') returns None if the
-        # value does not exist, while request.POST['<variable>'] 
+        # value does not exist, while request.POST['<variable>']
         # will raise a KeyError exception.
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -92,7 +92,7 @@ def user_login(request):
 
 # Use the login_required() decorator to ensure only those logged in can
 # access the view.
-@login_required 
+@login_required
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)
@@ -145,7 +145,7 @@ def sign_up(request):
         player_form = PlayerForm()
 
     # Render the template depending on the context.
-    return render(request, 
+    return render(request,
                   'fives/sign_up.html',
                   {'user_form': user_form,
                   'player_form': player_form,

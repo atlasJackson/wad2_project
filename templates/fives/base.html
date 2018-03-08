@@ -6,8 +6,13 @@
         <meta charset = "UTF-8" />
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/individual_styles.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.theme.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.structure.min.css' %}">
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery.validate.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
         {% block js_block %}
         {% endblock %}
         <title>
@@ -32,7 +37,7 @@
 				</div>
 				<div id="login-account">
 					{% if user.is_authenticated %}
-                        {{ user.username }}:&nbsp;&nbsp;<a class="account-a" href="{% url 'my_account' %}">My Account</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'logout' %}?next=/fives/">Logout</a>
+                        <a class="account-a" href="{% url 'my_account' %}">{{ user.username }}</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'logout' %}?next=/fives/">Logout</a>
 					{% else %}
                         <a class="account-a" href="{% url 'login' %}">Login</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'sign_up' %}">Sign up</a>
 					{% endif %}

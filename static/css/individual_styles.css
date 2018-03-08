@@ -58,3 +58,13 @@
 }
 
 /* login.html END */
+
+/* create_match.html START */
+.jquery_validation_form label.error {
+    font-size: 11px;
+    font-style: normal;
+    color: red;
+    padding-left: 10px;
+}
+
+/* create_match.html END */
