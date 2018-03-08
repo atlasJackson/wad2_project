@@ -32,7 +32,7 @@
 				</div>
 				<div id="login-account">
 					{% if user.is_authenticated %}
-                        {{ user.firstname }}&nbsp;|&nbsp;<a class="account-a" href="{% url 'my_account' %}">My Account</a>
+                        {{ user.username }}:&nbsp;&nbsp;<a class="account-a" href="{% url 'my_account' %}">My Account</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'logout' %}">Logout</a>
 					{% else %}
                         <a class="account-a" href="{% url 'login' %}">Login</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'sign_up' %}">Sign up</a>
 					{% endif %}

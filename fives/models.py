@@ -5,28 +5,21 @@ from decimal import *
 import datetime
 import uuid
 
-class UserProfile(models.Model):
-    # This line is required. Link UserProfile to a User model instance.
+# One-to-one relationship with user model
+class Player(models.Model):
+    # Username, firstname, surname, email, password acquired from user model
     user = models.OneToOneField(User)
 
-    #The additional attributes we wish to include.
-    #picture = models.ImageField(upload_to='profile_images', blank=True)
+    # Gender uses boolean values for male/female
+    MALE = True
+    FEMALE = False
 
-    #Override the __str__() method.
-    def __str__(self):
-        return self.user.username
-
-class Player(models.Model):
-    # Firstname, surname, email, password acquired from user model?
-    #firstname =
-    #surname =
-    #email =
-    #password =
-    user = models.OneToOneField(UserProfile)
-    #user_id = models.IntegerField(default=0, unique=True)
-
-    # gender - T/F: M/F
-    gender = models.BooleanField(default=True)
+    GENDER_CHOICES = (
+        (MALE, "Male"),
+        (FEMALE, "Female"),
+    )
+    
+    gender = models.BooleanField(choices=GENDER_CHOICES, default=True)
 
     host_rating = models.IntegerField(default=0)
     num_host_ratings = models.IntegerField(default=0)
@@ -36,9 +29,9 @@ class Player(models.Model):
     skill = models.IntegerField(default=0)
     num_player_ratings = models.IntegerField(default=0)
 
-#FIX - Override the __str__() method.
+    # Override the __str__() method.
     def __str__(self):
-        return self.user_id
+        return self.user.username
 
 
 class Game(models.Model):
@@ -67,14 +60,25 @@ class Game(models.Model):
 
     # Date and time entries
     date = models.DateField(default=datetime.date.today)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    duration = models.BooleanField(default=True)
+    start_time = models.TimeField(default=datetime.time.min)
+    end_time = models.TimeField(default=datetime.time.max)
+    
+    # Duration of 1 hour is false, 2 hours is true. Used to calculate endtime in form.
+    ONEHOUR = False
+    TWOHOURS = True
+
+    DURATION_CHOICES = (
+        (ONEHOUR, "1 hour"),
+        (TWOHOURS, "2 hours"),
+    )
+
+    duration = models.BooleanField(choices=DURATION_CHOICES, default=True)
 
     # Address entries
     street = models.CharField(max_length=128)
     place = models.CharField(max_length=128)
     postcode = models.CharField(max_length=128)
+    # Longitude/latitude???
 
     price = models.DecimalField(max_digits=8, decimal_places=2)
     # Booked is true if the pitch has been booked and false if it has not.

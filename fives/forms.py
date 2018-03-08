@@ -2,26 +2,33 @@ from django import forms
 from django.contrib.auth.models import User
 from fives.models import Player, Game
 
-GAME_CHOICES = (
-    ('MENS_CP', "Men's Competitive"),
-    ('MENS_FR', "Men's Friendly"),
-    ('WOMENS_CP', "Women's Competitive"),
-    ('WOMENS_FR', "Women's Friendly"),
-    ('MIXED_CP', "Mixed Competitive"),
-    ('MIXED_FR', "Mixed Friendly"),
-)
 
-#class PlayerForm(forms.Modelform):
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'email', 'first_name', 'last_name')
+
+
+class PlayerForm(forms.ModelForm):
+
+    gender = forms.ChoiceField(choices=Player.GENDER_CHOICES, label="Gender")
+
+    class Meta:
+        model=Player
+        fields = ('gender',)
+
 
 class GameForm(forms.ModelForm):
-
-    game_type = forms.ChoiceField(choices=GAME_CHOICES, label="Match type:");
+   
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, label="Match type:");
 
     date = forms.DateField(widget=forms.SelectDateWidget(), label="Date:")
 
     start_time = forms.TimeField(widget=forms.TimeInput(), label="Start time:")
-    end_time = forms.TimeField(widget=forms.HiddenInput(), )
-    duration = forms.BooleanField(widget=forms.CheckboxInput(), label="Duration")
+    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, label="Duration")
+    #end_time = Calculate
 
     street = forms.CharField(max_length=128, label="Street & number: ")
     place = forms.CharField(max_length=128, label="City/Town: ")

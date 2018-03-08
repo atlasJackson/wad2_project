@@ -1,0 +1,12 @@
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ user.first_name }} ({{ user.username }})
+{% endblock %}
+
+{% block body_block %}
+    <h1>Welcome {{ user.username }}</h1>
+    
+
+{% endblock %}
