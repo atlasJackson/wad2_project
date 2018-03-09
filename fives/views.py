@@ -25,13 +25,13 @@ def game_list(request):
     response = render(request, 'fives/game_list.html', context=context_dict)
     return response
 
-def show_game(request, game_customSlug):
+def show_game(request, game_custom_slug):
     context_dict = {}
-    print game_customSlug
+    print game_custom_slug
 
     try:
         # Try to find a game with the given slug.
-        game = Game.objects.get(customSlug=game_customSlug)
+        game = Game.objects.get(custom_slug=game_custom_slug)
         # Retreive a list of all players participating in the game
         participants = Participation.objects.filter(game=game)
 
@@ -66,10 +66,6 @@ def create_game(request):
 
             # Get host entry from current user
             game.host = request.user
-
-            # Populate slug field
-            customSlug = str(game.host.username) + "-" + game.date.strftime("%Y") + game.date.strftime("%m") + game.date.strftime("%d") + "-" + game.start_time.strftime("%H") + game.start_time.strftime("%M")
-            game.customSlug = customSlug
 
             # Save the new Game to the database
             game.save()

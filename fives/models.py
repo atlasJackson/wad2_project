@@ -92,7 +92,7 @@ class Game(models.Model):
     # Host uses foreign key from Player class
     host = models.ForeignKey(User)
     # A customized slug field: username-date-time
-    customSlug = models.CharField(max_length=128, unique=True)
+    custom_slug = models.CharField(max_length=128, unique=True)
 
     #Override the __str__() method.
     def __str__(self):
@@ -103,6 +103,12 @@ class Game(models.Model):
         if self.free_slots == 0:
             # Prevent player adding themselves to the game.
             print("")
+
+    # This method is called each time a game is saved/created, and the custom_slug is automatically generated.
+    def save(self, *args, **kwargs):
+        self.custom_lug = str(self.host.username) + "-" + self.date.strftime("%Y") + self.date.strftime("%m") + self.date.strftime("%d") + "-" + self.start_time.strftime("%H") + self.start_time.strftime("%M")
+        super(Game, self).save(*args, **kwargs)
+
 
 class Participation(models.Model):
     player = models.ForeignKey(Player)
