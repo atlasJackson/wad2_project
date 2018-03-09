@@ -23,7 +23,7 @@ class PlayerForm(forms.ModelForm):
 
 class GameForm(forms.ModelForm):
 
-    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Match type");
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type");
 
     date = forms.DateField(label="Date")
 
@@ -40,4 +40,4 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        exclude = ('game_id', 'free_slots', 'host', 'end_time')
+        exclude = ('game_id', 'free_slots', 'host', 'end_time', 'slug')

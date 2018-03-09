@@ -115,11 +115,11 @@ a.main-menu-a:hover:not(.active) {
     text-decoration: underline;
 }
 
-tr.tr-match-bottom-border {
+tr.tr-game-bottom-border {
     border-bottom: 1px solid black
 }
 
-table.match-table-display {
+table.game-table-display {
     width: 100%;
     border-collapse: collapse;
 }

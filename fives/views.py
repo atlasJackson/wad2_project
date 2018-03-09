@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect,HttpResponse
 from django.core.urlresolvers import reverse
 import datetime
+import sys
 
 from fives.models import Player, Game
 from fives.forms import UserForm, PlayerForm, GameForm
@@ -19,13 +20,18 @@ def about_us(request):
     response = render(request, 'fives/about_us.html', context=context_dict)
     return response
 
-def match_list(request):
+def game_list(request):
     context_dict = {}
-    response = render(request, 'fives/match_list.html', context=context_dict)
+    response = render(request, 'fives/game_list.html', context=context_dict)
+    return response
+
+def show_game(request, game_customSlug):
+    context_dict = {}
+    response = render(request, 'fives/show_game.html', context=context_dict)
     return response
 
 @login_required
-def create_match(request):
+def create_game(request):
     game_form = GameForm()
 
     # An HTTP POST?
@@ -40,11 +46,15 @@ def create_match(request):
             # Calculate end time from start time and duration
             end_time_hour = (game.start_time.hour + game.duration) % 24
             game.end_time = datetime.time(end_time_hour, game.start_time.minute)
-            
+
             # Get host entry from current user
             game.host = request.user
-            # Save the new Match to the database
+            # Save the new Game to the database
             game.save()
+
+            # Populate slug field
+            # game.slug = game.host.username + "-" + game.date + "-" + game.start_time
+            # sys.stdout.write(game.host.username + "-" + game.date + "-" + game.start_time)
 
             # Direct the user back to the index page.
             return index(request)
@@ -52,7 +62,7 @@ def create_match(request):
             # The supplied form contained errors - print them to the terminal.
             print(game_form.errors)
 
-    return render(request, 'fives/create_match.html', {'game_form': game_form})
+    return render(request, 'fives/create_game.html', {'game_form': game_form})
 
 def sign_up(request):
     # A boolean value for telling the template

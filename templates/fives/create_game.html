@@ -4,7 +4,7 @@
 {% block js_block %}
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#match_form").validate({
+            $("#game_form").validate({
                 rules: {
                     date: {},
                     start_time: {required: true},
@@ -34,13 +34,13 @@
 {% endblock %}
 
 {% block title_block %}
-    Create Match
+    Create Game
 {% endblock %}
 
 {% block body_block %}
 
-    <h1>Create a New Match</h1>
-    <form id="match_form" class="jquery_validation_form" method="post" action="{% url 'create_match' %}">
+    <h1>Create a New Game</h1>
+    <form id="game_form" class="jquery_validation_form" method="post" action="{% url 'create_game' %}">
 
     {% csrf_token %}
 
@@ -48,7 +48,7 @@
     {{ game_form.as_p }}
 
     <!-- Provide a button to click to submit form -->
-    <input type="submit" name="submit" value="Create Match" />
+    <input type="submit" name="submit" value="Create Game" />
     </form>
 
 {% endblock %}

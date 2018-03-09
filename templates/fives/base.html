@@ -18,7 +18,7 @@
         <title>
             Football Fives Finder |
             {% block title_block %}
-                Join or create five-a-side matches!
+                Join or create five-a-side Games!
             {% endblock %}
         </title>
     </head>
@@ -28,9 +28,9 @@
 				<div id="main-menu">
 					<ul class="main-menu-ul">
 						<li class="main-menu-li"><a class="main-menu-a" href="{% url 'index' %}">Home</a></li>
-						<li class="main-menu-li"><a class="main-menu-a" href="{% url 'match_list' %}">Match List</a></li>
+						<li class="main-menu-li"><a class="main-menu-a" href="{% url 'game_list' %}">Game List</a></li>
 						{% if user.is_authenticated %}
-							<li class="main-menu-li"><a class="main-menu-a" href="{% url 'create_match' %}">Create Match</a></li>
+							<li class="main-menu-li"><a class="main-menu-a" href="{% url 'create_game' %}">Create Game</a></li>
 						{% endif %}
 						<li class="main-menu-li"><a class="main-menu-a" href="{% url 'about_us' %}">About us</a></li>
 					</ul>

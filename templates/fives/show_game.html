@@ -1,0 +1,40 @@
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Show Game
+{% endblock %}
+
+{% block body_block %}
+<div class="game-head-wrapper">
+    <div class="game-head-title">
+        {{ game.host.username }}, {{ game.date }}, {{ game.time }}
+    </div>
+    <div class="game-head-host">
+        Host {{ game.host.name }}
+    </div>
+</div>
+<div class="game-info">
+    Date: {{ game.date }}<br />
+    Time: {{ game.time }}<br />
+    Pitch:
+    {% if game.pitchBooked %}
+        <span style="color:Green">Booked</span><br />
+    {% else %}
+        <span style="color:Red">Not Booked</span><br />
+    {% endif %}
+    Price/person: {{ game.price }}
+</div>
+<div class="game-address">
+    Address:<br />
+    {{ game.street }}<br />
+    {{ game.city }}<br />
+    {{ game.postcode }}
+</div>
+<div class="game-map">
+    Google Maps
+</div>
+<div class="game-player-list">
+    My Player 1 <br />My Player 2 <br />My Player 3 <br />My Player 4 <br />
+</div>
+{% endblock %}

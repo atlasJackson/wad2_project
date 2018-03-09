@@ -57,7 +57,7 @@ class Game(models.Model):
     )
 
     game_type = models.IntegerField(choices=GAME_CHOICES, default=MENS_CP)
-    # Number of available slots in match - default is 9 since host is automatically added.
+    # Number of available slots in Game - default is 9 since host is automatically added.
     free_slots = models.IntegerField(default=9)
 
     # Date and time entries
@@ -88,6 +88,8 @@ class Game(models.Model):
     booked = models.BooleanField(default=False)
     # Host uses foreign key from Player class
     host = models.ForeignKey(User)
+    # A customized slug field: username-date-time or username-game_id
+    # customSlug = models.CharField(max_length=128, unique=True)
 
     #Override the __str__() method.
     def __str__(self):

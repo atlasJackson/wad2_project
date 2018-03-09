@@ -1,5 +1,5 @@
-/* chosen_match.html START */
-.match-head-wrapper {
+/* show_game.html START */
+.game-head-wrapper {
     border-bottom: solid thin lightblue;
     clear: both;
     padding-bottom: 10px;
@@ -8,15 +8,15 @@
     height: 100%; /* Needed for IE, so children divs stay inside container. */
 }
 
-.match-head-title {
+.game-head-title {
     float: left;
 }
 
-.match-head-host {
+.game-head-host {
     float: right;
 }
 
-.match-info {
+.game-info {
     float: left;
     width: 33%;
     line-height: 25px;
@@ -25,7 +25,7 @@
     border-right: solid thin lightblue;
 }
 
-.match-address {
+.game-address {
     float: left;
     width: 33%;
     line-height: 25px;
@@ -35,18 +35,18 @@
     border-right: solid thin lightblue;
 }
 
-.match-map {
+.game-map {
     float: left;
     margin-bottom: 10px;
     padding-left: 10px;
     border-left: solid thin lightblue;
 }
 
-.match-player-list {
+.game-player-list {
     clear: both;
     border: solid thin lightblue;
 }
-/* chosen_match.html END */
+/* show_game.html END */
 
 
 /* login.html START */
@@ -59,7 +59,7 @@
 
 /* login.html END */
 
-/* create_match.html START */
+/* create_game.html START */
 .jquery_validation_form label.error {
     font-size: 11px;
     font-style: normal;
@@ -67,4 +67,4 @@
     padding-left: 10px;
 }
 
-/* create_match.html END */
+/* create_game.html END */
