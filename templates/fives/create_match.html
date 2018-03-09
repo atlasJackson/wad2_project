@@ -17,14 +17,18 @@
             });
 
             $("#id_date").datepicker({
-                showButtonPanel: true, // Display button "Today" and "Done".
                 minDate: 0, // Can't select dates in the past.
-                maxDate: 30, // Can only select dates within 60 days from today.
-                dateFormat: "D dd/mm/yy",
+                maxDate: 30, // Can only select dates within 30 days from today.
+                dateFormat: "mm/dd/yy",
             });
             $('#id_date').datepicker('setDate', new Date()); // .datepicker('setDate', date) sets the current date for the datepicker.
 
-            // $("#id_street").timepicker({});
+            time_choices: ["8:30", "9:30", "10:30", "11:30", "12:30"]
+
+            $("#id_start_time").time_picker({});
+
+            $("#id_start_time").innerhtml(time_choices);
+
         });
     </script>
 {% endblock %}

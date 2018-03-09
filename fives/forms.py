@@ -32,7 +32,7 @@ class GameForm(forms.ModelForm):
     duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration")
 
     street = forms.CharField(max_length=128, label="Street & number")
-    place = forms.CharField(max_length=128, label="City/Town")
+    city = forms.CharField(max_length=128, label="City/Town")
     postcode = forms.CharField(max_length=128, label="Postocde")
 
     price = forms.DecimalField(widget=forms.TextInput(), label="Price/person")

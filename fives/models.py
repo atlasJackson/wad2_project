@@ -18,7 +18,7 @@ class Player(models.Model):
         (MALE, "Male"),
         (FEMALE, "Female"),
     )
-    
+
     gender = models.BooleanField(choices=GENDER_CHOICES, default=MALE)
 
     host_rating = models.IntegerField(default=0)
@@ -64,7 +64,7 @@ class Game(models.Model):
     date = models.DateField(default=datetime.date.today())
     start_time = models.TimeField(default=datetime.time.min)
     end_time = models.TimeField(default=datetime.time.max)
-    
+
     # Duration of 1 hour is false, 2 hours is true. Used to calculate endtime in form.
     ONE_HOUR = 1
     TWO_HOURS = 2
@@ -98,3 +98,11 @@ class Game(models.Model):
         if self.free_slots == 0:
             # Prevent player adding themselves to the game.
             print("")
+
+class Participation(models.Model):
+    player = models.ForeignKey(Player)
+    game = models.ForeignKey(Game)
+    rated = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.player) + " " + str(self.game) + " " + str(self.rated)
