@@ -40,4 +40,4 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        exclude = ('game_id', 'host', 'end_time')
+        exclude = ('game_id', 'free_slots', 'host', 'end_time')

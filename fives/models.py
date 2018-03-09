@@ -19,7 +19,7 @@ class Player(models.Model):
         (FEMALE, "Female"),
     )
     
-    gender = models.BooleanField(choices=GENDER_CHOICES, default=True)
+    gender = models.BooleanField(choices=GENDER_CHOICES, default=MALE)
 
     host_rating = models.IntegerField(default=0)
     num_host_ratings = models.IntegerField(default=0)
@@ -57,15 +57,17 @@ class Game(models.Model):
     )
 
     game_type = models.IntegerField(choices=GAME_CHOICES, default=MENS_CP)
+    # Number of available slots in match - default is 9 since host is automatically added.
+    free_slots = models.IntegerField(default=9)
 
     # Date and time entries
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateField(default=datetime.date.today())
     start_time = models.TimeField(default=datetime.time.min)
     end_time = models.TimeField(default=datetime.time.max)
     
     # Duration of 1 hour is false, 2 hours is true. Used to calculate endtime in form.
-    ONE_HOUR = 0
-    TWO_HOURS = 1
+    ONE_HOUR = 1
+    TWO_HOURS = 2
 
     DURATION_CHOICES = (
         (ONE_HOUR, "1 hour"),
@@ -77,7 +79,7 @@ class Game(models.Model):
 
     # Address entries
     street = models.CharField(max_length=128)
-    place = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=128)
     # Longitude/latitude???
 
@@ -85,8 +87,14 @@ class Game(models.Model):
     # Booked is true if the pitch has been booked and false if it has not.
     booked = models.BooleanField(default=False)
     # Host uses foreign key from Player class
-    host = models.ForeignKey(Player)
+    host = models.ForeignKey(User)
 
     #Override the __str__() method.
     def __str__(self):
-        return self.game_id
+        return str(self.host) + " " + str(self.date) + " " + str(self.game_id)[:6]
+
+    def clean(self):
+        # Don't allow more than 10 participants in a game.
+        if self.free_slots == 0:
+            # Prevent player adding themselves to the game.
+            print("")
