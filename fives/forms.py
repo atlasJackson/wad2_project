@@ -23,7 +23,7 @@ class PlayerForm(forms.ModelForm):
 
 class GameForm(forms.ModelForm):
 
-    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type");
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type")
 
     date = forms.DateField(label="Date")
 
@@ -36,8 +36,8 @@ class GameForm(forms.ModelForm):
     postcode = forms.CharField(max_length=128, label="Postocde")
 
     price = forms.DecimalField(widget=forms.TextInput(), label="Price/person")
-    booked = forms.BooleanField(widget=forms.CheckboxInput(), initial=False, label="Pitch booked?")
+    booked = forms.BooleanField(widget=forms.CheckboxInput(), initial=False, required=False, label="Pitch booked?")
 
     class Meta:
         model = Game
-        exclude = ('game_id', 'free_slots', 'host', 'end_time', 'slug')
+        exclude = ('game_id', 'free_slots', 'host', 'end_time', 'customSlug')

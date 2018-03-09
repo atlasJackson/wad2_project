@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 import datetime
 import sys
 
-from fives.models import Player, Game
+from fives.models import Player, Game, Participation
 from fives.forms import UserForm, PlayerForm, GameForm
 
 
@@ -27,6 +27,23 @@ def game_list(request):
 
 def show_game(request, game_customSlug):
     context_dict = {}
+    print game_customSlug
+
+    try:
+        # Try to find a game with the given slug.
+        game = Game.objects.get(customSlug=game_customSlug)
+        # Retreive a list of all players participating in the game
+        participants = Participation.objects.filter(game=game)
+
+        # Add both entities to the context dictionary
+        context_dict['game'] = game
+        context_dict['participants'] = participants
+
+    except Game.DoesNotExist:
+        # We get here if we couldn't find the specified game
+        context_dict['game'] = None
+        context_dict['participants'] = None
+
     response = render(request, 'fives/show_game.html', context=context_dict)
     return response
 
@@ -49,12 +66,13 @@ def create_game(request):
 
             # Get host entry from current user
             game.host = request.user
-            # Save the new Game to the database
-            game.save()
 
             # Populate slug field
-            # game.slug = game.host.username + "-" + game.date + "-" + game.start_time
-            # sys.stdout.write(game.host.username + "-" + game.date + "-" + game.start_time)
+            customSlug = str(game.host.username) + "-" + game.date.strftime("%Y") + game.date.strftime("%m") + game.date.strftime("%d") + "-" + game.start_time.strftime("%H") + game.start_time.strftime("%M")
+            game.customSlug = customSlug
+
+            # Save the new Game to the database
+            game.save()
 
             # Direct the user back to the index page.
             return index(request)

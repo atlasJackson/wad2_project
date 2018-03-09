@@ -33,6 +33,9 @@ class Player(models.Model):
     def __str__(self):
         return self.user.username
 
+    def __unicode__(self): # For Python 2, use __unicode__too
+        return self.user.username
+
 
 class Game(models.Model):
     # UUIDField creates unique id for each game
@@ -88,8 +91,8 @@ class Game(models.Model):
     booked = models.BooleanField(default=False)
     # Host uses foreign key from Player class
     host = models.ForeignKey(User)
-    # A customized slug field: username-date-time or username-game_id
-    # customSlug = models.CharField(max_length=128, unique=True)
+    # A customized slug field: username-date-time
+    customSlug = models.CharField(max_length=128, unique=True)
 
     #Override the __str__() method.
     def __str__(self):
