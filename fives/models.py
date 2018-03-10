@@ -106,7 +106,7 @@ class Game(models.Model):
 
     # This method is called each time a game is saved/created, and the custom_slug is automatically generated.
     def save(self, *args, **kwargs):
-        self.custom_lug = str(self.host.username) + "-" + self.date.strftime("%Y") + self.date.strftime("%m") + self.date.strftime("%d") + "-" + self.start_time.strftime("%H") + self.start_time.strftime("%M")
+        self.custom_slug = str(self.host.username) + "-" + self.date.strftime("%Y") + self.date.strftime("%m") + self.date.strftime("%d") + "-" + self.start_time.strftime("%H") + self.start_time.strftime("%M")
         super(Game, self).save(*args, **kwargs)
 
 
