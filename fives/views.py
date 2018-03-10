@@ -48,7 +48,7 @@ def show_game(request, game_custom_slug):
     return response
 
 @login_required
-def create_game(request):
+def create_game(request): # NOTE(Nicola): Add funtionality that the host is automatically added to the player list for the game.
     game_form = GameForm()
 
     # An HTTP POST?

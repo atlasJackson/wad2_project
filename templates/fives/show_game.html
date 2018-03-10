@@ -36,7 +36,23 @@
             Google Maps
         </div>
         <div class="game-player-list">
-            My Player 1 <br />My Player 2 <br />My Player 3 <br />My Player 4 <br />
+            {% for player in participants %}
+
+            {% endfor %}
+        </div>
+        <div class="">
+            {% if user.is_authenticated %}
+                {% if user == game.host %}
+                    <input type="submit" name="submit" value="Edit Game" />
+                    <input type="submit" name="submit" value="Delete Game" />
+                {% else %}
+                    {% if user in participants %}
+                        <input type="submit" name="submit" value="Leave Game" />
+                    {% else %}
+                        <input type="submit" name="submit" value="Join Game" />
+                    {% endif %}
+                {% endif %}
+            {% endif %}
         </div>
 {% else %}
     The specified game does not exist!
