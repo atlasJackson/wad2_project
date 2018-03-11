@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect,HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
 import datetime
 import sys
+import json
 
-from fives.models import Player, Game, Participation
+from fives.models import User, Player, Game, Participation
 from fives.forms import UserForm, PlayerForm, GameForm
-
 
 def index(request):
     context_dict = {}
@@ -21,19 +22,20 @@ def about_us(request):
     return response
 
 def game_list(request):
-    context_dict = {}
-    response = render(request, 'fives/game_list.html', context=context_dict)
-    return response
-
+    games = Game.objects.filter(date__gte=datetime.date.today()).order_by('date')[:20]
+    context_dict = {'games': games}
+    return render(request, 'fives/game_list.html', context=context_dict)
+    
 def show_game(request, game_custom_slug):
     context_dict = {}
-    print game_custom_slug
+    print (game_custom_slug)
 
     try:
         # Try to find a game with the given slug.
         game = Game.objects.get(custom_slug=game_custom_slug)
         # Retreive a list of all players participating in the game
         participants = Participation.objects.filter(game=game)
+        print (participants)
 
         # Add both entities to the context dictionary
         context_dict['game'] = game
@@ -44,8 +46,34 @@ def show_game(request, game_custom_slug):
         context_dict['game'] = None
         context_dict['participants'] = None
 
-    response = render(request, 'fives/show_game.html', context=context_dict)
-    return response
+    return render(request, 'fives/show_game.html', context=context_dict)
+
+@login_required
+@csrf_exempt
+def join_game(request, game_custom_slug):
+    gameid = request.POST.get('gameid')
+    game = Game.objects.get(game_id=gameid)
+
+    username = request.POST.get('user')
+    user = User.objects.get(username=username)
+    player=Player.objects.get(user=user)
+
+    if game:
+        game.free_slots -= 1
+        game.save()
+        p = Participation(player=player, game=game)
+        p.save()
+        player_added = True
+    else:
+        player_added = False
+
+    data = {'player_added': player_added}
+
+    return JsonResponse(data)
+
+
+
+
 
 @login_required
 def create_game(request): # NOTE(Nicola): Add funtionality that the host is automatically added to the player list for the game.
@@ -77,6 +105,11 @@ def create_game(request): # NOTE(Nicola): Add funtionality that the host is auto
             print(game_form.errors)
 
     return render(request, 'fives/create_game.html', {'game_form': game_form})
+
+
+###############################################
+# User-centric Views
+###############################################
 
 def sign_up(request):
     # A boolean value for telling the template

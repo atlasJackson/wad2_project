@@ -9,7 +9,7 @@
 {% if game %}
     <div class="game-head-wrapper">
         <div class="game-head-title">
-            {{ game.host.username }}, {{ game.date }}, {{ game.start_time }}
+            {{ game.host.first_name }}, {{ game.date }}, {{ game.start_time }}
         </div>
         <div class="game-head-host">
             Host: {{ game.host.username }}
@@ -36,20 +36,37 @@
             Google Maps
         </div>
         <div class="game-player-list">
+            Free spaces: <strong>{{ game.free_slots }}</strong>
+            <ul>
             {% for player in participants %}
-
+                <li>
+                    {{ player }} -------
+                    {{ player.player.user.first_name }} 
+                    {{ player.player.user.last_name }}, 
+                    {{ player.player.user.username }}, 
+                    Skill: {{ player.player.skill }} 
+                    Teamplay: {{ player.player.likeability }} 
+                    Punctuality: {{ player.player.reliability }} 
+                </li>
             {% endfor %}
+            </ul>
         </div>
-        <div class="">
+        <div >
             {% if user.is_authenticated %}
                 {% if user == game.host %}
                     <input type="submit" name="submit" value="Edit Game" />
                     <input type="submit" name="submit" value="Delete Game" />
                 {% else %}
+                    {% for participant in participants %}
+                        <p>{{ participant.player }}</p>
+                    {% endfor %}
                     {% if user in participants %}
                         <input type="submit" name="submit" value="Leave Game" />
                     {% else %}
-                        <input type="submit" name="submit" value="Join Game" />
+                        <button type="button" id="joinBtn" data-gameid="{{ game.game_id }}" 
+                        data-username="{{ user.username }}" >
+                            Join Game
+                        </button>
                     {% endif %}
                 {% endif %}
             {% endif %}

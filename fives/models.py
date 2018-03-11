@@ -102,7 +102,7 @@ class Game(models.Model):
         # Don't allow more than 10 participants in a game.
         if self.free_slots == 0:
             # Prevent player adding themselves to the game.
-            print("")
+            print("No slots left")
 
     # This method is called each time a game is saved/created, and the custom_slug is automatically generated.
     def save(self, *args, **kwargs):

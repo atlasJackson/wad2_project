@@ -6,5 +6,21 @@
 {% endblock %}
 
 {% block body_block %}
-    TODO: Edit template: game_list.html
+    <div>
+
+    </div>
+    <div>
+    {% if games %}
+    <ul>
+        {% for game in games %}
+            <li>
+                <a href="{% url 'show_game' game.custom_slug %}">{{ game.custom_slug }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>No games match the above criteria. Please refine your search, or click below to host your own game.</p>
+        <a href="{% url 'create_game' %}">Create a game.</a>
+    {% endif %}
+    </div>
 {% endblock %}
