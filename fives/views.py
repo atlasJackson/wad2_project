@@ -6,7 +6,6 @@ from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
 import datetime
 import sys
-import json
 
 from fives.models import User, Player, Game, Participation
 from fives.forms import UserForm, PlayerForm, GameForm
@@ -28,18 +27,18 @@ def game_list(request):
     
 def show_game(request, game_custom_slug):
     context_dict = {}
-    print (game_custom_slug)
 
     try:
         # Try to find a game with the given slug.
         game = Game.objects.get(custom_slug=game_custom_slug)
-        # Retreive a list of all players participating in the game
-        participants = Participation.objects.filter(game=game)
-        print (participants)
-
+        # Retreive a list of all players, and corresponding user entries, participating in the game.
+        participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
+        users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
+        
         # Add both entities to the context dictionary
         context_dict['game'] = game
         context_dict['participants'] = participants
+        context_dict['users'] = users
 
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
@@ -71,12 +70,33 @@ def join_game(request, game_custom_slug):
 
     return JsonResponse(data)
 
+@login_required
+@csrf_exempt
+def leave_game(request, game_custom_slug):
+    gameid = request.POST.get('gameid')
+    game = Game.objects.get(game_id=gameid)
 
+    username = request.POST.get('user')
+    user = User.objects.get(username=username)
+    player=Player.objects.get(user=user)
+
+    if game:
+        p = Participation.objects.get(player=player, game=game)
+        p.delete()
+        game.free_slots += 1
+        game.save()
+        player_removed = True
+    else:
+        player_removed = False
+
+    data = {'player_removed': player_removed}
+
+    return JsonResponse(data)
 
 
 
 @login_required
-def create_game(request): # NOTE(Nicola): Add funtionality that the host is automatically added to the player list for the game.
+def create_game(request): 
     game_form = GameForm()
 
     # An HTTP POST?
@@ -97,6 +117,11 @@ def create_game(request): # NOTE(Nicola): Add funtionality that the host is auto
 
             # Save the new Game to the database
             game.save()
+
+            # Add the user to the list of the game's participants.
+            user_player = Player.objects.get(user=request.user)
+            p = Participation(player=user_player, game=game)
+            p.save()
 
             # Direct the user back to the index page.
             return index(request)

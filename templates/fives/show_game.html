@@ -25,43 +25,42 @@
             <span style="color:Red">Not Booked</span><br />
             {% endif %}
             Price/person: {{ game.price }}
-        </div>
-        <div class="game-address">
-            Address:<br />
-            {{ game.street }}<br />
-            {{ game.city }}<br />
-            {{ game.postcode }}
-        </div>
-        <div class="game-map">
-            Google Maps
-        </div>
-        <div class="game-player-list">
-            Free spaces: <strong>{{ game.free_slots }}</strong>
-            <ul>
-            {% for player in participants %}
-                <li>
-                    {{ player }} -------
-                    {{ player.player.user.first_name }} 
-                    {{ player.player.user.last_name }}, 
-                    {{ player.player.user.username }}, 
-                    Skill: {{ player.player.skill }} 
-                    Teamplay: {{ player.player.likeability }} 
-                    Punctuality: {{ player.player.reliability }} 
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div >
+    </div>
+    <div class="game-address">
+        Address:<br />
+        {{ game.street }}<br />
+        {{ game.city }}<br />
+        {{ game.postcode }}
+    </div>
+    <div class="game-map">
+        Google Maps
+    </div>
+    <div class="game-player-list">
+        Free spaces: <strong>{{ game.free_slots }}</strong>
+        <ul>
+        {% for player in participants %}
+            <li>
+                {{ player.user.first_name }}
+                {{ player.user.last_name }}, 
+                Skill: {{ player.skill }} 
+                Teamplay: {{ player.likeability }} 
+                Punctuality: {{ player.reliability }} 
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="game-player-static">
+        <div class="game-player-buttons">
             {% if user.is_authenticated %}
                 {% if user == game.host %}
                     <input type="submit" name="submit" value="Edit Game" />
                     <input type="submit" name="submit" value="Delete Game" />
                 {% else %}
-                    {% for participant in participants %}
-                        <p>{{ participant.player }}</p>
-                    {% endfor %}
-                    {% if user in participants %}
-                        <input type="submit" name="submit" value="Leave Game" />
+                    {% if user in users %}
+                        <button type="button" id="leaveBtn" data-gameid="{{ game.game_id }}" 
+                        data-username="{{ user.username }}" >
+                            Leave Game
+                        </button>
                     {% else %}
                         <button type="button" id="joinBtn" data-gameid="{{ game.game_id }}" 
                         data-username="{{ user.username }}" >
@@ -71,6 +70,7 @@
                 {% endif %}
             {% endif %}
         </div>
+    </div>
 {% else %}
     The specified game does not exist!
 {% endif %}
