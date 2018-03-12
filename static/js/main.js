@@ -27,7 +27,7 @@ function buttonJoinLeave(button, urlLink) {
         success: function(data) {
             if (data.player_added || data.player_removed) {
                 // Refresh player list and button options on success.
-                $(".game-players-wrapper").load(" .game-players-wrapper", function(){button.children().unwrap()});
+                $(".game-player-table").load(" .game-player-table", function(){button.children().unwrap()});
                 $(".game-player-buttons").load(" .game-player-buttons", function(){button.children().unwrap()});
             } else {
                 // This should not be reached.
