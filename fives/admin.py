@@ -10,7 +10,7 @@ class PlayerAdmin(admin.ModelAdmin):
 # Class to customise the Admin Interface
 class GameAdmin(admin.ModelAdmin):
     list_display = ['host', 'date', 'start_time', 'end_time', 'free_slots']
-    prepopulated_fields = {'custom_slug':('custom_slug',)}
+    readonly_fields = ('custom_slug',)
 
 
 admin.site.register(Player, PlayerAdmin)
