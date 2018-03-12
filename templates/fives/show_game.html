@@ -35,19 +35,26 @@
     <div class="game-map">
         Google Maps
     </div>
-    <div class="game-player-list">
-        Free spaces: <strong>{{ game.free_slots }}</strong>
-        <ul>
+    <div class="game-players-wrapper">
+        <table class="game-player-table">
+            <tr>
+                <th>Name</th>
+                <th>Surame</th>
+                <th>Skill</th>
+                <th>Likes</th>
+                <th>Punctuality</th>
+            </tr>
         {% for player in participants %}
-            <li>
-                {{ player.user.first_name }}
-                {{ player.user.last_name }}, 
-                Skill: {{ player.skill }} 
-                Teamplay: {{ player.likeability }} 
-                Punctuality: {{ player.reliability }} 
-            </li>
+            <tr>
+                <td>{{ player.user.first_name }}</td>
+                <td>{{ player.user.last_name }}</td>
+                <td>{{ player.skill }}</td>
+                <td>{{ player.likeability }}</td>
+                <td>{{ player.reliability }}</td>
+            </tr>
         {% endfor %}
-        </ul>
+        </table>
+        <span class="span-free-slots">Free spaces: <strong>{{ game.free_slots }}</strong></span>
     </div>
     <div class="game-player-static">
         <div class="game-player-buttons">
@@ -57,12 +64,12 @@
                     <input type="submit" name="submit" value="Delete Game" />
                 {% else %}
                     {% if user in users %}
-                        <button type="button" id="leaveBtn" data-gameid="{{ game.game_id }}" 
+                        <button type="button" id="leaveBtn" data-gameid="{{ game.game_id }}"
                         data-username="{{ user.username }}" >
                             Leave Game
                         </button>
                     {% else %}
-                        <button type="button" id="joinBtn" data-gameid="{{ game.game_id }}" 
+                        <button type="button" id="joinBtn" data-gameid="{{ game.game_id }}"
                         data-username="{{ user.username }}" >
                             Join Game
                         </button>

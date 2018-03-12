@@ -42,9 +42,63 @@
     border-left: solid thin lightblue;
 }
 
-.game-player-list {
+.game-players-wrapper {
+    padding-top: 10px;
     clear: both;
-    border: solid thin lightblue;
+    border-top: solid thin lightblue;
+}
+
+.game-player-table {
+    width: 100%;
+    border-collapse:collapse;
+}
+
+.game-player-table th {
+    text-align: left;
+    background-color: #4CAF50;
+    font-weight: normal;
+    color: white;
+    font-style: normal;
+    height: 22px;
+    border: 0px;
+}
+
+.game-player-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.game-player-table tr:hover {
+    background-color: #ddd;
+}
+
+.span-free-slots {
+    float: right;
+    font-size: 12px;
+}
+
+.game-player-static {
+    margin-top: 20px;
+    float: left;
+}
+
+.game-player-buttons button {
+    width: 100px;
+    height: 25px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.game-player-buttons button:hover {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}
+
+
+#joinBtn {
+    background-color: #4CAF50;
+}
+#leaveBtn {
+        background-color: #ff3333;
 }
 /* show_game.html END */
 

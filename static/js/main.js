@@ -1,18 +1,18 @@
 $(document).ready(function(){
 
     $(".game-player-static").on("click", "#joinBtn", function(e) {
-        
+
         e.preventDefault();
         buttonJoinLeave($(this), "join_game/");
     });
 
 
     $(".game-player-static").on("click", "#leaveBtn", function(e) {
-        
+
         e.preventDefault();
         buttonJoinLeave($(this), "leave_game/");
     });
-});    
+});
 
 function buttonJoinLeave(button, urlLink) {
     $.ajax({
@@ -21,13 +21,13 @@ function buttonJoinLeave(button, urlLink) {
         data: {
             "gameid": button.attr("data-gameid"),
             "user": button.attr("data-username"),
-            "csrfmiddlewaretoken": "{{ csrftoken }}", 
+            "csrfmiddlewaretoken": "{{ csrftoken }}",
         },
         dataType: "json",
         success: function(data) {
             if (data.player_added || data.player_removed) {
                 // Refresh player list and button options on success.
-                $(".game-player-list").load(" .game-player-list", function(){button.children().unwrap()});
+                $(".game-players-wrapper").load(" .game-players-wrapper", function(){button.children().unwrap()});
                 $(".game-player-buttons").load(" .game-player-buttons", function(){button.children().unwrap()});
             } else {
                 // This should not be reached.
@@ -52,4 +52,3 @@ function loadDoc(url,cFunction) {
     }
 }
 */
-

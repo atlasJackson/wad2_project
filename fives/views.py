@@ -24,7 +24,7 @@ def game_list(request):
     games = Game.objects.filter(date__gte=datetime.date.today()).order_by('date')[:20]
     context_dict = {'games': games}
     return render(request, 'fives/game_list.html', context=context_dict)
-    
+
 def show_game(request, game_custom_slug):
     context_dict = {}
 
@@ -34,7 +34,7 @@ def show_game(request, game_custom_slug):
         # Retreive a list of all players, and corresponding user entries, participating in the game.
         participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
         users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
-        
+
         # Add both entities to the context dictionary
         context_dict['game'] = game
         context_dict['participants'] = participants
@@ -55,7 +55,7 @@ def join_game(request, game_custom_slug):
 
     username = request.POST.get('user')
     user = User.objects.get(username=username)
-    player=Player.objects.get(user=user)
+    player=Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
 
     if game:
         game.free_slots -= 1
@@ -96,7 +96,7 @@ def leave_game(request, game_custom_slug):
 
 
 @login_required
-def create_game(request): 
+def create_game(request):
     game_form = GameForm()
 
     # An HTTP POST?
