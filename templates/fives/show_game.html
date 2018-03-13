@@ -33,8 +33,12 @@
         {{ game.postcode }}
     </div>
     <div class="game-map">
-        Google Maps
+        <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 600px; height: 200px;">
+            <div id="map" >
+            </div>
+        </div>
     </div>
+
     <div class="game-players-wrapper">
         <table class="game-player-table">
             <tr>
@@ -94,4 +98,37 @@
 {% else %}
     The specified game does not exist!
 {% endif %}
+
+<!-- Move the following to main.js -->
+
+<script>
+    var map
+    function initMap() {
+        var mapDisplay = document.getElementById("map-display"); 
+
+        var latitude = mapDisplay.getAttribute("data-latitude");
+        var longitude = mapDisplay.getAttribute("data-longitude");
+        var thisLatLng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+
+        var mapOptions = {
+            center: thisLatLng,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(mapDisplay, mapOptions);
+
+        var marker = new google.maps.Marker({
+          position: thisLatLng,
+          map: map,
+        });
+    }
+
+</script>
+<script type="text/javascript" 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw&callback=initMap"
+    async defer>
+</script>
+
+
 {% endblock %}

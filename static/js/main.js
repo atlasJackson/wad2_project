@@ -34,7 +34,7 @@ function buttonJoinLeaveDelete(button, urlLink) {
         data: {
             "gameid": button.attr("data-gameid"),
             "user": button.attr("data-username"),
-            "csrfmiddlewaretoken": "{{ csrftoken }}",
+            csrfmiddlewaretoken: "{{ csrftoken }}",
         },
         dataType: "json",
         success: function(data) {
@@ -42,6 +42,8 @@ function buttonJoinLeaveDelete(button, urlLink) {
                 // Refresh player list and button options on success.
                 $(".game-player-table").load(" .game-player-table", function(){button.children().unwrap()});
                 $(".game-player-buttons").load(" .game-player-buttons", function(){button.children().unwrap()});
+                $(".span-free-slots").load(" .span-free-slots", function(){button.children().unwrap()});
+                
             } else if (data.game_deleted) {
                 window.location.replace("/");
             } else {
@@ -55,4 +57,3 @@ function buttonJoinLeaveDelete(button, urlLink) {
         }
     });
 }
-

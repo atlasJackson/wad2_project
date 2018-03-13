@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
+
+from geopy.geocoders import Nominatim
 import datetime
 import sys
 
@@ -25,6 +27,50 @@ def game_list(request):
     context_dict = {'games': games}
     return render(request, 'fives/game_list.html', context=context_dict)
 
+@login_required
+def create_game(request):
+    game_form = GameForm()
+
+    # An HTTP POST?
+    if request.method == 'POST':
+        game_form = GameForm(request.POST)
+
+        # Have we been provided with a valid form?
+        if game_form.is_valid():
+            # Save, but don't commit
+            game = game_form.save(commit=False)
+
+            # Get latitiude and longitude from address
+            # Source: https://geopy.readthedocs.io/en/1.10.0/
+            geolocator = Nominatim()
+            location = geolocator.geocode(game.street + " " + game.city)
+            game.latitude = location.latitude
+            game.longitude = location.longitude
+
+            # Calculate end time from start time and duration
+            end_time_hour = (game.start_time.hour + game.duration) % 24
+            game.end_time = datetime.time(end_time_hour, game.start_time.minute)
+
+            # Get host entry from current user
+            game.host = request.user
+
+            # Save the new Game to the database
+            game.save()
+
+            # Add the user to the list of the game's participants.
+            user_player = Player.objects.get(user=request.user)
+            p = Participation(player=user_player, game=game)
+            p.save()
+
+            # Direct the user back to the index page.
+            return index(request)
+        else:
+            # The supplied form contained errors - print them to the terminal.
+            print(game_form.errors)
+
+    return render(request, 'fives/create_game.html', {'game_form': game_form})
+
+
 def show_game(request, game_custom_slug):
     context_dict = {}
 
@@ -45,6 +91,7 @@ def show_game(request, game_custom_slug):
         context_dict['game'] = None
         context_dict['participants'] = None
         context_dict['users'] = None
+        #context_dict['api_key'] = "AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw"
 
     return render(request, 'fives/show_game.html', context=context_dict)
 
@@ -59,7 +106,7 @@ def join_game(request, game_custom_slug):
     player=Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
 
     if game:
-        if game.free_slots == -0:
+        if game.free_slots == 0:
             player_added = False
         else:            
             game.free_slots -= 1
@@ -118,42 +165,6 @@ def delete_game(request, game_custom_slug):
     data = {'game_deleted': game_deleted}
 
     return JsonResponse(data)
-
-@login_required
-def create_game(request):
-    game_form = GameForm()
-
-    # An HTTP POST?
-    if request.method == 'POST':
-        game_form = GameForm(request.POST)
-
-        # Have we been provided with a valid form?
-        if game_form.is_valid():
-            # Save, but don't commit
-            game = game_form.save(commit=False)
-
-            # Calculate end time from start time and duration
-            end_time_hour = (game.start_time.hour + game.duration) % 24
-            game.end_time = datetime.time(end_time_hour, game.start_time.minute)
-
-            # Get host entry from current user
-            game.host = request.user
-
-            # Save the new Game to the database
-            game.save()
-
-            # Add the user to the list of the game's participants.
-            user_player = Player.objects.get(user=request.user)
-            p = Participation(player=user_player, game=game)
-            p.save()
-
-            # Direct the user back to the index page.
-            return index(request)
-        else:
-            # The supplied form contained errors - print them to the terminal.
-            print(game_form.errors)
-
-    return render(request, 'fives/create_game.html', {'game_form': game_form})
 
 
 ###############################################

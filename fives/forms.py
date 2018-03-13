@@ -33,11 +33,11 @@ class GameForm(forms.ModelForm):
 
     street = forms.CharField(max_length=128, label="Street & number")
     city = forms.CharField(max_length=128, label="City/Town")
-    postcode = forms.CharField(max_length=128, label="Postocde")
+    postcode = forms.CharField(max_length=128, label="Postcode")
 
     price = forms.DecimalField(widget=forms.TextInput(), label="Price/person")
     booked = forms.BooleanField(widget=forms.CheckboxInput(), initial=False, required=False, label="Pitch booked?")
 
     class Meta:
         model = Game
-        exclude = ('game_id', 'free_slots', 'host', 'end_time', 'custom_slug')
+        exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end_time', 'custom_slug')

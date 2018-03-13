@@ -84,7 +84,8 @@ class Game(models.Model):
     street = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=128)
-    # Longitude/latitude???
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, default = 0)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, default = 0) 
 
     price = models.DecimalField(max_digits=8, decimal_places=2)
     # Booked is true if the pitch has been booked and false if it has not.
