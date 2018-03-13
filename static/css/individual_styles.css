@@ -134,10 +134,32 @@
 
 
 /* create_game.html START */
-.jquery_validation_form label.error {
+.content-wrapper-center { /* This class gives the div a maximum width and centers horizontally it on the page. */
+    max-width: 500px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.jquery_validation_form label.error, td.django-form-errors {
     font-size: 11px;
     font-style: normal;
     color: red;
     padding-left: 10px;
+}
+
+input#create-game {
+    margin-top: 15px;
+    margin-left: 90px;
+    width: 100px;
+    height: 25px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    background-color: #4CAF50;
+    border: 1px solid #e7e7e7;
+}
+
+input#create-game:hover {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
 }
 /* create_game.html END */

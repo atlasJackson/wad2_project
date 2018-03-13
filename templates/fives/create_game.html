@@ -1,59 +1,33 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 
-{% block js_block %}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#game_form").validate({
-                rules: {
-                    date: {},
-                    start_time: {required: true},
-                    street: {required: true, maxlength: 128},
-                    place: {required: true, maxlength: 128},
-                    postcode: {required: true, minlength: 5, maxlength: 8},
-                    price: {required: true, range: [0, 99]},
-                    booked: {required: false},
-                }
-            });
-
-            $("#id_date").datepicker({
-                minDate: 0, // Can't select dates in the past.
-                maxDate: 30, // Can only select dates within 30 days from today.
-                dateFormat: "mm/dd/yy",
-            });
-            $('#id_date').datepicker('setDate', new Date()); // .datepicker('setDate', date) sets the current date for the datepicker.
-
-            time_choices: ["8:30", "9:30", "10:30", "11:30", "12:30"]
-
-            $("#id_start_time").time_picker({});
-
-            $("#id_start_time").innerhtml(time_choices);
-
-        });
-    </script>
-{% endblock %}
-
 {% block title_block %}
     Create Game
 {% endblock %}
 
 {% block body_block %}
-
-    <h1>Create a New Game</h1>
-    <p>Hosted by: {{ user.username }}</p>
+<div class="content-wrapper-center">
+    <h3>{{ user.first_name }}, create your own game...</h3>
     <form id="game_form" class="jquery_validation_form" method="post" action="{% url 'create_game' %}">
 
     {% csrf_token %}
 
-    <!-- Display each form -->
-    {{ game_form.as_p }}
+    <table>
+        {% for field in game_form %}
+            <tr style="height:30px;">
+                <td>{{ field.label }}:</td>
+                <td>{{ field }}</td>
+                <td class="django-form-errors">{{ field.errors }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
     <!-- Provide a button to click to submit form -->
-    <input type="submit" name="submit" value="Create Game" />
+    <input id="create-game" type="submit" name="submit" value="Create Game" />
     </form>
-    <p>
+    <p style="font-size:11px; margin-top:40px; width:280px; text-align:center;">
         Please note that as users are joining a game with the details you supply here, the details cannot be changed after submission.<br />
-        Delete the game and create a new one if circumstances change. Thank you for understanding.
+        Delete the game and create a new one if circumstances change.<br/>Thank you for understanding.
     </p>
-
+</div>
 {% endblock %}

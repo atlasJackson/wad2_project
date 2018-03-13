@@ -11,10 +11,10 @@
 <div class="game-content">
     <div class="game-head-wrapper">
         <div class="game-head-title">
-            {{ game.host.username }}&nbsp;&#9675;&nbsp;{{ game.date|date:"d N Y" }}&nbsp;&#9675;&nbsp;{{ game.start_time|date:"H:i" }}
+            {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;&#9675;&nbsp;{{ game.date|date:"d N Y" }}&nbsp;&#9675;&nbsp;{{ game.start_time|date:"H:i" }}
         </div>
         <div class="game-head-host">
-            Host: {{ game.host.username }}
+            Host: <span title="">{{ game.host.username }}</span>
         </div>
     </div>
     <div class="game-info">
@@ -26,7 +26,8 @@
         {% else %}
             <span style="color:Red">Not Booked</span><br />
         {% endif %}
-        Price/person: {{ game.price }}
+        Price/person: {{ game.price }}<br />
+        Type: {{ game.game_type }}
     </div>
     <div class="game-address">
         Address:<br />
@@ -47,7 +48,7 @@
                 <th>Name</th>
                 <th>Surame</th>
                 <th>Gender</th>
-                <th>Skill</th>
+                <th>Skills</th>
                 <th>Likes</th>
                 <th>Punctuality</th>
                 {% if user == game.host %}
@@ -60,9 +61,9 @@
                 <td>{{ player.user.last_name }}</td>
                 <td>
                     {% if player.gender %}
-                        <img src="{% static 'img/male.png' %}" alt="male" height="12">
+                        <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
                     {% else %}
-                        <img src="{% static 'img/female.png' %}" alt="female" height="14">
+                        <img src="{% static 'img/female.png' %}" alt="female" height="14" title="female">
                     {% endif %}
                 </td>
                 <td>
@@ -97,7 +98,7 @@
                 <td style="text-align:right">
                     {% if user != player.user %}
                         <button type="button" id="removeBtn"  class="hoverBtn" data-gameid="{{ game.game_id }}"
-                        data-username="{{ player.user.username }}" >
+                        data-username="{{ player.user.username }}" title="remove player">
                             <img src="{% static 'img/removeBtn.png' %}" alt="remove player">
                         </button>
                     {% endif %}
