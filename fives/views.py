@@ -59,11 +59,14 @@ def join_game(request, game_custom_slug):
     player=Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
 
     if game:
-        game.free_slots -= 1
-        game.save()
-        p = Participation(player=player, game=game)
-        p.save()
-        player_added = True
+        if game.free_slots == -0:
+            player_added = False
+        else:            
+            game.free_slots -= 1
+            game.save()
+            p = Participation(player=player, game=game)
+            p.save()
+            player_added = True
     else:
         player_added = False
 
@@ -93,7 +96,7 @@ def leave_game(request, game_custom_slug):
     data = {'player_removed': player_removed}
 
     return JsonResponse(data)
-    
+
 @login_required
 @csrf_exempt
 def delete_game(request, game_custom_slug):

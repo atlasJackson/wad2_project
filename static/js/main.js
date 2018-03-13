@@ -44,10 +44,9 @@ function buttonJoinLeaveDelete(button, urlLink) {
                 $(".game-player-buttons").load(" .game-player-buttons", function(){button.children().unwrap()});
             } else if (data.game_deleted) {
                 window.location.replace("/");
-
             } else {
                 // This should not be reached.
-                alert("Oh no...");
+                alert("Unable to process request.");
             }
         },
         error: function (rs, e) {
