@@ -81,6 +81,14 @@ def show_game(request, game_custom_slug):
         participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
         users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
 
+        today = datetime.date.today()
+        currentTime = datetime.datetime.now().time()
+        # Check if game is in the past and all slots were filled.
+        if game.date <= today and game.free_slots == 0 and game.end_time > currentTime:
+            context_dict['gameTookPlace'] = True
+        else:
+            context_dict['gameTookPlace'] = False
+
         # Add both entities to the context dictionary
         context_dict['game'] = game
         context_dict['participants'] = participants
@@ -91,6 +99,7 @@ def show_game(request, game_custom_slug):
         context_dict['game'] = None
         context_dict['participants'] = None
         context_dict['users'] = None
+        context_dict['gameTookPlace'] = None
         #context_dict['api_key'] = "AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw"
 
     return render(request, 'fives/show_game.html', context=context_dict)

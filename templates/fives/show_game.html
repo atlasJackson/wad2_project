@@ -111,6 +111,9 @@
     </div>
     <div class="game-player-static">
         <div class="game-player-buttons">
+        {% if gameTookPlace %} <!-- The current game lies in the past and took place(all slots filled). -->
+            
+        {% else %} <!-- The current game lies in the future. -->
             {% if user.is_authenticated %}
                 {% if user == game.host %}
                     <button type="button" id="deleteBtn" data-gameid="{{ game.game_id }}"
@@ -131,6 +134,7 @@
                     {% endif %}
                 {% endif %}
             {% endif %}
+        {% endif %}
         </div>
     </div>
 </div>
