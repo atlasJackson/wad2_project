@@ -7,7 +7,7 @@ django.setup()
 from django.contrib.auth.models import User
 from fives.models import Player, Game, Participation
 from geopy.geocoders import Nominatim
-import datetime
+from datetime import datetime
 import uuid
 
 def populate():
@@ -137,9 +137,8 @@ def populate():
     games = {"realMarioMario-20180326-1800":
                 {"game_type": 0,
                 "free_slots": 7,
-                "date": "2018-03-26",
-                "start_time": "18:00",
-                "end_time": "19:00",
+                "start": "2018-03-26 18:00",
+                "end": "2018-03-26 19:00",
                 "duration": 1,
                 "street": "1 Kennedy Street",
                 "city": "Glasgow",
@@ -151,9 +150,8 @@ def populate():
             "realMarioMario-20180324-1700":
                 {"game_type": 5,
                 "free_slots": 0,
-                "date": "2018-03-24",
-                "start_time": "17:00",
-                "end_time": "19:00",
+                "start": "2018-03-24 17:00",
+                "end": "2018-03-24 19:00",
                 "duration": 2,
                 "street": "137 Shawbridge Street",
                 "city": "Glasgow",
@@ -165,9 +163,8 @@ def populate():
             "ryanIndustries1946-20180325-1200":
                 {"game_type": 1,
                 "free_slots": 9,
-                "date": "2018-03-25",
-                "start_time": "12:00",
-                "end_time": "14:00",
+                "start": "2018-03-25 12:00",
+                "end": "2018-03-25 14:00",
                 "duration": 2,
                 "street": "Victoria Park",
                 "city": "Glasgow",
@@ -205,8 +202,8 @@ def populate():
             user_data["punctuality"], user_data["likeability"], user_data["skill"], user_data["num_player_ratings"])
 
     for game, game_data in games.items():
-        g = add_game(game,game_data["game_type"], game_data["free_slots"], game_data["date"], game_data["start_time"],
-            game_data["end_time"], game_data["duration"], game_data["street"], game_data["city"], game_data["postcode"],
+        g = add_game(game,game_data["game_type"], game_data["free_slots"], game_data["start"],
+            game_data["end"], game_data["duration"], game_data["street"], game_data["city"], game_data["postcode"],
             game_data["price"], game_data["booked"], game_data["host"])
 
     for p_game, p_players in particpants.items():
@@ -253,20 +250,24 @@ def add_player(user, gender, host_rating, num_host_ratings, punctuality, likeabi
     p.save()
     return p
 
-def add_game(custom_slug, game_type, free_slots, date, start_time, end_time, duration,
+def add_game(custom_slug, game_type, free_slots, start, end, duration,
             street, city, postcode, price, booked, host):
 
     h = User.objects.get(username=host)
-    year, month, day = date.split("-")
-    date = datetime.date(int(year), int(month), int(day))
+    #year, month, day = date.split("-")
+    #date = datetime.date(int(year), int(month), int(day))
 
-    start_hour, start_min = start_time.split(":")
-    end_hour, end_min = end_time.split(":")
-    start_time = datetime.time(int(start_hour), int(start_min))
-    end_time = datetime.time(int(end_hour), int(end_min))
+    #start_hour, start_min = start_time.split(":")
+    #end_hour, end_min = end_time.split(":")
+    #start_time = datetime.time(int(start_hour), int(start_min))
+    #end = datetime.time(int(end_hour), int(end_min))
+
+    start = datetime.strptime(start, '%Y-%m-%d %H:%M')
+    end = datetime.strptime(end, '%Y-%m-%d %H:%M')
+    print "START IS:", start
 
     g = Game.objects.get_or_create(custom_slug=custom_slug, host=h,
-        date=date, start_time=start_time, end_time=end_time, price=price)[0]
+        start=start, end=end, price=price)[0]
 
     g.game_type = game_type
     g.free_slots = free_slots

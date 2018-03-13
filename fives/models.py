@@ -64,9 +64,11 @@ class Game(models.Model):
     free_slots = models.IntegerField(default=9)
 
     # Date and time entries
-    date = models.DateField(default=None)
-    start_time = models.TimeField(default=datetime.time.min)
-    end_time = models.TimeField(default=datetime.time.max)
+    start = models.DateTimeField(default=None)
+    end = models.DateTimeField(default=None)
+    #date = models.DateField(default=None)
+    #start_time = models.TimeField(default=datetime.time.min)
+    #end_time = models.TimeField(default=datetime.time.max)
 
     # Duration of 1 hour is false, 2 hours is true. Used to calculate endtime in form.
     ONE_HOUR = 1
@@ -98,7 +100,7 @@ class Game(models.Model):
 
     #Override the __str__() method.
     def __str__(self):
-        return str(self.host) + " " + str(self.date) + " " + str(self.game_id)[:6]
+        return str(self.host) + " " + str(self.start) + " " + str(self.game_id)[:6]
 
     def clean(self):
         # Don't allow more than 10 participants in a game.
@@ -108,7 +110,9 @@ class Game(models.Model):
 
     # This method is called each time a game is saved/created, and the custom_slug is automatically generated.
     def save(self, *args, **kwargs):
-        self.custom_slug = str(self.host.username) + "-" + self.date.strftime("%Y") + self.date.strftime("%m") + self.date.strftime("%d") + "-" + self.start_time.strftime("%H") + self.start_time.strftime("%M")
+        #self.custom_slug = str(self.host.username) + "-" + self.date.strftime("%Y") + self.date.strftime("%m") + self.date.strftime("%d") + "-" + self.start_time.strftime("%H") + self.start_time.strftime("%M")
+        self.custom_slug = str(self.host.username) + "-" + self.start.strftime('%Y%m%d-%H%M')
+        print "CUSTOM SLUG IS:", self.custom_slug
         super(Game, self).save(*args, **kwargs)
 
 

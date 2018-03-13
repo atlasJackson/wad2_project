@@ -52,20 +52,20 @@ $(document).ready(function(){
         return value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
     }, 'Enter a valid time: hh:mm');
 
-    $("#id_date").datepicker({
+    $("#id_start").datepicker({
         minDate: 0, // Can't select dates in the past.
         maxDate: 30, // Can only select dates within 30 days from today.
         dateFormat: "mm/dd/yy",
     });
-    $('#id_date').datepicker('setDate', new Date()); // .datepicker('setDate', date) sets the current date for the datepicker.
+    $('#id_start').datepicker('setDate', new Date()); // .datepicker('setDate', date) sets the current date for the datepicker.
 
     // Checks if date lies in the past, if so, set date to today.
-    $("#id_date").datepicker().change(evt => {
-        var selectedDate = $("#id_date").datepicker('getDate');
+    $("#id_start").datepicker().change(evt => {
+        var selectedDate = $("#id_start").datepicker('getDate');
         var today = new Date();
         today.setHours(0,0,0,0);
         if (selectedDate < today) {
-            $('#id_date').datepicker('setDate', new Date());
+            $('#id_start').datepicker('setDate', new Date());
         }
     });
 

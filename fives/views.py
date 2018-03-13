@@ -23,7 +23,7 @@ def about_us(request):
     return response
 
 def game_list(request):
-    games = Game.objects.filter(date__gte=datetime.date.today()).order_by('date')[:20]
+    games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:20]
     context_dict = {'games': games}
     return render(request, 'fives/game_list.html', context=context_dict)
 
@@ -48,8 +48,9 @@ def create_game(request):
             game.longitude = location.longitude
 
             # Calculate end time from start time and duration
-            end_time_hour = (game.start_time.hour + game.duration) % 24
-            game.end_time = datetime.time(end_time_hour, game.start_time.minute)
+            #end_time_hour = (game.start_time.hour + game.duration) % 24
+            #game.end_time = datetime.time(end_time_hour, game.start_time.minute)
+            game.end = game.start.hour + game.duration
 
             # Get host entry from current user
             game.host = request.user
@@ -81,13 +82,12 @@ def show_game(request, game_custom_slug):
         participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
         users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
 
-        today = datetime.date.today()
-        currentTime = datetime.datetime.now().time()
+        # now = datetime.datetime.now()
         # Check if game is in the past and all slots were filled.
-        if game.date <= today and game.free_slots == 0 and game.end_time > currentTime:
-            context_dict['gameTookPlace'] = True
-        else:
-            context_dict['gameTookPlace'] = False
+        # if game.end < now and game.free_slots == 0:
+        #    context_dict['gameTookPlace'] = True
+        #else:
+        context_dict['gameTookPlace'] = False
 
         # Add both entities to the context dictionary
         context_dict['game'] = game

@@ -11,15 +11,15 @@
 <div class="game-content">
     <div class="game-head-wrapper">
         <div class="game-head-title">
-            {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;&#9675;&nbsp;{{ game.date|date:"d N Y" }}&nbsp;&#9675;&nbsp;{{ game.start_time|date:"H:i" }}
+            {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;&#9675;&nbsp;{{ game.start|date:"d N Y" }}&nbsp;&#9675;&nbsp;{{ game.start|date:"H:i" }}
         </div>
         <div class="game-head-host">
             Host: <span title="">{{ game.host.username }}</span>
         </div>
     </div>
     <div class="game-info">
-        Date: {{ game.date|date:"d M Y" }}<br />
-        Time: {{ game.start_time|date:"H:i" }}<br />
+        Date: {{ game.start|date:"d M Y" }}<br />
+        Time: {{ game.start|date:"H:i" }}<br />
         Pitch:
         {% if game.booked %}
             <span style="color:Green">Booked</span><br />
@@ -112,7 +112,7 @@
     <div class="game-player-static">
         <div class="game-player-buttons">
         {% if gameTookPlace %} <!-- The current game lies in the past and took place(all slots filled). -->
-            
+
         {% else %} <!-- The current game lies in the future. -->
             {% if user.is_authenticated %}
                 {% if user == game.host %}
