@@ -97,7 +97,7 @@
     border: 1px solid #e7e7e7;
 }
 
-.game-player-buttons button:hover {
+.game-player-buttons button:hover, .hoverBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
 }
 
@@ -106,9 +106,19 @@
     background-color: #4CAF50;
 }
 #leaveBtn, #deleteBtn {
-    background-color: #ff4d4d;
+    background-color: #f24438;
+}
+#removeBtn {
+    margin:0px;
+    padding:0px;
+    width: 20px;
+    height: 20px;
+    border:0;
+    background:transparent.
 }
 /* show_game.html END */
+
+
 
 
 /* login.html START */
@@ -118,8 +128,10 @@
     color: red;
     padding-left: 10px;
 }
-
 /* login.html END */
+
+
+
 
 /* create_game.html START */
 .jquery_validation_form label.error {
@@ -128,5 +140,4 @@
     color: red;
     padding-left: 10px;
 }
-
 /* create_game.html END */

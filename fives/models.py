@@ -24,7 +24,7 @@ class Player(models.Model):
     host_rating = models.IntegerField(default=0)
     num_host_ratings = models.IntegerField(default=0)
 
-    reliability = models.IntegerField(default=0)
+    punctuality = models.IntegerField(default=0)
     likeability = models.IntegerField(default=0)
     skill = models.IntegerField(default=0)
     num_player_ratings = models.IntegerField(default=0)
