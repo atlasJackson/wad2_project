@@ -1,0 +1,7 @@
+
+SHOW GAME
+    - Male/Female can only join games within certain categories.
+
+CREATE GAME
+    - Users can't create games in the past or within two hours.
+    - 

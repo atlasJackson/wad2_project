@@ -108,7 +108,7 @@ def join_game(request, game_custom_slug):
     if game:
         if game.free_slots == 0:
             player_added = False
-        else:            
+        else:
             game.free_slots -= 1
             game.save()
             p = Participation(player=player, game=game)
@@ -161,7 +161,7 @@ def delete_game(request, game_custom_slug):
         game_deleted = False
     except Game.DoesNotExist:
         game_deleted = True
-        
+
     data = {'game_deleted': game_deleted}
 
     return JsonResponse(data)

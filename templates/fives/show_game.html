@@ -7,9 +7,10 @@
 
 {% block body_block %}
 {% if game %}
+<div class="game-content">
     <div class="game-head-wrapper">
         <div class="game-head-title">
-            {{ game.host.first_name }}&nbsp;&#9675;&nbsp;{{ game.date|date:"d N Y" }}&nbsp;&#9675;&nbsp;{{ game.start_time }}
+            {{ game.host.username }}&nbsp;&#9675;&nbsp;{{ game.date|date:"d N Y" }}&nbsp;&#9675;&nbsp;{{ game.start_time|date:"H:i" }}
         </div>
         <div class="game-head-host">
             Host: {{ game.host.username }}
@@ -17,7 +18,7 @@
     </div>
     <div class="game-info">
         Date: {{ game.date|date:"d M Y" }}<br />
-        Time: {{ game.start_time }}<br />
+        Time: {{ game.start_time|date:"H:i" }}<br />
         Pitch:
         {% if game.booked %}
             <span style="color:Green">Booked</span><br />
@@ -33,7 +34,7 @@
         {{ game.postcode }}
     </div>
     <div class="game-map">
-        <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 600px; height: 200px;">
+        <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 300px; height: 150px;">
             <div id="map" >
             </div>
         </div>
@@ -47,22 +48,43 @@
                 <th>Skill</th>
                 <th>Likes</th>
                 <th>Punctuality</th>
+                {% if user == game.host %}
+                    <th style="text-align:right; padding-right:55px;"></th>
+                {% endif %}
             </tr>
         {% for player in participants %}
             <tr>
                 <td>{{ player.user.first_name }}</td>
                 <td>{{ player.user.last_name }}</td>
-                <td>{{ player.skill }}</td>
-                <td>{{ player.likeability }}</td>
-                <td>{{ player.reliability }}</td>
-                
-                {% if user == game.host %}
                 <td>
+                    {% with ''|center:player.skill as range %}
+                    {% for i in range %}
+                        <img src="{% static 'img/skill.png' %}" alt="skill rating" height="15" width="15">
+                    {% endfor %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {% with ''|center:player.likeability as range %}
+                    {% for i in range %}
+                        <img src="{% static 'img/likes.png' %}" alt="likeability rating" height="15" width="15">
+                    {% endfor %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {% with ''|center:player.reliability as range %}
+                    {% for i in range %}
+                        <img src="{% static 'img/punctuality.png' %}" alt="puntuality rating" height="15" width="15">
+                    {% endfor %}
+                    {% endwith %}
+                </td>
+
+                {% if user == game.host %}
+                <td style="text-align:right">
                     {% if user != player.user %}
-                        <button type="button" id="removeBtn" data-gameid="{{ game.game_id }}" 
+                        <button type="button" id="removeBtn" data-gameid="{{ game.game_id }}"
                         data-username="{{ player.user.username }}" >
                             Remove Player
-                       </button>
+                        </button>
                     {% endif %}
                 </td>
                 {% endif %}
@@ -75,7 +97,7 @@
         <div class="game-player-buttons">
             {% if user.is_authenticated %}
                 {% if user == game.host %}
-                    <button type="button" id="deleteBtn" data-gameid="{{ game.game_id }}" 
+                    <button type="button" id="deleteBtn" data-gameid="{{ game.game_id }}"
                     data-username="{{ user.username }}" >
                         Delete Game
                     </button>
@@ -95,6 +117,7 @@
             {% endif %}
         </div>
     </div>
+</div>
 {% else %}
     The specified game does not exist!
 {% endif %}
@@ -104,7 +127,7 @@
 <script>
     var map
     function initMap() {
-        var mapDisplay = document.getElementById("map-display"); 
+        var mapDisplay = document.getElementById("map-display");
 
         var latitude = mapDisplay.getAttribute("data-latitude");
         var longitude = mapDisplay.getAttribute("data-longitude");
@@ -125,7 +148,7 @@
     }
 
 </script>
-<script type="text/javascript" 
+<script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw&callback=initMap"
     async defer>
 </script>
