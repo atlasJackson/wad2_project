@@ -7,14 +7,22 @@
 {% endblock %}
 
 {% block body_block %}
-{% if game %}
+{% if game %} <!-- The game exists -->
+{% if not gameTookPlace %} <!-- Checks if the game is not in the past. -->
 <div class="game-content">
     <div class="game-head-wrapper">
         <div class="game-head-title">
-            {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;&#9675;&nbsp;{{ game.start|date:"d N Y" }}&nbsp;&#9675;&nbsp;{{ game.start|date:"H:i" }}
+            {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;-&nbsp;{{ game.start|date:"d N Y" }}&nbsp;-&nbsp;{{ game.start|date:"H:i" }}
         </div>
         <div class="game-head-host">
-            Host: <span title="">{{ game.host.username }}</span>
+            <span title="">{{ game.host.username }}</span>
+            {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} <!-- Divides rating by number of ratings -->
+                {% with ''|center:rating as range %} <!-- Creates a string with length of the value of "rating" -->
+                    {% for i in range %}
+                        <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                    {% endfor %}
+                {% endwith %}
+            {% endwith %}
         </div>
     </div>
     <div class="game-info">
@@ -51,7 +59,7 @@
                 <th>Skills</th>
                 <th>Likes</th>
                 <th>Punctuality</th>
-                {% if user == game.host %}
+                {% if user == game.host%}
                     <th style="text-align:right; padding-right:55px;"></th>
                 {% endif %}
             </tr>
@@ -111,7 +119,7 @@
     </div>
     <div class="game-player-static">
         <div class="game-player-buttons">
-        {% if gameTookPlace %} <!-- The current game lies in the past and took place(all slots filled). -->
+        {% if gameTookPlace %} <!-- The current game lies in the past and took place(all slots were filled). -->
 
         {% else %} <!-- The current game lies in the future. -->
             {% if user.is_authenticated %}
@@ -138,6 +146,9 @@
         </div>
     </div>
 </div>
+{% else %}
+    The specified game has already taken place.
+{% endif %}
 {% else %}
     The specified game does not exist!
 {% endif %}

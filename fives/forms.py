@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import formset_factory
 from django.contrib.auth.models import User
 from fives.models import Player, Game
 import datetime
@@ -25,11 +26,8 @@ class GameForm(forms.ModelForm):
 
     game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type")
 
-    #date = forms.DateField(label="Date")
     start = forms.DateTimeField(widget=forms.SplitDateTimeWidget())
 
-    # Calculate end_time from start_time and duration
-    # start_time = forms.TimeField(label="Start time")
     duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration")
 
     street = forms.CharField(max_length=128, label="Street & number")
@@ -42,3 +40,7 @@ class GameForm(forms.ModelForm):
     class Meta:
         model = Game
         exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end', 'custom_slug')
+
+
+class RatingForm(forms.ModelForm):
+    pass

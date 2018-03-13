@@ -66,9 +66,6 @@ class Game(models.Model):
     # Date and time entries
     start = models.DateTimeField(default=None)
     end = models.DateTimeField(default=None)
-    #date = models.DateField(default=None)
-    #start_time = models.TimeField(default=datetime.time.min)
-    #end_time = models.TimeField(default=datetime.time.max)
 
     # Duration of 1 hour is false, 2 hours is true. Used to calculate endtime in form.
     ONE_HOUR = 1

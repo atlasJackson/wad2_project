@@ -16,13 +16,14 @@ urlpatterns = [
     url(r'^create_game/$', views.create_game, name='create_game'),
     #url(r'^create_game/chosen_game$', views.create_game, name='chosen_game'),
     #url(r'^create_game/chosen_game/edit_game$', views.create_game, name='edit_game'),
-    
+
 
     url(r'^sign_up/$', views.sign_up, name='sign_up'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
 
     url(r'^my_account/$', views.my_account, name='my_account'),
+    url(r'^my_account/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/$', views.rate_game, name='rate_game'),
     #url(r'^my_account/edit_account$', views.edit_account, name='edit_account'),
     #url(r'^my_account/history$', views.history, name='history'),
 ]

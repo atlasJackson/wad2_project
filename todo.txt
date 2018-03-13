@@ -2,6 +2,14 @@
 SHOW GAME
     - Male/Female can only join games within certain categories.
 
+EDIT GAME
+    - Keep this or not?
+    - Change Pitch status.
+
 CREATE GAME
     - Users can't create games in the past or within two hours.
+    - Datepicker and time field.
+
+RATE GAME
+    - (Use of formsets for multiple ratings?)
     - 

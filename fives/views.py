@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 
 from geopy.geocoders import Nominatim
 import datetime
+import pytz
 import sys
 
 from fives.models import User, Player, Game, Participation
@@ -47,9 +48,7 @@ def create_game(request):
             game.latitude = location.latitude
             game.longitude = location.longitude
 
-            # Calculate end time from start time and duration
-            #end_time_hour = (game.start_time.hour + game.duration) % 24
-            #game.end_time = datetime.time(end_time_hour, game.start_time.minute)
+            # Calculate end from start and duration
             game.end = game.start.hour + game.duration
 
             # Get host entry from current user
@@ -82,18 +81,18 @@ def show_game(request, game_custom_slug):
         participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
         users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
 
-        # now = datetime.datetime.now()
-        # Check if game is in the past and all slots were filled.
-        # if game.end < now and game.free_slots == 0:
-        #    context_dict['gameTookPlace'] = True
-        #else:
-        context_dict['gameTookPlace'] = False
+        now = datetime.datetime.now(pytz.utc)
+        # Check if game is in the past.
+        if game.end < now:
+            context_dict['gameTookPlace'] = True
+        else:
+            context_dict['gameTookPlace'] = False
 
-        # Add both entities to the context dictionary
+        # Add entities to the context dictionary
         context_dict['game'] = game
         context_dict['participants'] = participants
         context_dict['users'] = users
-
+        
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
         context_dict['game'] = None
@@ -103,6 +102,50 @@ def show_game(request, game_custom_slug):
         #context_dict['api_key'] = "AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw"
 
     return render(request, 'fives/show_game.html', context=context_dict)
+
+def rate_game(request, game_custom_slug):
+    context_dict = {}
+
+    try:
+        # Try to find a game with the given slug.
+        game = Game.objects.get(custom_slug=game_custom_slug)
+        # Retreive a list of all players, and corresponding user entries, participating in the game.
+        participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
+        users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
+
+        # Retreive participation relationship for current user.
+        for player in participants:
+            if player.user == request.user:
+                currentPlayer = player
+                participation = Participation.objects.get(game=game, player=request.user.player)
+                if participation.rated:
+                    context_dict['rated'] = True
+                else:
+                    context_dict['rated'] = False
+            else:
+                context_dict['rated'] = False
+
+        now = datetime.datetime.now(pytz.utc)
+        # Check if game is in the past and all slots were filled.
+        if game.end < now and game.free_slots == 0:
+            context_dict['gameTookPlace'] = True
+        else:
+            context_dict['gameTookPlace'] = False
+
+        # Add entities to the context dictionary
+        context_dict['game'] = game
+        context_dict['participants'] = participants
+        context_dict['users'] = users
+
+    except Game.DoesNotExist:
+        # We get here if we couldn't find the specified game
+        context_dict['game'] = None
+        context_dict['participants'] = None
+        context_dict['gameTookPlace'] = None
+        context_dict['participants'] = None
+
+    return render(request, 'fives/rate_game.html', context=context_dict)
+
 
 @login_required
 @csrf_exempt
@@ -286,5 +329,6 @@ def user_logout(request):
 
 def my_account(request):
     context_dict = {}
-    response = render(request, 'fives/my_account.html', context=context_dict)
-    return response
+    pastGames = Game.objects.filter(start__lt=datetime.date.today()).order_by('start')[:20]
+    context_dict = {'pastGames': pastGames}
+    return render(request, 'fives/my_account.html', context=context_dict)

@@ -1,0 +1,105 @@
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+{% load fives_filters %}
+
+{% block title_block %}
+    {{ game.custom_slug }}
+{% endblock %}
+
+{% block body_block %}
+{% if game %}
+    {% if gameTookPlace %}
+    {% if user in users %}
+    <div class="game-content">
+        <div class="game-head-wrapper">
+            <div class="game-head-title">
+                {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;-&nbsp;{{ game.start|date:"d N Y" }}&nbsp;-&nbsp;{{ game.start|date:"H:i" }}
+            </div>
+            <div class="game-head-host">
+                Host: <span title="">{{ game.host.username }}</span>
+            </div>
+        </div>
+        {% if not rated %}
+
+        We hope you enjoyed the game! Please leave a rating for the other players and the host.<br /><br />
+
+        <div class="game-players-wrapper">
+            <table class="game-player-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Surame</th>
+                    <th>Gender</th>
+                    <th>Skills</th>
+                    <th>Likeability</th>
+                    <th>Punctuality</th>
+                </tr>
+            {% for player in participants %}
+                <tr>
+                    <td>{{ player.user.first_name }}</td>
+                    <td>{{ player.user.last_name }}</td>
+                    <td>
+                        {% if player.gender %}
+                            <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
+                        {% else %}
+                            <img src="{% static 'img/female.png' %}" alt="female" height="14" title="female">
+                        {% endif %}
+                    </td>
+                    <td>
+                        <select type="select" class="skill" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected="selected">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select type="select" class="likeability" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected="selected">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select type="select" class="puntuality" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected="selected">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+            {% if user == game.host %}
+            {% else %}
+            <br />
+            The hosting skills of {{ game.host.first_name }} {{ game.host.last_name }}:
+            <select type="select" class="skill" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected="selected">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            {% endif %}
+        </div>
+
+        {% else %}
+            You have already rated the players for this game.
+        {% endif %}
+    </div>
+    {% else %}
+        This game has already taken place. You didn't play in this game.
+    {% endif %}
+    {% else %}
+        The game has not taken place yet! Try to find it in the <a href="{% url 'game_list' %}">Game List</a>.
+    {% endif %}
+{% else %}
+    The specified game doesn't exist!
+{% endif %}
+
+{% endblock %}

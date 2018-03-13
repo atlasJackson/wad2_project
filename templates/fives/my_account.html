@@ -7,6 +7,16 @@
 
 {% block body_block %}
     <h1>Welcome {{ user.username }}</h1>
-    
+    <div class="">
+        {% if pastGames %}
+        <ul>
+            {% for game in pastGames %}
+                <li>
+                    <a href="{% url 'rate_game' game.custom_slug %}">{{ game.custom_slug }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
 
 {% endblock %}

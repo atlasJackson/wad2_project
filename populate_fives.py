@@ -254,9 +254,10 @@ def add_game(custom_slug, game_type, free_slots, start, end, duration,
             street, city, postcode, price, booked, host):
 
     h = User.objects.get(username=host)
+
     #year, month, day = date.split("-")
     #date = datetime.date(int(year), int(month), int(day))
-
+    
     #start_hour, start_min = start_time.split(":")
     #end_hour, end_min = end_time.split(":")
     #start_time = datetime.time(int(start_hour), int(start_min))
