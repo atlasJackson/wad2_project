@@ -51,6 +51,17 @@
                 <td>{{ player.skill }}</td>
                 <td>{{ player.likeability }}</td>
                 <td>{{ player.reliability }}</td>
+                
+                {% if user == game.host %}
+                <td>
+                    {% if user != player.user %}
+                        <button type="button" id="removeBtn" data-gameid="{{ game.game_id }}" 
+                        data-username="{{ player.user.username }}" >
+                            Remove Player
+                       </button>
+                    {% endif %}
+                </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </table>
@@ -60,8 +71,10 @@
         <div class="game-player-buttons">
             {% if user.is_authenticated %}
                 {% if user == game.host %}
-                    <input type="submit" name="submit" value="Edit Game" />
-                    <input type="submit" name="submit" value="Delete Game" />
+                    <button type="button" id="deleteBtn" data-gameid="{{ game.game_id }}" 
+                    data-username="{{ user.username }}" >
+                        Delete Game
+                    </button>
                 {% else %}
                     {% if user in users %}
                         <button type="button" id="leaveBtn" data-gameid="{{ game.game_id }}"

@@ -64,7 +64,7 @@ class Game(models.Model):
     free_slots = models.IntegerField(default=9)
 
     # Date and time entries
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=None)
     start_time = models.TimeField(default=datetime.time.min)
     end_time = models.TimeField(default=datetime.time.max)
 
@@ -88,6 +88,7 @@ class Game(models.Model):
 
     price = models.DecimalField(max_digits=8, decimal_places=2)
     # Booked is true if the pitch has been booked and false if it has not.
+    # Allows the option for people to organise a game at a public park (such as teens or children).
     booked = models.BooleanField(default=False)
     # Host uses foreign key from Player class
     host = models.ForeignKey(User)

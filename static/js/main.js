@@ -3,18 +3,31 @@ $(document).ready(function(){
     $(".game-player-static").on("click", "#joinBtn", function(e) {
 
         e.preventDefault();
-        buttonJoinLeave($(this), "join_game/");
+        buttonJoinLeaveDelete($(this), "join_game/");
     });
-
 
     $(".game-player-static").on("click", "#leaveBtn", function(e) {
 
         e.preventDefault();
-        buttonJoinLeave($(this), "leave_game/");
+        buttonJoinLeaveDelete($(this), "leave_game/");
+    });
+
+    $(".game-player-table").on("click", "#removeBtn", function(e) {
+        
+        e.preventDefault();
+        buttonJoinLeaveDelete($(this), "leave_game/");
+    });
+
+    $(".game-player-static").on("click", "#deleteBtn", function(e) {
+        var confirmDelete = confirm("Are you sure you want to delete this game?");
+        if (confirmDelete) {
+            e.preventDefault();
+            buttonJoinLeaveDelete($(this), "delete_game/");
+        }
     });
 });
 
-function buttonJoinLeave(button, urlLink) {
+function buttonJoinLeaveDelete(button, urlLink) {
     $.ajax({
         type: "POST",
         url: urlLink,
@@ -29,6 +42,9 @@ function buttonJoinLeave(button, urlLink) {
                 // Refresh player list and button options on success.
                 $(".game-player-table").load(" .game-player-table", function(){button.children().unwrap()});
                 $(".game-player-buttons").load(" .game-player-buttons", function(){button.children().unwrap()});
+            } else if (data.game_deleted) {
+                window.location.replace("/");
+
             } else {
                 // This should not be reached.
                 alert("Oh no...");
@@ -41,14 +57,3 @@ function buttonJoinLeave(button, urlLink) {
     });
 }
 
-/*
-function loadDoc(url,cFunction) {
-    var xhttp;
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            cFunction(this);
-        }
-    }
-}
-*/

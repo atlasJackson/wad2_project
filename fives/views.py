@@ -44,6 +44,7 @@ def show_game(request, game_custom_slug):
         # We get here if we couldn't find the specified game
         context_dict['game'] = None
         context_dict['participants'] = None
+        context_dict['users'] = None
 
     return render(request, 'fives/show_game.html', context=context_dict)
 
@@ -92,8 +93,28 @@ def leave_game(request, game_custom_slug):
     data = {'player_removed': player_removed}
 
     return JsonResponse(data)
+    
+@login_required
+@csrf_exempt
+def delete_game(request, game_custom_slug):
+    gameid = request.POST.get('gameid')
+    game = Game.objects.get(game_id=gameid)
 
+    username = request.POST.get('user')
+    user = User.objects.get(username=username)
+    player=Player.objects.get(user=user)
 
+    game.delete()
+
+    try:
+        game = Game.objects.get(game_id=gameid)
+        game_deleted = False
+    except Game.DoesNotExist:
+        game_deleted = True
+        
+    data = {'game_deleted': game_deleted}
+
+    return JsonResponse(data)
 
 @login_required
 def create_game(request):
