@@ -22,10 +22,10 @@
         Pitch:
         {% if game.booked %}
             <span style="color:Green">Booked</span><br />
-            {% else %}
+        {% else %}
             <span style="color:Red">Not Booked</span><br />
-            {% endif %}
-            Price/person: {{ game.price }}
+        {% endif %}
+        Price/person: {{ game.price }}
     </div>
     <div class="game-address">
         Address:<br />
