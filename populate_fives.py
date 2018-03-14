@@ -15,6 +15,7 @@ def populate():
     # List of users - also contains details for corresponding player entry.
     users = {"realMarioMario":
                 {"password": "password",
+                "email": "mario@mariobros.mk",
                 "first_name": "Mario",
                 "last_name": "Mario",
                 "gender": 1,
@@ -27,6 +28,7 @@ def populate():
 
             "luigi-best-mario":
                 {"password": "password",
+                "email": "luigi@mariobros.mk",
                 "first_name": "Luigi",
                 "last_name": "Mario",
                 "gender": 1,
@@ -39,6 +41,7 @@ def populate():
 
             "kakarot":
                 {"password": "password",
+                "email": "",
                 "first_name": "Goku",
                 "last_name": "Son",
                 "gender": 1,
@@ -51,6 +54,7 @@ def populate():
 
             "ryanIndustries1946":
                 {"password": "password",
+                "email": "andrew.ryan@ryanindusties.rap",
                 "first_name": "Andrew",
                 "last_name": "Ryan",
                 "gender": 1,
@@ -63,6 +67,7 @@ def populate():
 
             "kevin-garvey":
                 {"password": "password",
+                "email": "kgarvey71@jpd.com",
                 "first_name": "Kevin",
                 "last_name": "Garvey",
                 "gender": 1,
@@ -75,6 +80,7 @@ def populate():
 
             "testuser":
                 {"password": "password",
+                "email": "user1@testemail.com",
                 "first_name": "Test",
                 "last_name": "User",
                 "gender": 0,
@@ -87,6 +93,7 @@ def populate():
 
             "wonderWoman":
                 {"password": "password",
+                "email": "",
                 "first_name": "Diana",
                 "last_name": "Prince",
                 "gender": 0,
@@ -99,6 +106,7 @@ def populate():
 
             "Greatest-Earthbender-in-the-World":
                 {"password": "password",
+                "email": "",
                 "first_name": "Toph",
                 "last_name": "Beifong",
                 "gender": 0,
@@ -111,6 +119,7 @@ def populate():
 
             "BtVS":
                 {"password": "password",
+                "email": "buffy4angel@gmail.com",
                 "first_name": "Buffy",
                 "last_name": "Summers",
                 "gender": 0,
@@ -123,6 +132,7 @@ def populate():
 
             "DragonQueen":
                 {"password": "password",
+                "email": "",
                 "first_name": "Daenerys",
                 "last_name": "Targaryen",
                 "gender": 0,
@@ -134,18 +144,53 @@ def populate():
                 "num_player_ratings": 2},
             }
 
-    games = {"realMarioMario-20180326-1800":
-                {"game_type": 0,
-                "free_slots": 7,
-                "start": "2018-03-26 18:00",
-                "end": "2018-03-26 19:00",
-                "duration": 1,
-                "street": "1 Kennedy Street",
+    games = {"realMarioMario-20180310-1700":
+                {"game_type": 1,
+                "free_slots": 0,
+                "start": "2018-03-10 17:00",
+                "end": "2018-03-10 19:00",
+                "duration": 2,
+                "street": "137 Shawbridge Street",
                 "city": "Glasgow",
-                "postcode": "G4 0EB",
-                "price": 4,
+                "postcode": "G43 1QQ",
+                "price": 5,
                 "booked": 1,
-                "host": "realMarioMario"},
+                "host": "realMarioMario",
+                "participants":
+                        [("realMarioMario",0),
+                        ("luigi-best-mario",0),
+                        ("kevin-garvey",0),
+                        ("ryanIndustries1946",0),
+                        ("kakarot",1),
+                        ("testuser",1),
+                        ("wonderWoman",0),
+                        ("Greatest-Earthbender-in-the-World",0),
+                        ("BtVS",0),
+                        ("DragonQueen",0)],},
+
+            "realMarioMario-20180317-1700":
+                {"game_type": 5,
+                "free_slots": 0,
+                "start": "2018-03-17 17:00",
+                "end": "2018-03-17 19:00",
+                "duration": 2,
+                "street": "137 Shawbridge Street",
+                "city": "Glasgow",
+                "postcode": "G43 1QQ",
+                "price": 5,
+                "booked": 1,
+                "host": "realMarioMario",
+                "participants":
+                        [("realMarioMario",0),
+                        ("luigi-best-mario",0),
+                        ("kevin-garvey",0),
+                        ("ryanIndustries1946",0),
+                        ("kakarot",0),
+                        ("testuser",0),
+                        ("wonderWoman",0),
+                        ("Greatest-Earthbender-in-the-World",0),
+                        ("BtVS",0),
+                        ("DragonQueen",0)],},
 
             "realMarioMario-20180324-1700":
                 {"game_type": 5,
@@ -158,7 +203,78 @@ def populate():
                 "postcode": "G43 1QQ",
                 "price": 5,
                 "booked": 1,
-                "host": "realMarioMario"},
+                "host": "realMarioMario",
+                "participants":
+                        [("realMarioMario",0),
+                        ("luigi-best-mario",0),
+                        ("kevin-garvey",0),
+                        ("ryanIndustries1946",0),
+                        ("kakarot",0),
+                        ("testuser",0),
+                        ("wonderWoman",0),
+                        ("Greatest-Earthbender-in-the-World",0),
+                        ("BtVS",0),
+                        ("DragonQueen",0)],},
+
+            "realMarioMario-20180326-1800":
+                {"game_type": 0,
+                "free_slots": 7,
+                "start": "2018-03-26 18:00",
+                "end": "2018-03-26 19:00",
+                "duration": 1,
+                "street": "1 Kennedy Street",
+                "city": "Glasgow",
+                "postcode": "G4 0EB",
+                "price": 4,
+                "booked": 1,
+                "host": "realMarioMario",
+                "participants":
+                        [("realMarioMario",0),
+                        ("luigi-best-mario",0),
+                        ("kevin-garvey",0)],},
+
+            "realMarioMario-20180331-1700":
+                {"game_type": 5,
+                "free_slots": 5,
+                "start": "2018-03-31 17:00",
+                "end": "2018-03-31 19:00",
+                "duration": 2,
+                "street": "137 Shawbridge Street",
+                "city": "Glasgow",
+                "postcode": "G43 1QQ",
+                "price": 3,
+                "booked": 1,
+                "host": "realMarioMario",
+                "participants":
+                        [("realMarioMario",0),
+                        ("luigi-best-mario",0),
+                        ("kakarot",0),
+                        ("wonderWoman",0),
+                        ("DragonQueen",0)],},
+
+            "ryanIndustries1946-20180312-1700":
+                {"game_type": 0,
+                "free_slots": 0,
+                "start": "2018-03-12 17:00",
+                "end": "2018-03-12 19:00",
+                "duration": 2,
+                "street": "137 Shawbridge Street",
+                "city": "Glasgow",
+                "postcode": "G43 1QQ",
+                "price": 6,
+                "booked": 1,
+                "host": "ryanIndustries1946",
+                "participants":
+                        [("realMarioMario",1),
+                        ("luigi-best-mario",1),
+                        ("kevin-garvey",1),
+                        ("ryanIndustries1946",1),
+                        ("kakarot",1),
+                        ("testuser",1),
+                        ("wonderWoman",0),
+                        ("Greatest-Earthbender-in-the-World",0),
+                        ("BtVS",1),
+                        ("DragonQueen",0)],},
 
             "ryanIndustries1946-20180325-1200":
                 {"game_type": 1,
@@ -171,33 +287,16 @@ def populate():
                 "postcode": "G14 9NN",
                 "price": 0,
                 "booked": 0,
-                "host": "ryanIndustries1946"},
-            }
+                "host": "ryanIndustries1946",
+                "participants": 
+                        [("ryanIndustries1946",0),
+                        ("realMarioMario",0)],},
 
-    particpants = {"realMarioMario-20180326-1800":
-                        [("realMarioMario",0),
-                        ("luigi-best-mario",0),
-                        ("kevin-garvey",0)],
-
-                    "realMarioMario-20180324-1700":
-                        [("realMarioMario",0),
-                        ("luigi-best-mario",0),
-                        ("kevin-garvey",0),
-                        ("ryanIndustries1946",0),
-                        ("kakarot",1),
-                        ("testuser",1),
-                        ("wonderWoman",0),
-                        ("Greatest-Earthbender-in-the-World",0),
-                        ("BtVS",0),
-                        ("DragonQueen",0)],
-
-                    "ryanIndustries1946-20180325-1200":
-                        [("ryanIndustries1946",0)],
             }
 
 
     for user, user_data in users.items():
-        u = add_user(user,user_data["password"], user_data["first_name"], user_data["last_name"])
+        u = add_user(user, user_data["password"], user_data["email"], user_data["first_name"], user_data["last_name"])
         p = add_player(user, user_data["gender"], user_data["host_rating"], user_data["num_host_ratings"],
             user_data["punctuality"], user_data["likeability"], user_data["skill"], user_data["num_player_ratings"])
 
@@ -206,9 +305,9 @@ def populate():
             game_data["end"], game_data["duration"], game_data["street"], game_data["city"], game_data["postcode"],
             game_data["price"], game_data["booked"], game_data["host"])
 
-    for p_game, p_players in particpants.items():
-        for player in p_players:
-            p = add_participant(p_game,player[0],player[1])
+        for player in game_data["participants"]:
+            p = add_participant(game,player[0],player[1])
+            print(p)
 
 
 
@@ -228,9 +327,10 @@ def populate():
         print (str(p))
 
 
-def add_user(username, password, first_name, last_name):
+def add_user(username, password, email, first_name, last_name):
     u = User.objects.get_or_create(username=username)[0]
     u.set_password(password)
+    u.email = email
     u.first_name = first_name
     u.last_name = last_name
     u.save()

@@ -332,10 +332,31 @@ def my_account(request, player):
     username = User.objects.get(username=player)
     player = Player.objects.get(user=username)
 
-    joinedGames = [g.game for g in Participation.objects.select_related('game').filter(player=player)]
+    gameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+
+    joinedGames = Game.objects.filter(custom_slug__in=gameSlugs).exclude(host=username).filter(
+        start__gte=datetime.date.today()).order_by('start')[:20]
+
     hostingGames = Game.objects.filter(host=username).filter(start__gte=datetime.date.today()).order_by('start')[:20]
-    pastGames = Game.objects.filter(start__lt=datetime.date.today()).order_by('-start')[:5]
+
+    pastGames = Game.objects.filter(custom_slug__in=gameSlugs).filter(
+        start__lt=datetime.date.today()).order_by('-start')[:5]
 
     context_dict = {'player': player, 'joinedGames': joinedGames, 'hostingGames': hostingGames, 'pastGames': pastGames}
 
     return render(request, 'fives/my_account.html', context=context_dict)
+
+def history(request, player):
+    context_dict = {}
+    username = User.objects.get(username=player)
+    player = Player.objects.get(user=username)
+
+    gameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+    fullHistory = Game.objects.filter(custom_slug__in=gameSlugs).filter(
+        start__lt=datetime.date.today()).order_by('-start')
+
+    context_dict = {'player': player, 'fullHistory': fullHistory}
+
+    return render(request, 'fives/history.html', context=context_dict)
+
+

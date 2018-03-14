@@ -14,16 +14,13 @@ urlpatterns = [
     url(r'^game_list/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/delete_game/$', views.delete_game, name='delete_game'),
 
     url(r'^create_game/$', views.create_game, name='create_game'),
-    #url(r'^create_game/chosen_game$', views.create_game, name='chosen_game'),
-    #url(r'^create_game/chosen_game/edit_game$', views.create_game, name='edit_game'),
-
 
     url(r'^sign_up/$', views.sign_up, name='sign_up'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
 
-    url(r'^my_account/(?P<player>[\w\d\-]+\b)/$', views.my_account, name='my_account'),
-    url(r'^my_account/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/$', views.rate_game, name='rate_game'),
-    #url(r'^my_account/edit_account$', views.edit_account, name='edit_account'),
-    #url(r'^my_account/history$', views.history, name='history'),
+    url(r'^user/(?P<player>[\w\d\-]+\b)/$', views.my_account, name='my_account'),
+    #url(r'^user/(?P<player>[\w\d\-]+\b)/edit_account/$', views.my_account, name='edit_account'),
+    #url(r'^user/(?P<player>[\w\d\-]+\b)/history/$', views.my_account, name='history'),
+    #url(r'^user/(?P<player>[\w\d\-]+\b)/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/$', views.rate_game, name='rate_game'),
 ]

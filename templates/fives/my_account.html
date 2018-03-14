@@ -3,10 +3,11 @@
 {% load fives_filters %}
 
 {% block title_block %}
-    {{ user.first_name }} ({{ user.username }})
+    {{ player.user.first_name }} ({{ player.user.username }})
 {% endblock %}
 
 {% block body_block %}
+{% if user.is_authenticated %}
 <div class="player-content">
     <div class="player-head-wrapper"> 
         <div class="player-info">
@@ -160,12 +161,11 @@
                 </td>
 
                 <td>
-                    {% if user == game.host %}
+                    {% if user == player.user %}
                         <button type="button" id="rateButton" data-game="{{ game }}">
                             Rate
                         </button>
                     {% else %}
-                        N/A
                     {% endif %}
                 </td>
 
@@ -179,16 +179,10 @@
     </div>
 </div>
 
-
-<div class="">
-    {% if pastGames %}
-    <ul>
-        {% for game in pastGames %}
-            <li>
-                <a href="{% url 'rate_game' game.custom_slug %}">{{ game.custom_slug }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-</div>
+{% else %}
+    <p>
+        You do not have permission to view this page. Please <a href="{% url 'login' %}">login</a>.<br /><br />
+        If you do not have an account then <a href="{% url 'sign_up' %}">sign up</a> today.
+    </p>
+{% endif %}
 {% endblock %}
