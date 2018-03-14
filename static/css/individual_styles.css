@@ -9,7 +9,7 @@
     padding-bottom: 50px;
 }
 
-#game-link {
+#game-player-link {
     cursor: pointer;
 }
 /* game_list.html END */
@@ -178,7 +178,7 @@
     background-color: #f2f2f2;
 }
 
-#player-link {
+.game-player-table #player-link {
     cursor: pointer;
 }
 

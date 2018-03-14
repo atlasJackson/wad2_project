@@ -1,11 +1,11 @@
 $(document).ready(function(){
 
-    $(".game-player-table").on("click", "#game-link", function() {
+    $(".game-player-table").on("click", "#game-player-link", function() {
 
         window.location.href = $(this).data("url");
     });
 
-    $(".game-player-table").on("click", "#player-link", function() {
+    $(".player-tables-wrapper").on("click", "#account-redirect", function() {
 
         window.location.href = $(this).data("url");
     });
