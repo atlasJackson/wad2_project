@@ -42,7 +42,7 @@ $(document).ready(function(){
     $("#game_form").validate({
         rules: {
             date: {},
-            start_time: {required: true, time: true},
+            time: {required: true, time: true},
             street: {required: true, maxlength: 128},
             place: {required: true, maxlength: 128},
             postcode: {required: true, minlength: 5, maxlength: 8},
@@ -60,32 +60,27 @@ $(document).ready(function(){
     // Add validation for time, makes sure it's a valid time in the correct format.
     $.validator.addMethod('time', function(value, element, param) {
         return value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
-    }, 'Enter a valid time: hh:mm');
+    }, 'Enter a valid time (hh:mm)');
 
-    $("#id_start").datepicker({
+
+    $("#id_date").datepicker({
         minDate: 0, // Can't select dates in the past.
         maxDate: 30, // Can only select dates within 30 days from today.
-        dateFormat: "mm/dd/yy",
+        dateFormat: "yy-mm-dd",
     });
-    $('#id_start').datepicker('setDate', new Date()); // .datepicker('setDate', date) sets the current date for the datepicker.
+    $('#id_date').datepicker('setDate', new Date()); // .datepicker('setDate', date) sets the current date for the datepicker.
 
     // Checks if date lies in the past, if so, set date to today.
-    $("#id_start").datepicker().change(evt => {
-        var selectedDate = $("#id_start").datepicker('getDate');
+    $("#id_date").datepicker().change(evt => {
+        var selectedDate = $("#id_date").datepicker('getDate');
         var today = new Date();
         today.setHours(0,0,0,0);
         if (selectedDate < today) {
-            $('#id_start').datepicker('setDate', new Date());
+            $('#id_date').datepicker('setDate', new Date());
         }
     });
 
-
-
-    time_choices: ["8:30", "9:30", "10:30", "11:30", "12:30"]
-
-    $("#id_start_time").time_picker({});
-
-    $("#id_start_time").innerhtml(time_choices);
+    //$("#id_start_1").
 
 });
 
@@ -95,8 +90,8 @@ function buttonJoinLeaveDelete(button, urlLink) {
         type: "POST",
         url: urlLink,
         data: {
-            "gameid": button.attr("data-gameid"),
-            "user": button.attr("data-username"),
+            "gameid": button.data("gameid"),
+            "user": button.data("username"),
             csrfmiddlewaretoken: "{{ csrftoken }}",
         },
         dataType: "json",

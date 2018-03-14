@@ -1,11 +1,11 @@
 /* game_list.html START */
-.game-list-content { 
+.game-list-content {
     max-width: 1200px;
     height: auto;
     margin: 0 auto;
 }
 
-.game-list-buttons { 
+.game-list-buttons {
     padding-bottom: 50px;
 }
 
@@ -17,7 +17,7 @@
 
 
 /* user_account.html START */
-.player-content { 
+.player-content {
     max-width: 1200px;
     height: auto;
     margin: 0 auto;
@@ -67,7 +67,7 @@
 
 .player-ratings ul {
     padding: 0px;
-    list-style-type: none; 
+    list-style-type: none;
 }
 
 
@@ -197,7 +197,7 @@
 }
 
 .game-player-buttons button {
-    width: 100px;
+    width: auto;
     height: 25px;
     border: none;
     border-radius: 4px;
@@ -258,7 +258,7 @@
 input#create-game {
     margin-top: 15px;
     margin-left: 90px;
-    width: 100px;
+    width: auto;
     height: 25px;
     border: none;
     border-radius: 4px;

@@ -26,7 +26,11 @@ class GameForm(forms.ModelForm):
 
     game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type")
 
-    start = forms.DateTimeField(widget=forms.SplitDateTimeWidget())
+    #start = forms.SplitDateTimeField(widget=forms.SplitDateTimeWidget(), input_date_formats=['%Y-%m-%d'], input_time_formats=['%H:%M'], label="Date/Time")
+    date = forms.DateField()
+    time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'))
+
+
 
     duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration")
 
@@ -39,7 +43,7 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end', 'custom_slug')
+        exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end', 'custom_slug', 'start')
 
 
 class RatingForm(forms.ModelForm):

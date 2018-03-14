@@ -41,6 +41,15 @@ def create_game(request):
             # Save, but don't commit
             game = game_form.save(commit=False)
 
+            # Combine date and time for DateTimeField
+            date = game_form.cleaned_data["date"]
+            time = game_form.cleaned_data["time"]
+
+            #d = datetime.datetime(date.year, date.month, date.day, time.hour, time.minute)
+            game.start = datetime.datetime.combine(date, time)
+            print game.start
+            #game.start = d
+
             # Get latitiude and longitude from address
             # Source: https://geopy.readthedocs.io/en/1.10.0/
             geolocator = Nominatim()
@@ -49,7 +58,7 @@ def create_game(request):
             game.longitude = location.longitude
 
             # Calculate end from start and duration
-            game.end = game.start.hour + game.duration
+            game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
 
             # Get host entry from current user
             game.host = request.user
