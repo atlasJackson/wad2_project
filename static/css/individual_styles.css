@@ -1,3 +1,107 @@
+/* game_list.html START */
+.game-list-content { 
+    max-width: 1200px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.game-list-buttons { 
+    padding-bottom: 50px;
+}
+
+#game-link {
+    cursor: pointer;
+}
+/* game_list.html END */
+
+
+
+/* user_account.html START */
+.player-content { 
+    max-width: 1200px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.player-head-wrapper {
+    border-bottom: solid thin lightblue;
+    clear: both;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    overflow: auto; /* Keeps floating children divs inside this container. Otherwise they float beneath it. */
+    height: 100%; /* Needed for IE, so children divs stay inside container. */
+}
+
+.player-info {
+    box-sizing: border-box;
+    float:left;
+    width: 50%;
+    height: auto;
+    line-height: 25px;
+    margin-bottom: 10px;
+    padding-right: 20px;
+    border-right: solid thin lightblue;
+}
+
+.player-info #editButton {
+    position: relative;
+    bottom: 0px;
+}
+
+.player-info ul {
+    padding-left: 0;
+    list-style-type: none; /* Removes any bullets. */
+}
+
+.player-ratings {
+    box-sizing: border-box;
+    float: right;
+    width: 50%;
+    height: auto;
+    line-height: 25px;
+    margin-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 10px;
+
+}
+
+.player-ratings ul {
+    padding: 0px;
+    list-style-type: none; 
+}
+
+
+.player-tables-wrapper {
+    padding-top: 10px;
+    clear: both;
+}
+
+#player-joined-table {
+    width: 100%;
+    border-collapse:collapse;
+    border-top: solid thin lightblue;
+    border-bottom: solid thin lightblue;
+}
+
+#player-hosting-table {
+    width: 100%;
+    border-collapse:collapse;
+    border-top: solid thin lightblue;
+    border-bottom: solid thin lightblue;
+}
+
+#player-past-table {
+    width: 100%;
+    border-collapse:collapse;
+    border-top: solid thin lightblue;
+    border-bottom: solid thin lightblue;
+}
+/* user_account.html END */
+
+
+
+
+
 /* show_game.html START */
 .game-content { /* This class gives the div a maximum width and centers horizontally it on the page. */
     max-width: 800px;
@@ -72,6 +176,10 @@
 
 .game-player-table tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+#player-link {
+    cursor: pointer;
 }
 
 .game-player-table tr:hover {

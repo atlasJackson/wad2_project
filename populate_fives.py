@@ -55,7 +55,7 @@ def populate():
                 "last_name": "Ryan",
                 "gender": 1,
                 "host_rating": 0,
-                "num_host_ratings": 0,
+                "num_host_ratings": 3,
                 "punctuality": 4,
                 "likeability": 1,
                 "skill": 4,
@@ -265,7 +265,7 @@ def add_game(custom_slug, game_type, free_slots, start, end, duration,
 
     start = datetime.strptime(start, '%Y-%m-%d %H:%M')
     end = datetime.strptime(end, '%Y-%m-%d %H:%M')
-    print "START IS:", start
+    print ("START IS:", start)
 
     g = Game.objects.get_or_create(custom_slug=custom_slug, host=h,
         start=start, end=end, price=price)[0]

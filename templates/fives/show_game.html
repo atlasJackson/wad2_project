@@ -34,7 +34,7 @@
         {% else %}
             <span style="color:Red">Not Booked</span><br />
         {% endif %}
-        Price/person: {{ game.price }}<br />
+        Price/person: &#163 {{ game.price }}<br />
         Type: {{ game.game_type }}
     </div>
     <div class="game-address">
@@ -64,7 +64,7 @@
                 {% endif %}
             </tr>
         {% for player in participants %}
-            <tr>
+            <tr id="player-link" data-url="{% url 'my_account' player.user.username %}" >
                 <td>{{ player.user.first_name }}</td>
                 <td>{{ player.user.last_name }}</td>
                 <td>

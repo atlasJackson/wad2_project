@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+    $(".game-player-table").on("click", "#game-link", function() {
+
+        window.location.href = $(this).data("url");
+    });
+
+    $(".game-player-table").on("click", "#player-link", function() {
+
+        window.location.href = $(this).data("url");
+    });
+
     $(".game-player-static").on("click", "#joinBtn", function(e) {
 
         e.preventDefault();
@@ -79,6 +89,7 @@ $(document).ready(function(){
 
 });
 
+
 function buttonJoinLeaveDelete(button, urlLink) {
     $.ajax({
         type: "POST",
@@ -99,8 +110,7 @@ function buttonJoinLeaveDelete(button, urlLink) {
             } else if (data.game_deleted) {
                 window.location.replace("/");
             } else {
-                // This should not be reached.
-                alert("Unable to process request.");
+                alert("Unable to process request. There may not be free spaces left for this game.");
             }
         },
         error: function (rs, e) {

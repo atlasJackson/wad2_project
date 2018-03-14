@@ -12,8 +12,9 @@
         <a href="{% url 'index' %}">Home</a>
     {% else %}
         {% if registered %}
-            <strong>Thank you for registering!</strong>
-            <a href="{% url 'index' %}">Return to the homepage.</a><br />
+            <strong>Thank you for registering!</strong><br />
+            <a href="{% url 'index' %}">Return to the homepage</a> or 
+            <a href="{% url 'login' %}"> login to your account</a>.
         {% else %}
             <strong>Join your first game today!</strong><br />
             <form id="user_form" method="post" action="{% url 'sign_up' %}"

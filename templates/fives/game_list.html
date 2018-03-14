@@ -1,34 +1,66 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
+{% load fives_filters %}
 
 {% block title_block %}
     Game List
 {% endblock %}
 
 {% block body_block %}
-    <div>
+<div class="game-list-content">
+    <div class="game-list-buttons">
+        Buttons up here for filtering and sorting.<br />
+    </div>
 
-    </div>
     <div>
-    {% if games %}
-    <ul>
-        {% for game in games %}
-            <li>
-                <a href="{% url 'show_game' game.custom_slug %}">{{ game.custom_slug }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>No games match the above criteria.</p>
-        {% if user.is_authenticated %}
-            <p>
-                Please refine your search, or <a href="{% url 'create_game' %}">create your own game</a>.
-            </p>            
+        {% if games %}
+        <div class="game-players-wrapper">
+            <table class="game-player-table">
+                <tr>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Spaces</th>
+                    <th>Type</th>
+                    <th>Price (&#163)</th>
+                    <th>Host</th>
+                    <th>Rating</th>
+                </tr>
+            {% for game in games %}
+                <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+                    <td>{{ game.city }}</td>
+                    <td>{{ game.start }}</td>
+                    <td>{{ game.end }}</td>
+                    <td>{{ game.free_slots }}</td>
+                    <td>{{ game.game_type }}</td>
+                    <td>{{ game.price }}</td>
+                    <td>{{ game.host.username }}</td>
+
+                    <td>
+                        {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                            {% with ''|center:rating as range %}
+                                {% for i in range %}
+                                    <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                                {% endfor %}
+                            {% endwith %}
+                        {% endwith %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
         {% else %}
-            <p>
-                Please refine your search, or <a href="{% url 'sign_up' %}">sign up</a> to create your own game.
-            </p>
-        {% endif %}        
-    {% endif %}
+            <p>No games match the above criteria.</p>
+            {% if user.is_authenticated %}
+                <p>
+                    Please refine your search, or <a href="{% url 'create_game' %}">create your own game</a>.
+                </p>            
+            {% else %}
+                <p>
+                    Please refine your search, or <a href="{% url 'sign_up' %}">sign up</a> to create your own game.
+                </p>
+            {% endif %}        
+        {% endif %}
     </div>
+</div>
 {% endblock %}

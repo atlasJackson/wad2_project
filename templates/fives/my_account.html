@@ -1,22 +1,194 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
+{% load fives_filters %}
 
 {% block title_block %}
     {{ user.first_name }} ({{ user.username }})
 {% endblock %}
 
 {% block body_block %}
-    <h1>Welcome {{ user.username }}</h1>
-    <div class="">
-        {% if pastGames %}
-        <ul>
-            {% for game in pastGames %}
+<div class="player-content">
+    <div class="player-head-wrapper"> 
+        <div class="player-info">
+            <h2>{{ player.user.first_name }} {{ player.user.last_name }}</h2>
+            
+            {% if player.user.email %}
+                <strong><em>{{ player.user.email }}</em></strong><br />
+            {% else %}
+                <strong><em>No e-mail provided</em></strong><br />
+            {% endif %}
+
+            <ul>
+                <li>Username: <strong>{{ player.user.username}}</strong></li>
                 <li>
-                    <a href="{% url 'rate_game' game.custom_slug %}">{{ game.custom_slug }}</a>
+                    Gender: 
+                    {% if player.gender %}
+                        <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
+                    {% else %}
+                        <img src="{% static 'img/female.png' %}" alt="female" height="14" title="female">
+                    {% endif %}
                 </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+            </ul>
+
+            {% if user == player.user %}
+                <button type="button" id="editButton" data-user="{{ user }}">
+                        Edit account
+                </button>
+            {% endif %}
+        </div>
+        <div class="player-ratings">
+            <h2>Player Ratings</h2>
+            <ul>
+                <li><strong>Skills: </strong> 
+                    {% with rating=player.skill|divide:player.num_player_ratings %} <!-- Divides rating by number of ratings -->
+                        {% with ''|center:rating as range %} <!-- Creates a string with length of the value of "rating" -->
+                            {% for i in range %}
+                                <img src="{% static 'img/skill.png' %}" alt="skill rating" height="15" width="15">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </li>
+                <li><strong>Likes: </strong> 
+                    {% with rating=player.likeability|divide:player.num_player_ratings %}
+                        {% with ''|center:rating as range %}
+                            {% for i in range %}
+                                <img src="{% static 'img/likes.png' %}" alt="likeability rating" height="15" width="15">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </li>
+                <li><strong>Punctuality: </strong> 
+                    {% with rating=player.punctuality|divide:player.num_player_ratings %}
+                        {% with ''|center:rating as range %}
+                            {% for i in range %}
+                                <img src="{% static 'img/punctuality.png' %}" alt="puntuality rating" height="15" width="15">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </li>
+                <li><strong>Hosting: </strong> 
+                    {% with rating=player.host_rating|divide:player.num_host_ratings %} 
+                        {% with ''|center:rating as range %}
+                            {% for i in range %}
+                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div class="player-tables-wrapper">
+        <h2>Joined</h2>
+        <table class="game-player-table" id="player-joined-table">
+
+        {% for game in joinedGames %}
+            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+                <td>{{ game.city }}</td>
+                <td>{{ game.start }}</td>
+                <td>{{ game.end }}</td>
+                <td>{{ game.free_slots }}</td>
+                <td>{{ game.game_type }}</td>
+                <td>{{ game.price }}</td>
+                <td>{{ game.host.username }}</td>
+
+                <td>
+                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                        {% with ''|center:rating as range %}
+                            {% for i in range %}
+                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
     </div>
 
+    <div class="player-tables-wrapper">
+        <h2>Hosting</h2>
+        <table class="game-player-table" id="player-hosting-table">
+
+        {% for game in hostingGames %}
+            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+                <td>{{ game.city }}</td>
+                <td>{{ game.start }}</td>
+                <td>{{ game.end }}</td>
+                <td>{{ game.free_slots }}</td>
+                <td>{{ game.game_type }}</td>
+                <td>{{ game.price }}</td>
+                <td>{{ game.host.username }}</td>
+
+                <td>
+                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                        {% with ''|center:rating as range %}
+                            {% for i in range %}
+                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+    <div class="player-tables-wrapper">
+        <h2>History</h2>
+        <table class="game-player-table" id="player-hosting-table">
+
+        {% for game in pastGames %}
+            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+                <td>{{ game.city }}</td>
+                <td>{{ game.start }}</td>
+                <td>{{ game.end }}</td>
+                <td>{{ game.free_slots }}</td>
+                <td>{{ game.game_type }}</td>
+                <td>{{ game.price }}</td>
+                <td>{{ game.host.username }}</td>
+
+                <td>
+                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                        {% with ''|center:rating as range %}
+                            {% for i in range %}
+                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </td>
+
+                <td>
+                    {% if user == game.host %}
+                        <button type="button" id="rateButton" data-game="{{ game }}">
+                            Rate
+                        </button>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
+            </tr>
+        {% endfor %}
+        </table>
+
+        <button type="button" id="historyButton" data-player="{{ player }}">
+            View all past matches
+        </button>
+    </div>
+</div>
+
+
+<div class="">
+    {% if pastGames %}
+    <ul>
+        {% for game in pastGames %}
+            <li>
+                <a href="{% url 'rate_game' game.custom_slug %}">{{ game.custom_slug }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
 {% endblock %}

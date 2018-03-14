@@ -327,8 +327,15 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect(reverse('index'))
 
-def my_account(request):
+def my_account(request, player):
     context_dict = {}
-    pastGames = Game.objects.filter(start__lt=datetime.date.today()).order_by('start')[:20]
-    context_dict = {'pastGames': pastGames}
+    username = User.objects.get(username=player)
+    player = Player.objects.get(user=username)
+
+    joinedGames = [g.game for g in Participation.objects.select_related('game').filter(player=player)]
+    hostingGames = Game.objects.filter(host=username).filter(start__gte=datetime.date.today()).order_by('start')[:20]
+    pastGames = Game.objects.filter(start__lt=datetime.date.today()).order_by('-start')[:5]
+
+    context_dict = {'player': player, 'joinedGames': joinedGames, 'hostingGames': hostingGames, 'pastGames': pastGames}
+
     return render(request, 'fives/my_account.html', context=context_dict)
