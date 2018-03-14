@@ -9,10 +9,10 @@
 {% block body_block %}
 {% if user.is_authenticated %}
 <div class="player-content">
-    <div class="player-head-wrapper"> 
+    <div class="player-head-wrapper">
         <div class="player-info">
             <h2>{{ player.user.first_name }} {{ player.user.last_name }}</h2>
-            
+
             {% if player.user.email %}
                 <strong><em>{{ player.user.email }}</em></strong><br />
             {% else %}
@@ -22,7 +22,7 @@
             <ul>
                 <li>Username: <strong>{{ player.user.username}}</strong></li>
                 <li>
-                    Gender: 
+                    Gender:
                     {% if player.gender %}
                         <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
                     {% else %}
@@ -40,7 +40,7 @@
         <div class="player-ratings">
             <h2>Player Ratings</h2>
             <ul>
-                <li><strong>Skills: </strong> 
+                <li><strong>Skills: </strong>
                     {% with rating=player.skill|divide:player.num_player_ratings %} <!-- Divides rating by number of ratings -->
                         {% with ''|center:rating as range %} <!-- Creates a string with length of the value of "rating" -->
                             {% for i in range %}
@@ -49,7 +49,7 @@
                         {% endwith %}
                     {% endwith %}
                 </li>
-                <li><strong>Likes: </strong> 
+                <li><strong>Likes: </strong>
                     {% with rating=player.likeability|divide:player.num_player_ratings %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
@@ -58,7 +58,7 @@
                         {% endwith %}
                     {% endwith %}
                 </li>
-                <li><strong>Punctuality: </strong> 
+                <li><strong>Punctuality: </strong>
                     {% with rating=player.punctuality|divide:player.num_player_ratings %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
@@ -67,8 +67,8 @@
                         {% endwith %}
                     {% endwith %}
                 </li>
-                <li><strong>Hosting: </strong> 
-                    {% with rating=player.host_rating|divide:player.num_host_ratings %} 
+                <li><strong>Hosting: </strong>
+                    {% with rating=player.host_rating|divide:player.num_host_ratings %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
                                 <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
@@ -95,7 +95,7 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
                                 <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
@@ -123,7 +123,7 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
                                 <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
@@ -151,7 +151,7 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
                                 <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
@@ -162,9 +162,10 @@
 
                 <td>
                     {% if user == player.user %}
-                        <button type="button" id="rateButton" data-game="{{ game }}">
+                        <!-- <button type="button" id="rateButton" data-game="{{ game }}">
                             Rate
-                        </button>
+                        </button> -->
+                        <a href="{% url 'rate_game' user.username game.custom_slug %}"></a>
                     {% else %}
                     {% endif %}
                 </td>

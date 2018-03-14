@@ -19,8 +19,8 @@ urlpatterns = [
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
 
-    url(r'^user/(?P<player>[\w\d\-]+\b)/$', views.my_account, name='my_account'),
-    #url(r'^user/(?P<player>[\w\d\-]+\b)/edit_account/$', views.my_account, name='edit_account'),
-    #url(r'^user/(?P<player>[\w\d\-]+\b)/history/$', views.my_account, name='history'),
-    #url(r'^user/(?P<player>[\w\d\-]+\b)/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/$', views.rate_game, name='rate_game'),
+    url(r'^user/(?P<player>[\w\d\-]+\b)/$', views.user_account, name='user_account'),
+    #url(r'^user/(?P<player>[\w\d\-]+\b)/edit_account/$', views.user_account, name='edit_account'),
+    #url(r'^user/(?P<player>[\w\d\-]+\b)/history/$', views.user_account, name='history'),
+    url(r'^user/(?P<player>[\w\d\-]+\b)/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/$', views.rate_game, name='rate_game'),
 ]

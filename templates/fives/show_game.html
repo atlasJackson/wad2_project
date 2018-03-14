@@ -64,7 +64,7 @@
                 {% endif %}
             </tr>
         {% for player in participants %}
-            <tr id="player-link" data-url="{% url 'my_account' player.user.username %}" >
+            <tr id="player-link" data-url="{% url 'user_account' player.user.username %}" >
                 <td>{{ player.user.first_name }}</td>
                 <td>{{ player.user.last_name }}</td>
                 <td>

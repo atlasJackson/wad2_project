@@ -92,7 +92,7 @@ def show_game(request, game_custom_slug):
         context_dict['game'] = game
         context_dict['participants'] = participants
         context_dict['users'] = users
-        
+
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
         context_dict['game'] = None
@@ -103,7 +103,7 @@ def show_game(request, game_custom_slug):
 
     return render(request, 'fives/show_game.html', context=context_dict)
 
-def rate_game(request, game_custom_slug):
+def rate_game(request, username, game_custom_slug):
     context_dict = {}
 
     try:
@@ -327,29 +327,29 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect(reverse('index'))
 
-def my_account(request, player):
+def user_account(request, player):
     context_dict = {}
-    username = User.objects.get(username=player)
-    player = Player.objects.get(user=username)
+    user = User.objects.get(username=player)
+    player = Player.objects.get(user=user)
 
     gameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
 
-    joinedGames = Game.objects.filter(custom_slug__in=gameSlugs).exclude(host=username).filter(
+    joinedGames = Game.objects.filter(custom_slug__in=gameSlugs).exclude(host=user).filter(
         start__gte=datetime.date.today()).order_by('start')[:20]
 
-    hostingGames = Game.objects.filter(host=username).filter(start__gte=datetime.date.today()).order_by('start')[:20]
+    hostingGames = Game.objects.filter(host=user).filter(start__gte=datetime.date.today()).order_by('start')[:20]
 
     pastGames = Game.objects.filter(custom_slug__in=gameSlugs).filter(
         start__lt=datetime.date.today()).order_by('-start')[:5]
 
     context_dict = {'player': player, 'joinedGames': joinedGames, 'hostingGames': hostingGames, 'pastGames': pastGames}
 
-    return render(request, 'fives/my_account.html', context=context_dict)
+    return render(request, 'fives/user_account.html', context=context_dict)
 
 def history(request, player):
     context_dict = {}
-    username = User.objects.get(username=player)
-    player = Player.objects.get(user=username)
+    user = User.objects.get(username=player)
+    player = Player.objects.get(user=user)
 
     gameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
     fullHistory = Game.objects.filter(custom_slug__in=gameSlugs).filter(
@@ -358,5 +358,3 @@ def history(request, player):
     context_dict = {'player': player, 'fullHistory': fullHistory}
 
     return render(request, 'fives/history.html', context=context_dict)
-
-
