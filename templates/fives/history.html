@@ -1,0 +1,53 @@
+{% extends 'fives/user_account.html' %}
+{% load staticfiles %}
+{% load fives_filters %}
+
+{% block title_block %}
+    {{ player.user.first_name }} ({{ player.user.username }})
+{% endblock %}
+
+{% block account_block %}
+<div class="player-tables-wrapper">
+        <h2>History</h2>
+        <table class="game-player-table" id="player-hosting-table">
+
+        {% for game in fullHistory %}
+            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+                <td>{{ game.city }}</td>
+                <td>{{ game.start }}</td>
+                <td>{{ game.end }}</td>
+                <td>{{ game.free_slots }}</td>
+                <td>{{ game.game_type }}</td>
+                <td>{{ game.price }}</td>
+                <td>{{ game.host.username }}</td>
+
+                <td>
+                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
+                        {% with ''|center:rating as range %}
+                            {% for i in range %}
+                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
+                </td>
+
+                <td>
+                    {% if user == player.user %}
+                        <!-- <button type="button" id="rateButton" data-game="{{ game }}">
+                            Rate
+                        </button> -->
+                        <a href="{% url 'rate_game' user.username game.custom_slug %}"></a>
+                    {% else %}
+                    {% endif %}
+                </td>
+
+            </tr>
+        {% endfor %}
+        </table>
+
+        <button type="button" id="account-redirect" data-url="{% url 'user_account' player %}">
+            Return
+        </button>
+    </div>
+{% endblock %}
+

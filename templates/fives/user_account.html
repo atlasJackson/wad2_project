@@ -80,12 +80,13 @@
 
         </div>
     </div>
+    {% block account_block %}
     <div class="player-tables-wrapper">
         <h2>Joined</h2>
         <table class="game-player-table" id="player-joined-table">
 
         {% for game in joinedGames %}
-            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+            <tr id="game-player-link" data-url="{% url 'show_game' game.custom_slug %}" >
                 <td>{{ game.city }}</td>
                 <td>{{ game.start }}</td>
                 <td>{{ game.end }}</td>
@@ -113,7 +114,7 @@
         <table class="game-player-table" id="player-hosting-table">
 
         {% for game in hostingGames %}
-            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+            <tr id="game-player-link" data-url="{% url 'show_game' game.custom_slug %}" >
                 <td>{{ game.city }}</td>
                 <td>{{ game.start }}</td>
                 <td>{{ game.end }}</td>
@@ -141,7 +142,7 @@
         <table class="game-player-table" id="player-hosting-table">
 
         {% for game in pastGames %}
-            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+            <tr id="game-player-link" data-url="{% url 'show_game' game.custom_slug %}" >
                 <td>{{ game.city }}</td>
                 <td>{{ game.start }}</td>
                 <td>{{ game.end }}</td>
@@ -174,10 +175,11 @@
         {% endfor %}
         </table>
 
-        <button type="button" id="historyButton" data-player="{{ player }}">
+        <button type="button" id="account-redirect" data-url="{% url 'history' player %}">
             View all past matches
         </button>
     </div>
+    {% endblock %}
 </div>
 
 {% else %}
