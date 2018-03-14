@@ -47,7 +47,6 @@ def create_game(request):
 
             #d = datetime.datetime(date.year, date.month, date.day, time.hour, time.minute)
             game.start = datetime.datetime.combine(date, time)
-            print game.start
             #game.start = d
 
             # Get latitiude and longitude from address
