@@ -22,7 +22,7 @@
                     <th>Time</th>
                     <th>Spaces</th>
                     <th>Type</th>
-                    <th>Price (&#163)</th>
+                    <th>Price (&#163;)</th>
                     <th>Host</th>
                     <th>Host Rating</th>
                 </tr>
@@ -37,7 +37,7 @@
                     <td>{{ game.host.username }}</td>
 
                     <td>
-                        {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %} 
+                        {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
                             {% with ''|center:rating as range %}
                                 {% for i in range %}
                                     <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
@@ -54,12 +54,12 @@
             {% if user.is_authenticated %}
                 <p>
                     Please refine your search, or <a href="{% url 'create_game' %}">create your own game</a>.
-                </p>            
+                </p>
             {% else %}
                 <p>
                     Please refine your search, or <a href="{% url 'sign_up' %}">sign up</a> to create your own game.
                 </p>
-            {% endif %}        
+            {% endif %}
         {% endif %}
     </div>
 </div>
