@@ -11,7 +11,7 @@ import pytz
 import sys
 
 from fives.models import User, Player, Game, Participation
-from fives.forms import UserForm, PlayerForm, GameForm
+from fives.forms import UserForm, PlayerForm, GameForm, RatingForm
 
 def index(request):
     context_dict = {}
@@ -111,46 +111,48 @@ def show_game(request, game_custom_slug):
 
     return render(request, 'fives/show_game.html', context=context_dict)
 
-def rate_game(request, username, game_custom_slug):
-    context_dict = {}
+def rate_game(request, player, game_custom_slug):
+    rated = False
 
-    try:
-        # Try to find a game with the given slug.
-        game = Game.objects.get(custom_slug=game_custom_slug)
-        # Retreive a list of all players, and corresponding user entries, participating in the game.
-        participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
-        users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
+    rating_form = RatingForm()
 
-        # Retreive participation relationship for current user.
-        for player in participants:
-            if player.user == request.user:
-                currentPlayer = player
-                participation = Participation.objects.get(game=game, player=request.user.player)
-                if participation.rated:
-                    context_dict['rated'] = True
-                else:
-                    context_dict['rated'] = False
-            else:
-                context_dict['rated'] = False
+    # An HTTP POST?
+    if request.method == 'POST':
+        rating_form = RatingForm(request.POST)
 
-        now = datetime.datetime.now(pytz.utc)
-        # Check if game is in the past and all slots were filled.
-        if game.end < now and game.free_slots == 0:
-            context_dict['gameTookPlace'] = True
+        # Have we been provided with a valid form?
+        if rating_form.is_valid():
+            # Save, but don't commit
+            rating = rating_form.save(commit=False)
+
+
+
+            rated = True
         else:
-            context_dict['gameTookPlace'] = False
+            # Print problems to the terminal.
+            print(rating_form.errors)
+    else:
+        # Not an HTTP POST, so we render our form using two ModelForm instances.
+        # These forms will be blank, ready for user input.
+        rating_form = RatingForm()
 
-        # Add entities to the context dictionary
-        context_dict['game'] = game
-        context_dict['participants'] = participants
-        context_dict['users'] = users
+        try:
+            # Try to find a game with the given slug.
+            game = Game.objects.get(custom_slug=game_custom_slug)
+            # Retreive a list of all players, and corresponding user entries, participating in the game.
+            participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
+            users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
+            # Retreive participation relationship.
+            participation = Participation.objects.get(game=game, player=request.user.player)
+            # Check if game is in the past.
+            now = datetime.datetime.now(pytz.utc)
+            gameTookPlace = True if game.end < now else False
 
-    except Game.DoesNotExist:
-        # We get here if we couldn't find the specified game
-        context_dict['game'] = None
-        context_dict['participants'] = None
-        context_dict['gameTookPlace'] = None
-        context_dict['participants'] = None
+            context_dict = {'game': game, 'participants': participants, 'users': users, 'gameTookPlace':gameTookPlace, 'participation': participation}
+
+        except Game.DoesNotExist:
+            # We get here if we couldn't find the specified game
+            context_dict = {'game': None, 'participants': None, 'users': None, 'gameTookPlace':None, 'participation': None}
 
     return render(request, 'fives/rate_game.html', context=context_dict)
 

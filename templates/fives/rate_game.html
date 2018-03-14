@@ -1,4 +1,4 @@
-{% extends 'fives/base.html' %}
+{% extends 'fives/show_game.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
 
@@ -6,23 +6,10 @@
     {{ game.custom_slug }}
 {% endblock %}
 
-{% block body_block %}
-{% if game %}
-    {% if gameTookPlace %}
+{% block show_or_rate_block %}
+{% if gameTookPlace %}
     {% if user in users %}
-    <div class="game-content">
-        <div class="game-head-wrapper">
-            <div class="game-head-title">
-                {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;-&nbsp;{{ game.start|date:"d N Y" }}&nbsp;-&nbsp;{{ game.start|date:"H:i" }}
-            </div>
-            <div class="game-head-host">
-                Host: <span title="">{{ game.host.username }}</span>
-            </div>
-        </div>
-        {% if not rated %}
-
-        We hope you enjoyed the game! Please leave a rating for the other players and the host.<br /><br />
-
+        {% if participation.rated %}
         <div class="game-players-wrapper">
             <table class="game-player-table">
                 <tr>
@@ -74,8 +61,7 @@
                 </tr>
             {% endfor %}
             </table>
-            {% if user == game.host %}
-            {% else %}
+            {% if user != game.host %}
             <br />
             The hosting skills of {{ game.host.first_name }} {{ game.host.last_name }}:
             <select type="select" class="skill" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
@@ -91,15 +77,12 @@
         {% else %}
             You have already rated the players for this game.
         {% endif %}
-    </div>
     {% else %}
         This game has already taken place. You didn't play in this game.
     {% endif %}
-    {% else %}
-        The game has not taken place yet! Try to find it in the <a href="{% url 'game_list' %}">Game List</a>.
-    {% endif %}
 {% else %}
-    The specified game doesn't exist!
+    The game has not taken place yet! Try to find it in the <a href="{% url 'game_list' %}">Game List</a>.
 {% endif %}
+
 
 {% endblock %}

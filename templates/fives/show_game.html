@@ -8,7 +8,6 @@
 
 {% block body_block %}
 {% if game %} <!-- The game exists -->
-{% if not gameTookPlace %} <!-- Checks if the game is not in the past. -->
 <div class="game-content">
     <div class="game-head-wrapper">
         <div class="game-head-title">
@@ -49,7 +48,7 @@
             </div>
         </div>
     </div>
-
+{% block show_or_rate_block %}
     <div class="game-players-wrapper">
         <table class="game-player-table">
             <tr>
@@ -145,10 +144,8 @@
         {% endif %}
         </div>
     </div>
+{% endblock %}
 </div>
-{% else %}
-    The specified game has already taken place.
-{% endif %}
 {% else %}
     The specified game does not exist!
 {% endif %}
