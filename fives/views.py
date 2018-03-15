@@ -122,6 +122,10 @@ def show_past_game(request, player, game_custom_slug):
         playersToBeRated = [p.player for p in Participation.objects.select_related('player').filter(game=game).exclude(player=request.user.player)]
         # Retreive participation relationship.
         participation = Participation.objects.get(game=game, player=request.user.player)
+<<<<<<< HEAD
+=======
+        print (participation)
+>>>>>>> a3db7a42d125db4dd2a375fea0401c99a8ffa5b9
         # Check if game is in the past.
         now = datetime.datetime.now(pytz.utc)
         gameTookPlace = True if game.end < now else False

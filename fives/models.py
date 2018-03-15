@@ -123,7 +123,6 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         #self.custom_slug = str(self.host.username) + "-" + self.date.strftime("%Y") + self.date.strftime("%m") + self.date.strftime("%d") + "-" + self.start_time.strftime("%H") + self.start_time.strftime("%M")
         self.custom_slug = str(self.host.username) + "-" + self.start.strftime('%Y%m%d-%H%M')
-        print ("CUSTOM SLUG IS:", self.custom_slug)
         super(Game, self).save(*args, **kwargs)
 
 
