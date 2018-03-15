@@ -157,7 +157,6 @@ def show_past_game(request, player, game_custom_slug):
             participation.save()
 
             if request.user != game.host:
-                print "User is not host!"
                 if host_form.is_valid():
                     host = Player.objects.get(user=game.host)
                     host.host_rating += int(host_form.cleaned_data["host_rating"])
