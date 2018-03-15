@@ -38,7 +38,6 @@ $(document).ready(function(){
 
 
     // Scripts for create_game template
-
     $("#game_form").validate({
         rules: {
             date: {},
@@ -79,8 +78,6 @@ $(document).ready(function(){
             $('#id_date').datepicker('setDate', new Date());
         }
     });
-
-    //$("#id_start_1").
 
 });
 
