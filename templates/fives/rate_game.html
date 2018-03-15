@@ -9,8 +9,10 @@
 {% block show_or_rate_block %}
 {% if gameTookPlace %}
     {% if user in users %}
-        {% if participation.rated %}
         <div class="game-players-wrapper">
+            {% if not participation.rated %}
+            <form id="rating_formset" method="post" action="{% url 'rate_game' user.username game.custom_slug %}">
+            {% csrf_token %}
             <table class="game-player-table">
                 <tr>
                     <th>Name</th>
@@ -20,10 +22,40 @@
                     <th>Likeability</th>
                     <th>Punctuality</th>
                 </tr>
+                {{ rating_formset.management_form }}
+                {% for rating_form in rating_formset %}
+                    <tr style="height:30px;">
+                        <td>{{ playersToBeRated|getName:forloop.counter0 }}</td>
+                        <td>{{ playersToBeRated|getSurname:forloop.counter0 }}</td>
+                        <td>
+                            {% if playersToBeRated|getGender:forloop.counter0 %}
+                                <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
+                            {% else %}
+                                <img src="{% static 'img/female.png' %}" alt="female" height="14" title="female">
+                            {% endif %}
+                        </td>
+                        <td>{{ rating_form.skill }}</td>
+                        <td>{{ rating_form.likeability }}</td>
+                        <td>{{ rating_form.punctuality }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input id="rate-players" type="submit" name="submit" value="Rate Players" />
+            </form>
+            {% else %} <!-- Already rated, show normal game view. -->
+            <table class="game-player-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Surame</th>
+                    <th>Gender</th>
+                    <th>Skills</th>
+                    <th>Likes</th>
+                    <th>Punctuality</th>
+                </tr>
             {% for player in participants %}
                 <tr>
-                    <td>{{ player.user.first_name }}</td>
-                    <td>{{ player.user.last_name }}</td>
+                    <td id="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.first_name }}</td>
+                    <td id="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.last_name }}</td>
                     <td>
                         {% if player.gender %}
                             <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
@@ -32,57 +64,41 @@
                         {% endif %}
                     </td>
                     <td>
-                        <select type="select" class="skill" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3" selected="selected">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
+                        {% with rating=player.skill|divide:player.num_player_ratings %} <!-- Divides rating by number of ratings -->
+                            {% with ''|center:rating as range %} <!-- Creates a string with length of the value of "rating" -->
+                                {% for i in range %}
+                                    <img src="{% static 'img/skill.png' %}" alt="skill rating" height="15" width="15">
+                                {% endfor %}
+                            {% endwith %}
+                        {% endwith %}
                     </td>
                     <td>
-                        <select type="select" class="likeability" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3" selected="selected">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
+                        {% with rating=player.likeability|divide:player.num_player_ratings %}
+                            {% with ''|center:rating as range %}
+                                {% for i in range %}
+                                    <img src="{% static 'img/likes.png' %}" alt="likeability rating" height="15" width="15">
+                                {% endfor %}
+                            {% endwith %}
+                        {% endwith %}
                     </td>
                     <td>
-                        <select type="select" class="puntuality" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3" selected="selected">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
+                        {% with rating=player.punctuality|divide:player.num_player_ratings %}
+                            {% with ''|center:rating as range %}
+                                {% for i in range %}
+                                    <img src="{% static 'img/punctuality.png' %}" alt="puntuality rating" height="15" width="15">
+                                {% endfor %}
+                            {% endwith %}
+                        {% endwith %}
                     </td>
                 </tr>
             {% endfor %}
             </table>
-            {% if user != game.host %}
-            <br />
-            The hosting skills of {{ game.host.first_name }} {{ game.host.last_name }}:
-            <select type="select" class="skill" data-gameid="{{ game.game_id }}" data-player_username="{{ player.username }}" data-username="{{ user.username }}">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3" selected="selected">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
             {% endif %}
         </div>
-
-        {% else %}
-            You have already rated the players for this game.
-        {% endif %}
     {% else %}
-        This game has already taken place. You didn't play in this game.
+        You didn't participate in this game.
     {% endif %}
 {% else %}
     The game has not taken place yet! Try to find it in the <a href="{% url 'game_list' %}">Game List</a>.
 {% endif %}
-
-
 {% endblock %}

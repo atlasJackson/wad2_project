@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
+from django.forms import formset_factory
 
 from geopy.geocoders import Nominatim
 import datetime
@@ -89,17 +90,15 @@ def show_game(request, game_custom_slug):
         participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
         users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
 
-        now = datetime.datetime.now(pytz.utc)
         # Check if game is in the past.
-        if game.end < now:
-            context_dict['gameTookPlace'] = True
-        else:
-            context_dict['gameTookPlace'] = False
+        now = datetime.datetime.now(pytz.utc)
+        gameTookPlace = True if game.end < now else False
 
         # Add entities to the context dictionary
         context_dict['game'] = game
         context_dict['participants'] = participants
         context_dict['users'] = users
+        context_dict['gameTookPlace'] = gameTookPlace
 
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
@@ -111,48 +110,64 @@ def show_game(request, game_custom_slug):
 
     return render(request, 'fives/show_game.html', context=context_dict)
 
+@login_required
 def rate_game(request, player, game_custom_slug):
-    rated = False
+    try:
+        # Try to find a game with the given slug.
+        game = Game.objects.get(custom_slug=game_custom_slug)
+        # Retreive a list of all players(except current user), and corresponding user entries, participating in the game.
+        participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
+        users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
+        # Retreive a list of all players to be rated, all minus the current user.
+        playersToBeRated = [p.player for p in Participation.objects.select_related('player').filter(game=game).exclude(player=request.user.player)]
+        # Retreive participation relationship.
+        participation = Participation.objects.get(game=game, player=request.user.player)
+        print participation
+        # Check if game is in the past.
+        now = datetime.datetime.now(pytz.utc)
+        gameTookPlace = True if game.end < now else False
 
-    rating_form = RatingForm()
+        context_dict = {'game': game, 'participants': participants, 'users': users, 'gameTookPlace':gameTookPlace, 'participation': participation, 'playersToBeRated': playersToBeRated}
+
+    except Game.DoesNotExist:
+        # We get here if we couldn't find the specified game
+        context_dict = {'game': None, 'participants': None, 'users': None, 'gameTookPlace':None, 'participation': None, 'playersToBeRated': playersToBeRated}
+
+    # Cerate as many formsets as there are players to be rated(not including the player who is giving ratings).
+    RatingFormSet = formset_factory(RatingForm, extra=len(playersToBeRated))
 
     # An HTTP POST?
     if request.method == 'POST':
-        rating_form = RatingForm(request.POST)
+        rating_formset = RatingFormSet(request.POST)
 
         # Have we been provided with a valid form?
-        if rating_form.is_valid():
+        if rating_formset.is_valid():
             # Save, but don't commit
-            rating = rating_form.save(commit=False)
+            # rating = rating_form.save(commit=False)
 
+            index = 0
+            for rating_form in rating_formset:
+                p = Player.objects.get(user=participants[index].user)
 
+                p.skill += int(rating_form.cleaned_data.get('skill'))
+                p.likeability += int(rating_form.cleaned_data.get('likeability'))
+                p.punctuality += int(rating_form.cleaned_data.get('punctuality'))
+                p.num_player_ratings += 1
 
-            rated = True
+                p.save()
+                index += 1
+
+            participation.rated = True
+            participation.save()
         else:
             # Print problems to the terminal.
             print(rating_form.errors)
     else:
         # Not an HTTP POST, so we render our form using two ModelForm instances.
         # These forms will be blank, ready for user input.
-        rating_form = RatingForm()
+        rating_formset = RatingFormSet()
 
-        try:
-            # Try to find a game with the given slug.
-            game = Game.objects.get(custom_slug=game_custom_slug)
-            # Retreive a list of all players, and corresponding user entries, participating in the game.
-            participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
-            users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
-            # Retreive participation relationship.
-            participation = Participation.objects.get(game=game, player=request.user.player)
-            # Check if game is in the past.
-            now = datetime.datetime.now(pytz.utc)
-            gameTookPlace = True if game.end < now else False
-
-            context_dict = {'game': game, 'participants': participants, 'users': users, 'gameTookPlace':gameTookPlace, 'participation': participation}
-
-        except Game.DoesNotExist:
-            # We get here if we couldn't find the specified game
-            context_dict = {'game': None, 'participants': None, 'users': None, 'gameTookPlace':None, 'participation': None}
+    context_dict['rating_formset'] = rating_formset
 
     return render(request, 'fives/rate_game.html', context=context_dict)
 

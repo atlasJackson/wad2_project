@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import formset_factory
 from django.contrib.auth.models import User
 from fives.models import Player, Game
 import datetime
@@ -44,20 +43,23 @@ class GameForm(forms.ModelForm):
         exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end', 'custom_slug', 'start')
 
 class RatingForm(forms.ModelForm):
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+
     RATINGS=(
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('4', '4'),
-        ('5', '5'),
+        (ONE, "1"),
+        (TWO, "2"),
+        (THREE, "3"),
+        (FOUR, "4"),
+        (FIVE, "5"),
     )
-    skill = forms.ChoiceField(choices=RATINGS)
-    likeability = forms.ChoiceField(choices=RATINGS)
-    punctuality = forms.ChoiceField(choices=RATINGS)
-    hostRating = forms.ChoiceField(choices=RATINGS)
+    skill = forms.ChoiceField(choices=RATINGS, initial=THREE)
+    likeability = forms.ChoiceField(choices=RATINGS, initial=THREE)
+    punctuality = forms.ChoiceField(choices=RATINGS, initial=THREE)
 
     class Meta:
-        model=Player
-        fields = ('skill', 'likeability', 'punctuality', 'host_rating')
-
-RatingFormSet = formset_factory(RatingForm)
+        model = Player
+        fields = ('skill', 'likeability', 'punctuality')
