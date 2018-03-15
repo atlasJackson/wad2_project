@@ -122,7 +122,7 @@ def rate_game(request, player, game_custom_slug):
         playersToBeRated = [p.player for p in Participation.objects.select_related('player').filter(game=game).exclude(player=request.user.player)]
         # Retreive participation relationship.
         participation = Participation.objects.get(game=game, player=request.user.player)
-        print participation
+        print (participation)
         # Check if game is in the past.
         now = datetime.datetime.now(pytz.utc)
         gameTookPlace = True if game.end < now else False
