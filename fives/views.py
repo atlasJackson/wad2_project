@@ -12,7 +12,7 @@ import pytz
 import sys
 
 from fives.models import User, Player, Game, Participation
-from fives.forms import UserForm, PlayerForm, GameForm, RatingForm
+from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm
 
 def index(request):
     context_dict = {}
@@ -111,7 +111,7 @@ def show_game(request, game_custom_slug):
     return render(request, 'fives/show_game.html', context=context_dict)
 
 @login_required
-def rate_game(request, player, game_custom_slug):
+def show_past_game(request, player, game_custom_slug):
     try:
         # Try to find a game with the given slug.
         game = Game.objects.get(custom_slug=game_custom_slug)
@@ -122,16 +122,15 @@ def rate_game(request, player, game_custom_slug):
         playersToBeRated = [p.player for p in Participation.objects.select_related('player').filter(game=game).exclude(player=request.user.player)]
         # Retreive participation relationship.
         participation = Participation.objects.get(game=game, player=request.user.player)
-        print participation
         # Check if game is in the past.
         now = datetime.datetime.now(pytz.utc)
         gameTookPlace = True if game.end < now else False
 
-        context_dict = {'game': game, 'participants': participants, 'users': users, 'gameTookPlace':gameTookPlace, 'participation': participation, 'playersToBeRated': playersToBeRated}
+        context_dict = {'player': player, 'game': game, 'participants': participants, 'users': users, 'gameTookPlace':gameTookPlace, 'participation': participation, 'playersToBeRated': playersToBeRated}
 
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
-        context_dict = {'game': None, 'participants': None, 'users': None, 'gameTookPlace':None, 'participation': None, 'playersToBeRated': playersToBeRated}
+        context_dict = {'player': None, 'game': None, 'participants': None, 'users': None, 'gameTookPlace':None, 'participation': None, 'playersToBeRated': playersToBeRated}
 
     # Cerate as many formsets as there are players to be rated(not including the player who is giving ratings).
     RatingFormSet = formset_factory(RatingForm, extra=len(playersToBeRated))
@@ -139,16 +138,13 @@ def rate_game(request, player, game_custom_slug):
     # An HTTP POST?
     if request.method == 'POST':
         rating_formset = RatingFormSet(request.POST)
+        host_form = RateHostForm(request.POST)
 
         # Have we been provided with a valid form?
         if rating_formset.is_valid():
-            # Save, but don't commit
-            # rating = rating_form.save(commit=False)
-
             index = 0
             for rating_form in rating_formset:
                 p = Player.objects.get(user=participants[index].user)
-
                 p.skill += int(rating_form.cleaned_data.get('skill'))
                 p.likeability += int(rating_form.cleaned_data.get('likeability'))
                 p.punctuality += int(rating_form.cleaned_data.get('punctuality'))
@@ -159,17 +155,27 @@ def rate_game(request, player, game_custom_slug):
 
             participation.rated = True
             participation.save()
+
+            if request.user is not game.host:
+                if host_form.is_valid():
+                    host = Player.objects.get(user=game.host)
+                    host.host_rating += int(host_form.cleaned_data["host_rating"])
+                    host.num_host_ratings += 1
+                    host.save()
         else:
             # Print problems to the terminal.
             print(rating_form.errors)
+            print(host_form.errors)
     else:
-        # Not an HTTP POST, so we render our form using two ModelForm instances.
+        # Not an HTTP POST, so we render our forms.
         # These forms will be blank, ready for user input.
         rating_formset = RatingFormSet()
+        host_form = RateHostForm()
 
     context_dict['rating_formset'] = rating_formset
+    context_dict['host_form'] = host_form
 
-    return render(request, 'fives/rate_game.html', context=context_dict)
+    return render(request, 'fives/show_past_game.html', context=context_dict)
 
 
 @login_required

@@ -12,7 +12,7 @@
         <table class="game-player-table" id="player-hosting-table">
 
         {% for game in fullHistory %}
-            <tr id="game-link" data-url="{% url 'show_game' game.custom_slug %}" >
+            <tr class="game-player-link" data-url="{% url 'show_past_game' user.username game.custom_slug %}" >
                 <td>{{ game.city }}</td>
                 <td>{{ game.start }}</td>
                 <td>{{ game.end }}</td>
@@ -33,10 +33,7 @@
 
                 <td>
                     {% if user == player.user %}
-                        <!-- <button type="button" id="rateButton" data-game="{{ game }}">
-                            Rate
-                        </button> -->
-                        <a href="{% url 'rate_game' user.username game.custom_slug %}"></a>
+                        <a href="{% url 'show_past_game' user.username game.custom_slug %}"></a>
                     {% else %}
                     {% endif %}
                 </td>
@@ -50,4 +47,3 @@
         </button>
     </div>
 {% endblock %}
-

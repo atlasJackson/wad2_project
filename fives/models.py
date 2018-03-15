@@ -19,6 +19,20 @@ class Player(models.Model):
         (FEMALE, "Female"),
     )
 
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+
+    RATINGS = (
+        (ONE, "1"),
+        (TWO, "2"),
+        (THREE, "3"),
+        (FOUR, "4"),
+        (FIVE, "5"),
+    )
+
     gender = models.BooleanField(choices=GENDER_CHOICES, default=MALE)
 
     host_rating = models.IntegerField(default=0)

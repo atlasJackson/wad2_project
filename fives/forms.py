@@ -43,23 +43,17 @@ class GameForm(forms.ModelForm):
         exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end', 'custom_slug', 'start')
 
 class RatingForm(forms.ModelForm):
-    ONE = 1
-    TWO = 2
-    THREE = 3
-    FOUR = 4
-    FIVE = 5
-
-    RATINGS=(
-        (ONE, "1"),
-        (TWO, "2"),
-        (THREE, "3"),
-        (FOUR, "4"),
-        (FIVE, "5"),
-    )
-    skill = forms.ChoiceField(choices=RATINGS, initial=THREE)
-    likeability = forms.ChoiceField(choices=RATINGS, initial=THREE)
-    punctuality = forms.ChoiceField(choices=RATINGS, initial=THREE)
+    skill = forms.ChoiceField(choices=Player.RATINGS, initial=Player.THREE)
+    likeability = forms.ChoiceField(choices=Player.RATINGS, initial=Player.THREE)
+    punctuality = forms.ChoiceField(choices=Player.RATINGS, initial=Player.THREE)
 
     class Meta:
         model = Player
         fields = ('skill', 'likeability', 'punctuality')
+
+class RateHostForm(forms.ModelForm):
+    host_rating = forms.ChoiceField(choices=Player.RATINGS, initial=Player.THREE)
+
+    class Meta:
+        model = Player
+        fields = ('host_rating',)
