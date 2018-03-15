@@ -1,4 +1,5 @@
 from django import template
+from fives.models import Participation, Player, Game
 
 register = template.Library()
 
@@ -21,3 +22,15 @@ def getSurname(list, i):
 @register.filter(name='getGender')
 def getGender(list, i):
     return list[i].gender
+
+@register.filter(name='isRated')
+def isRated(game, user):
+    p = Participation.objects.get(game=game, player=user.player)
+    return p.rated
+
+@register.filter(name='getType')
+def getType(value):
+    for elm in Game.GAME_CHOICES:
+        if value in elm:
+            return elm[1]
+    return "No Type"

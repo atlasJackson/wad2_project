@@ -34,7 +34,7 @@
             <span style="color:Red">Not Booked</span><br />
         {% endif %}
         Price/person: &#163; {{ game.price }}<br />
-        Type: {{ game.game_type }}
+        Type: {{ game.game_type|getType }}
     </div>
     <div class="game-address">
         Address:<br />

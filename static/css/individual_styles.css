@@ -76,25 +76,16 @@
     clear: both;
 }
 
-#player-joined-table {
+#account-game-table {
     width: 100%;
     border-collapse:collapse;
-    border-top: solid thin lightblue;
     border-bottom: solid thin lightblue;
 }
-
-#player-hosting-table {
-    width: 100%;
-    border-collapse:collapse;
-    border-top: solid thin lightblue;
-    border-bottom: solid thin lightblue;
-}
-
-#player-past-table {
-    width: 100%;
-    border-collapse:collapse;
-    border-top: solid thin lightblue;
-    border-bottom: solid thin lightblue;
+#account-game-table th {
+    background-color: #004466;
+    font-weight: normal;
+    font-size: 12px;
+    height: 19px;
 }
 /* user_account.html END */
 
