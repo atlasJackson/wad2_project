@@ -74,7 +74,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% with rating=player.skill|divide:player.num_player_ratings %} <!-- Divides rating by number of ratings -->
+                    {% with rating=player|getRating:"skill" %} <!-- Divides rating by number of ratings -->
                         {% with ''|center:rating as range %} <!-- Creates a string with length of the value of "rating" -->
                             {% for i in range %}
                                 <img src="{% static 'img/skill.png' %}" alt="skill rating" height="15" width="15">
@@ -83,7 +83,7 @@
                     {% endwith %}
                 </td>
                 <td>
-                    {% with rating=player.likeability|divide:player.num_player_ratings %}
+                    {% with rating=player|getRating:"likeability" %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
                                 <img src="{% static 'img/likes.png' %}" alt="likeability rating" height="15" width="15">
@@ -92,7 +92,7 @@
                     {% endwith %}
                 </td>
                 <td>
-                    {% with rating=player.punctuality|divide:player.num_player_ratings %}
+                    {% with rating=player|getRating:"punctuality" %}
                         {% with ''|center:rating as range %}
                             {% for i in range %}
                                 <img src="{% static 'img/punctuality.png' %}" alt="puntuality rating" height="15" width="15">

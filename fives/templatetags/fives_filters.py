@@ -34,3 +34,16 @@ def getType(value):
         if value in elm:
             return elm[1]
     return "No Type"
+
+@register.filter(name='getRating')
+def getRating(player, rating):
+    try:
+        if rating == "skill":
+            value = player.skill
+        elif rating == "likeability":
+            value = player.likeability
+        elif rating == "punctuality":
+            value = player.punctuality
+        return round(value / (player.num_player_ratings * 1.0))
+    except (ValueError, ZeroDivisionError):
+        return 0 # In case a player has no ratings.
