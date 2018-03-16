@@ -63,14 +63,25 @@
 <br />
 <br />
 <br />
-    <div class="game-list-buttons">
-        <form id="filter_form" method="get" action="{% url 'game_list' %}">
-            {% csrf_token %}
+    <div class="game-list-static">
+        <div class="game-list-filters">
+            Type:  
+            <select id="filter-game_type">
+                <option value="0">---</option>
+                <option value="1">Men's Competitive</option>
+                <option value="2">Men's Friendly</option>
+                <option value="3">Women's Competitive</option>
+                <option value="4">Women's Friendly</option>
+                <option value="5">Mixed Competitive</option>
+                <option value="6">Mixed Friendly</option>
+            </select>
 
-            Type: {{ filter_form.game_type }}
+            <button type="button" id="filterBtn" data-url="{% url 'filter_game' %}"
+            data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
+                Filter
+            </button>
 
-            <input id="filter-games" type="submit" name="submit" value="Filter" />
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

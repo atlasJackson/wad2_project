@@ -27,21 +27,25 @@ def about_us(request):
 
 def game_list(request):
     games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:30]
-
-    # An HTTP GET?
-    if request.method == 'GET':
-        filter_form = FilterForm(request.GET)
-
-        # Have we been provided with a valid form?
-        if filter_form.is_valid():
-            selected_filter = filter_form.cleaned_data.get('game_type')
-            games = Game.objects.filter(game_type=selected_filter)
-        else:
-            # Print problems to the terminal.
-            print(filter_form.errors)
-
-    context_dict = {'games': games, 'filter_form': filter_form}
+    context_dict = {'games': games}
     return render(request, 'fives/game_list.html', context=context_dict)
+
+def filter_game(request):
+    games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')
+    game_type = int(request.POST.get('game_type'))-1
+    if (game_type != 0):
+        games = games.filter(game_type=int(game_type))
+        
+    games[:30]    
+    print (games)
+
+    games_filtered = True
+
+    data = {'games_filtered': games_filtered}
+
+    return JsonResponse(data)
+
+
 
 @login_required
 def create_game(request):
