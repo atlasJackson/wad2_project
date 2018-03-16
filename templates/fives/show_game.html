@@ -90,7 +90,7 @@
                 <td style="text-align:right">
                     {% if user != player.user %}
                         <button type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
-                        data-username="{{ player.user.username }}" title="remove player">
+                        data-username="{{ player.user.username }}" data-csrf_token="{{ csrf_token }}"" title="remove player">
                             <img src="{% static 'img/removeBtn.png' %}" alt="remove player">
                         </button>
                     {% endif %}
