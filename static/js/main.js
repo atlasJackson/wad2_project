@@ -10,6 +10,10 @@ $(document).ready(function(){
         window.location.href = $(this).data("url");
     });
 
+    $( ".game-player-link" ).click(function() {
+        window.location.href = $(this).data("url");
+    });
+
     $(".player-tables-wrapper").on("click", "#account-redirect", function() {
 
         window.location.href = $(this).data("url");
