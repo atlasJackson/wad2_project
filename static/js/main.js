@@ -14,14 +14,14 @@ $(document).ready(function(){
             type:"POST",
             url: $(this).data("url"),
             data: {
-                "game_type": document.getElementById("filter-game_type").value,
+                "game_type": $("#filter-game_type").val(),
                 csrfmiddlewaretoken: $(this).data("csrf_token"),
             },
             dataType: "json",
             success: function(data) {
                 // Refresh game list and filter options on success.
                 if (data.games_filtered){
-                
+                    $(".game-list-filters").load(" .game-list-filters", function(){$(this).children().unwrap()});
                 }
             },
             error: function (rs, e) {
@@ -30,11 +30,6 @@ $(document).ready(function(){
         });
     });
 
-
-    $(".game-player-table").on("click", "#game-player-link", function() {
-
-        window.location.href = $(this).data("url");
-    });
 
     $( ".game-player-link" ).click(function() {
         window.location.href = $(this).data("url");

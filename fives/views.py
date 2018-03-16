@@ -18,7 +18,7 @@ def index(request):
     games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:5]
     context_dict = {'games': games}
     return render(request, 'fives/index.html', context=context_dict)
-    
+
 
 def about_us(request):
     context_dict = {}
@@ -32,11 +32,11 @@ def game_list(request):
 
 def filter_game(request):
     games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')
-    game_type = int(request.POST.get('game_type'))-1
-    if (game_type != 0):
+    game_type = int(request.POST.get('game_type'))
+    if (game_type != 9):
         games = games.filter(game_type=int(game_type))
-        
-    games[:30]    
+
+    games[:30]
     print (games)
 
     games_filtered = True
@@ -44,8 +44,6 @@ def filter_game(request):
     data = {'games_filtered': games_filtered}
 
     return JsonResponse(data)
-
-
 
 @login_required
 def create_game(request):

@@ -42,7 +42,7 @@
     padding-bottom: 50px;
 }
 
-#game-player-link {
+.game-player-link {
     cursor: pointer;
 }
 /* game_list.html END */
@@ -116,16 +116,16 @@
     clear: both;
 }
 
-#account-game-table {
-    width: 100%;
-    border-collapse:collapse;
-    border-bottom: solid thin lightblue;
+/* All tables of class account-game-table are also of class
+    game-player-table and inherit styles from there. */
+.account-game-table {
+    border-bottom: solid thin lightblue !important;
 }
-#account-game-table th {
-    background-color: #004466;
-    font-weight: normal;
-    font-size: 12px;
-    height: 19px;
+.account-game-table th {
+    background-color: #006699 !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    height: 19px !important;
 }
 /* user_account.html END */
 

@@ -35,15 +35,49 @@ def getType(value):
             return elm[1]
     return "No Type"
 
-@register.filter(name='getRating')
-def getRating(player, rating):
+# Returns a string of length equal to the player's rating defined by the parameter.
+@register.filter(name='ratingAsRange')
+def ratingAsRange(player, label):
+    switcher = {
+        "skill": player.skill,
+        "likeability": player.likeability,
+        "punctuality": player.punctuality,
+        "host": player.host_rating
+    }
+    rating = switcher.get(label, 0)
+
     try:
-        if rating == "skill":
-            value = player.skill
-        elif rating == "likeability":
-            value = player.likeability
-        elif rating == "punctuality":
-            value = player.punctuality
-        return round(value / (player.num_player_ratings * 1.0))
+        if label == "host":
+            rating = round(rating / (player.num_host_ratings * 1.0))
+        else:
+            rating = round(rating / (player.num_player_ratings * 1.0))
     except (ValueError, ZeroDivisionError):
-        return 0 # In case a player has no ratings.
+        rating = 0 # In case a player has no ratings.
+
+    string = ""
+    for i in range(0, int(rating)):
+        string += " "
+    return string
+
+@register.filter(name='getRatingIcons')
+def getRatingIcons(player, label):
+    switcher = {
+        "skill": [player.skill, '<img src="{% static "img/skill.png" %}" alt="skill rating" height="15" width="15">'],
+        "likeability": [player.likeability, '<img src="{% static "img/likes.png" %}" alt="likeability rating" height="15" width="15">'],
+        "punctuality": [player.punctuality, '<img src="{% static "img/punctuality.png" %}" alt="puntuality rating" height="15" width="15">'],
+        "host": [player.host_rating, '<img src="{% static "img/punctuality.png" %}" alt="puntuality rating" height="15" width="15">']
+    }
+    ratingTuple = switcher.get(label, (0,''))
+
+    try:
+        if label == "host":
+            rating = round(ratingTuple[0] / (player.num_host_ratings * 1.0))
+        else:
+            rating = round(ratingTuple[0] / (player.num_player_ratings * 1.0))
+    except (ValueError, ZeroDivisionError):
+        rating = 0 # In case a player has no ratings.
+
+    iconsHTML = ""
+    for i in range(0, int(rating)):
+        iconsHTML += ratingTuple[1]
+    return iconsHTML

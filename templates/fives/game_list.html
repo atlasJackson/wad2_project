@@ -8,7 +8,7 @@
 
 {% block body_block %}
 <div class="game-list-content">
-    <h2>List of Upcoming Games:</h2>    
+    <h2>List of Upcoming Games:</h2>
 
     <div>
         {% if games %}
@@ -25,7 +25,7 @@
                     <th>Host Rating</th>
                 </tr>
             {% for game in games %}
-                <tr id="game-player-link" data-url="{% url 'show_game' game.custom_slug %}" >
+                <tr class="game-player-link" data-url="{% url 'show_game' game.custom_slug %}" >
                     <td>{{ game.city }}</td>
                     <td>{{ game.start|date:"d M Y" }}</td>
                     <td>{{ game.start|date:"H:i" }}</td>
@@ -65,15 +65,15 @@
 <br />
     <div class="game-list-static">
         <div class="game-list-filters">
-            Type:  
+            Type:
             <select id="filter-game_type">
-                <option value="0">---</option>
-                <option value="1">Men's Competitive</option>
-                <option value="2">Men's Friendly</option>
-                <option value="3">Women's Competitive</option>
-                <option value="4">Women's Friendly</option>
-                <option value="5">Mixed Competitive</option>
-                <option value="6">Mixed Friendly</option>
+                <option value="9">---</option>
+                <option value="0">Men's Competitive</option>
+                <option value="1">Men's Friendly</option>
+                <option value="2">Women's Competitive</option>
+                <option value="3">Women's Friendly</option>
+                <option value="4">Mixed Competitive</option>
+                <option value="5">Mixed Friendly</option>
             </select>
 
             <button type="button" id="filterBtn" data-url="{% url 'filter_game' %}"
