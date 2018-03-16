@@ -6,6 +6,8 @@ urlpatterns = [
     url(r'^about_us/$', views.about_us, name='about_us'),
 
     url(r'^game_list/$', views.game_list, name='game_list'),
+    url(r'^game_list/filter_game/$', views.filter_game, name='filter_game'),
+
     # regex: [\w\d]+\-\d{8}\-\d{4}\b
     # regex: \w+ = any number of characters, \- = a dash, \d{8} = eight digits, \b = a word boundary
     url(r'^game_list/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/$', views.show_game, name='show_game'),

@@ -5,6 +5,32 @@ $(document).ready(function(){
         window.location.href = $(this).data("url");
     });
 
+
+    $(".game-list-static").on("click", "#filterBtn", function(e){
+
+        e.preventDefault();
+
+        $.ajax({
+            type:"POST",
+            url: $(this).data("url"),
+            data: {
+                "game_type": document.getElementById("filter-game_type").value,
+                csrfmiddlewaretoken: $(this).data("csrf_token"),
+            },
+            dataType: "json",
+            success: function(data) {
+                // Refresh game list and filter options on success.
+                if (data.games_filtered){
+                
+                }
+            },
+            error: function (rs, e) {
+                alert('Sorry, there was an error.');
+            }
+        });
+    });
+
+
     $(".game-player-table").on("click", "#game-player-link", function() {
 
         window.location.href = $(this).data("url");
@@ -111,7 +137,6 @@ function buttonJoinLeaveDelete(button, urlLink) {
             }
         },
         error: function (rs, e) {
-            console.log( document.csrftoken )
             alert('Sorry, there was an error.');
         }
     });
