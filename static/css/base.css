@@ -1,0 +1,32 @@
+body {
+    padding-top: 0px;
+    padding-bottom: 80px;
+}
+
+#body-content {
+    max-width: 960px;
+    height: auto;
+    margin: 0 auto;
+    padding-top: 40px;
+}
+
+.navbar {
+    height: 40px;
+}
+
+.footer-span-custom {
+    color: grey !important;
+    font-size: 12px;
+}
+
+table tr {
+    line-height: 5px;
+    min-height: 5px;
+    height: 5px;
+}
+table th {
+   line-height: 5px;
+   min-height: 5px;
+   height: 5px;
+   background-color: ;
+}

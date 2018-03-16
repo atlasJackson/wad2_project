@@ -9,33 +9,18 @@
 {% block body_block %}
 <div class="index-content">
 
-    <div class="fff-header">
-        <h1>FOOTBALL FIVES FINDER</h1>
+    <div class="index-header-centered">
+        <h3>FOOTBALL FIVES FINDER</h3>
+        {% if user.is_authenticated %}
+        <h5>Welcome {{ user.username }}!</h5>
+        {% endif %}
     </div>
 
-    <div class=index-header>
-    {% if user.is_authenticated %}
-        <h2>Welcome {{ user.username }}!</h2>
-    {% else %}
-        <h3>Login to participate:
-            <button type="button" id="redirect" data-url="{% url 'login' %}">
-                Login
-            </button>
-        </h3>
-
-        <h3>Don't have an account?
-            <button type="button" id="redirect" data-url="{% url 'sign_up' %}">
-                Sign up
-            </button>
-        </h3>
-    {% endif %}
-    </div>
-
-    <h3>List of Upcoming Games:</h3>
+    <h5>List of Upcoming Games:</h5>
 
     {% if games %}
     <div class="game-players-wrapper">
-        <table class="game-player-table">
+        <table class="table table-striped game-player-table table-hover">
             <tr>
                 <th>Location</th>
                 <th>Date</th>
@@ -79,12 +64,16 @@
         <p>No games match the above criteria.</p>
         {% if user.is_authenticated %}
             <p>
-                <a href="{% url 'create_game' %}">Create your own game</a>.
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">Create your own game</a>.
             </p>
         {% else %}
-            <p>
-                <a href="{% url 'sign_up' %}">Sign up</a> to create your own game.
-            </p>
+            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">
+                Login
+            </a>
+            or
+            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">
+                Sign up
+            </a>
         {% endif %}
     </div>
     {% endif %}
@@ -97,6 +86,16 @@
             </p>
             <p>Thank you for understanding.</p>
         </div>
+    {% else %}
+        <br />
+        Login to participate:
+        <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">
+            Login
+        </a>
+        or sign up today
+        <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">
+            Sign up
+        </a>
     {% endif %}
 </div>
 {% endblock %}

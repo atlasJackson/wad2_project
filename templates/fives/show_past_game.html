@@ -13,8 +13,8 @@
             {% if not participation.rated and user.username == player %}
             <form id="rating_form" method="post" action="{% url 'show_past_game' user.username game.custom_slug %}">
             {% csrf_token %}
-            <table class="game-player-table">
-                <tr>
+            <table class="table table-striped game-player-table table-hover account-game-table">
+                <tr class="bg-success text-white">
                     <th>Name</th>
                     <th>Surame</th>
                     <th>Gender</th>
@@ -47,8 +47,8 @@
             <input id="rate-players" type="submit" name="submit" value="Rate Players" />
             </form>
             {% else %} <!-- Already rated, show normal game view. -->
-            <table class="game-player-table">
-                <tr>
+            <table class="table table-striped game-player-table table-hover account-game-table">
+                <tr class="bg-success text-white">
                     <th>Name</th>
                     <th>Surame</th>
                     <th>Gender</th>
@@ -58,8 +58,8 @@
                 </tr>
             {% for player in participants %}
                 <tr>
-                    <td id="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.first_name }}</td>
-                    <td id="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.last_name }}</td>
+                    <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.first_name }}</td>
+                    <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.last_name }}</td>
                     <td>
                         {% if player.gender %}
                             <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">

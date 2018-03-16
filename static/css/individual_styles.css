@@ -1,17 +1,8 @@
-/* base.html START */
-.fff-header {
-    max-width: 1200px;
-    height: auto;
-    margin: 0 auto;
-    padding-bottom: 20px;
-}
-
-.fff-header h1 {
+/* index.html START */
+.index-header-centered {
     text-align: center;
-    border: solid thin black;
-    padding: 20px;
 }
-/* base.html END */
+/* index.html END */
 
 
 /* index.html START */
@@ -118,6 +109,7 @@
 
 /* All tables of class account-game-table are also of class
     game-player-table and inherit styles from there. */
+/*
 .account-game-table {
     border-bottom: solid thin lightblue !important;
 }
@@ -127,6 +119,7 @@
     font-size: 12px !important;
     height: 19px !important;
 }
+*/
 /* user_account.html END */
 
 
@@ -189,7 +182,7 @@
     clear: both;
     border-top: solid thin lightblue;
 }
-
+/*
 .game-player-table {
     width: 100%;
     border-collapse:collapse;
@@ -216,7 +209,7 @@
 .game-player-table tr:hover {
     background-color: #ddd;
 }
-
+*/
 .span-free-slots {
     float: right;
     font-size: 12px;
