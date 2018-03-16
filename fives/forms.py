@@ -57,3 +57,12 @@ class RateHostForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = ('host_rating',)
+
+class FilterForm(forms.ModelForm):
+
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP)
+
+    class Meta:
+        model = Game
+        fields = ('game_type', )
+

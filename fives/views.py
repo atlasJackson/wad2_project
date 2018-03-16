@@ -12,12 +12,12 @@ import pytz
 import sys
 
 from fives.models import User, Player, Game, Participation
-from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm
+from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm, FilterForm
 
 def index(request):
     context_dict = {}
-    response = render(request, 'fives/index.html', context=context_dict)
-    return response
+    return render(request, 'fives/index.html', context=context_dict)
+    
 
 def about_us(request):
     context_dict = {}
@@ -25,8 +25,21 @@ def about_us(request):
     return response
 
 def game_list(request):
-    games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:20]
-    context_dict = {'games': games}
+    games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:30]
+
+    # An HTTP GET?
+    if request.method == 'GET':
+        filter_form = FilterForm(request.GET)
+
+        # Have we been provided with a valid form?
+        if filter_form.is_valid():
+            selected_filter = filter_form.cleaned_data.get('game_type')
+            games = Game.objects.filter(game_type=selected_filter)
+        else:
+            # Print problems to the terminal.
+            print(filter_form.errors)
+
+    context_dict = {'games': games, 'filter_form': filter_form}
     return render(request, 'fives/game_list.html', context=context_dict)
 
 @login_required
@@ -106,7 +119,6 @@ def show_game(request, game_custom_slug):
         context_dict['participants'] = None
         context_dict['users'] = None
         context_dict['gameTookPlace'] = None
-        #context_dict['api_key'] = "AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw"
 
     return render(request, 'fives/show_game.html', context=context_dict)
 

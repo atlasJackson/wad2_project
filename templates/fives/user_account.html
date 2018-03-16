@@ -202,9 +202,11 @@
         {% endfor %}
         </table>
 
-        <button type="button" id="account-redirect" data-url="{% url 'history' player %}">
-            View all past matches
-        </button>
+        {% if user == player.user %}
+            <button type="button" id="account-redirect" data-url="{% url 'history' player %}">
+                View all past matches
+            </button>
+        {% endif %}
     </div>
     {% endblock %}
 </div>
