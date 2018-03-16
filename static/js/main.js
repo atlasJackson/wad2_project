@@ -89,7 +89,7 @@ function buttonJoinLeaveDelete(button, urlLink) {
         data: {
             "gameid": button.data("gameid"),
             "user": button.data("username"),
-            csrfmiddlewaretoken: "{{ csrftoken }}",
+            csrfmiddlewaretoken: button.data("csrf_token"),
         },
         dataType: "json",
         success: function(data) {

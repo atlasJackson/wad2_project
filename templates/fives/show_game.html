@@ -124,18 +124,18 @@
             {% if user.is_authenticated %}
                 {% if user == game.host %}
                     <button type="button" id="deleteBtn" data-gameid="{{ game.game_id }}"
-                    data-username="{{ user.username }}" >
+                    data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
                         Delete Game
                     </button>
                 {% else %}
                     {% if user in users %}
                         <button type="button" id="leaveBtn" data-gameid="{{ game.game_id }}"
-                        data-username="{{ user.username }}" >
+                        data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
                             Leave Game
                         </button>
                     {% else %}
                         <button type="button" id="joinBtn" data-gameid="{{ game.game_id }}"
-                        data-username="{{ user.username }}" >
+                        data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
                             Join Game
                         </button>
                     {% endif %}

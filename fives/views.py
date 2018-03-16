@@ -181,7 +181,6 @@ def show_past_game(request, player, game_custom_slug):
 
 
 @login_required
-@csrf_exempt
 def join_game(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
@@ -207,7 +206,6 @@ def join_game(request, game_custom_slug):
     return JsonResponse(data)
 
 @login_required
-@csrf_exempt
 def leave_game(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
@@ -230,7 +228,6 @@ def leave_game(request, game_custom_slug):
     return JsonResponse(data)
 
 @login_required
-@csrf_exempt
 def delete_game(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
