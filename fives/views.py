@@ -15,7 +15,8 @@ from fives.models import User, Player, Game, Participation
 from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm, FilterForm
 
 def index(request):
-    context_dict = {}
+    games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:5]
+    context_dict = {'games': games}
     return render(request, 'fives/index.html', context=context_dict)
     
 

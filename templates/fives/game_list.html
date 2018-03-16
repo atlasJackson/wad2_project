@@ -8,15 +8,7 @@
 
 {% block body_block %}
 <div class="game-list-content">
-    <div class="game-list-buttons">
-        <form id="filter_form" method="get" action="{% url 'game_list' %}">
-            {% csrf_token %}
-
-            Type: {{ filter_form.game_type }}
-
-            <input id="filter-games" type="submit" name="submit" value="Filter" />
-        </form>
-    </div>
+    <h2>List of Upcoming Games:</h2>    
 
     <div>
         {% if games %}
@@ -67,6 +59,18 @@
                 </p>
             {% endif %}
         {% endif %}
+    </div>
+<br />
+<br />
+<br />
+    <div class="game-list-buttons">
+        <form id="filter_form" method="get" action="{% url 'game_list' %}">
+            {% csrf_token %}
+
+            Type: {{ filter_form.game_type }}
+
+            <input id="filter-games" type="submit" name="submit" value="Filter" />
+        </form>
     </div>
 </div>
 {% endblock %}

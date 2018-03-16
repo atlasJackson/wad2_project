@@ -1,3 +1,37 @@
+/* base.html START */
+.fff-header {
+    max-width: 1200px;
+    height: auto;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+.fff-header h1 {
+    text-align: center;
+    border: solid thin black;
+    padding: 20px;
+}
+/* base.html END */
+
+
+/* index.html START */
+.index-content {
+    max-width: 1200px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.index-header {
+    padding: 30px;
+    text-align: center;
+}
+
+.host-info {
+    padding-top: 50px;
+}
+/* index.html END */
+
+
 /* game_list.html START */
 .game-list-content {
     max-width: 1200px;

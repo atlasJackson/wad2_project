@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Register for Football Fives Finder</h1>
+<div class="content-wrapper-center">
     {% if user.is_authenticated %}
         <p>You are already registered. Click below to return to the homepage.</p>
         <a href="{% url 'index' %}">Home</a>
@@ -31,4 +31,5 @@
             </form>
         {% endif %}
     {% endif %}
+</div>
 {% endblock %}

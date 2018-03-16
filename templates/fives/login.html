@@ -29,26 +29,28 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Login to Football Fives Finder</h1>
+<div class="content-wrapper-center">
+    <strong>Login to Football Fives Finder</strong><br />
 
-{% if user.is_authenticated %}
-    <p>You are already logged in. Click below to return to the homepage.</p>
-    <a href="{% url 'index' %}">Home</a>
-{% else %}
-    <form id="login_form" method="post" action="{% url 'login' %}">
-        {% csrf_token %}
+    {% if user.is_authenticated %}
+        <p>You are already logged in. Click below to return to the homepage.</p>
+        <a href="{% url 'index' %}">Home</a>
+    {% else %}
+        <form id="login_form" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
 
-        <p>
-            <label for="username">Username</label>
-            <input id="username" type="text" name="username" value=""/>
-        </p>
-        <p>
-            <label for="password">Password</label>
-            <input id="password" type="password" name="password" value=""/>
-        </p>
+            <p>
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" value=""/>
+            </p>
+            <p>
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" value=""/>
+            </p>
 
-        <input type="submit" value="submit" />
+            <input type="submit" value="submit" />
 
-    </form>
-{% endif %}
+        </form>
+    {% endif %}
+</div>
 {% endblock %}

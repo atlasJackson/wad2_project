@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+    $(".index-content").on("click", "#redirect", function() {
+
+        window.location.href = $(this).data("url");
+    });
+
     $(".game-player-table").on("click", "#game-player-link", function() {
 
         window.location.href = $(this).data("url");
