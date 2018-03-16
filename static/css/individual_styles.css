@@ -3,7 +3,7 @@
     max-width: 1200px;
     height: auto;
     margin: 0 auto;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
 }
 
 .fff-header h1 {
@@ -22,11 +22,10 @@
 }
 
 .index-header {
-    padding: 30px;
-    text-align: center;
+    padding-bottom: 30px;
 }
 
-.host-info {
+.index-host-info {
     padding-top: 50px;
 }
 /* index.html END */
@@ -55,6 +54,13 @@
     max-width: 1200px;
     height: auto;
     margin: 0 auto;
+}
+
+.player-content-unauthorised {
+    max-width: 1200px;
+    height: auto;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .player-head-wrapper {

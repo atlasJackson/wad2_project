@@ -8,22 +8,26 @@
 
 {% block body_block %}
 <div class="index-content">
+
+    <div class="fff-header">
+        <h1>FOOTBALL FIVES FINDER</h1>
+    </div>
     
     <div class=index-header>
     {% if user.is_authenticated %}
         <h2>Welcome {{ user.username }}!</h2>
     {% else %}
-        <p>Login:  
+        <h3>Login to participate:  
             <button type="button" id="redirect" data-url="{% url 'login' %}">
                 Login
             </button>
-        </p>
+        </h3>
 
-        <p>Don't have an account? 
+        <h3>Don't have an account? 
             <button type="button" id="redirect" data-url="{% url 'sign_up' %}">
-                Sign up to participate!
+                Sign up
             </button>
-        </p>
+        </h3>
     {% endif %}
     </div>   
 
@@ -84,14 +88,15 @@
         {% endif %}
     </div>
     {% endif %}
-
-    <div class="host-info">
-        <h3>Hosting Information</h3>
-        <p>We at Football Fives Finder would like to help you find the match you desire - whether it be a friendly or competitive fixture, or confined to men's only, women's only or a game of mixed competitors. </p>
-        <p>However, we cannot verify the credentials of individual users. If players join a game who do not match your given criteria, it is your responsibility to remove them from the game. If you have booked a game and fail to attract the desired number of players, it is also your responsbility to cover the lost funds for renting the pitch.
-        </p>
-        <p>Thank you for understanding.</p>
-    </div>
-
+    
+    {% if user.is_authenticated %}
+        <div class="index-host-info">
+            <h3>Hosting Information</h3>
+            <p>We at Football Fives Finder would like to help you find the match you desire - whether it be a friendly or competitive fixture, or confined to men's only, women's only or a game of mixed competitors. </p>
+            <p>However, we cannot verify the credentials of individual users. If players join a game who do not match your given criteria, it is your responsibility to remove them from the game. If you have booked a game and fail to attract the desired number of players, it is also your responsbility to cover the lost funds for renting the pitch.
+            </p>
+            <p>Thank you for understanding.</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

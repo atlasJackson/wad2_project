@@ -169,7 +169,7 @@
                 <th>Price (&#163;)</th>
                 <th>Host</th>
                 <th>Host Rating</th>
-                <th></th>
+                <th>Rate</th>
             </tr>
 
         {% for game in pastGames %}
@@ -210,11 +210,12 @@
     </div>
     {% endblock %}
 </div>
-
 {% else %}
+<div class="player-content-unauthorised">
     <p>
         You do not have permission to view this page. Please <a href="{% url 'login' %}">login</a>.<br /><br />
         If you do not have an account then <a href="{% url 'sign_up' %}">sign up</a> today.
     </p>
 {% endif %}
+</div>
 {% endblock %}
