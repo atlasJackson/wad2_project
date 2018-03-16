@@ -75,8 +75,15 @@
                 <option value="5">Mixed Friendly</option>
             </select>
 
+            Duration: 
+            <select id="filter-duration">
+                <option value="0">---</option>
+                <option value="1">1 hour</option>
+                <option value="2">2 hours</option>
+            </select>
+
             <button type="button" id="filterBtn" data-url="{% url 'filter_game' %}"
-            data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
+            data-csrf_token="{{ csrf_token }}" >
                 Filter
             </button>
 

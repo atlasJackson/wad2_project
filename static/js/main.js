@@ -13,14 +13,14 @@ $(document).ready(function(){
             url: $(this).data("url"),
             data: {
                 "game_type": $("#filter-game_type").val(),
+                "duration": $("#filter-duration").val(),
                 csrfmiddlewaretoken: $(this).data("csrf_token"),
             },
-            dataType: "json",
+            dataType: "html",
             success: function(data) {
                 // Refresh game list and filter options on success.
-                if (data.games_filtered){
-                    $(".game-list-filters").load(" .game-list-filters", function(){$(this).children().unwrap()});
-                }
+                $(".game-list-filters").load(" .game-list-filters", function(){$(this).children().unwrap()});
+                $('.game-players-wrapper').html(data);
             },
             error: function (rs, e) {
                 alert('Sorry, there was an error.');
@@ -28,7 +28,8 @@ $(document).ready(function(){
         });
     });
 
-    $( ".game-player-link" ).click(function() {
+    $(".game-list-content, .game-player-table").on("click", " .game-player-link", function() {
+
         window.location.href = $(this).data("url");
     });
 

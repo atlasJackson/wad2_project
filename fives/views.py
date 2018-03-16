@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
 from django.forms import formset_factory
+from django.template.loader import render_to_string
 
 from geopy.geocoders import Nominatim
 import datetime
@@ -33,18 +34,21 @@ def game_list(request):
 def filter_game(request):
     games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')
     game_type = int(request.POST.get('game_type'))
+    duration = int(request.POST.get('duration'))
     if (game_type != 9):
-        games = games.filter(game_type=int(game_type))
+        games = games.filter(game_type=game_type)
+    if (duration != 0):
+        games = games.filter(duration=duration)
+
 
     games[:30]
     print (games)
 
     games_filtered = True
 
-    data = {'games_filtered': games_filtered}
+    data = {'games_filtered': games_filtered, 'games': games}
 
-    return JsonResponse(data)
-    
+    return render(request, 'fives/game_list_table.html', data)
 
 @login_required
 def create_game(request):
