@@ -63,7 +63,7 @@ def ratingAsRange(player, label):
 def getRatingIcons(player, label):
     switcher = {
         "skill": [player.skill, '<img src="{% static "img/skill.png" %}" alt="skill rating" height="15" width="15">'],
-        "likeability": [player.likeability, '<img src="{% static "img/likes.png" %}" alt="likeability rating" height="15" width="15">'],
+        "likeability": [player.likeability, '<img src="{% static \'img/likes.png\' %}" alt="likeability rating" height="15" width="15">'],
         "punctuality": [player.punctuality, '<img src="{% static "img/punctuality.png" %}" alt="puntuality rating" height="15" width="15">'],
         "host": [player.host_rating, '<img src="{% static "img/punctuality.png" %}" alt="puntuality rating" height="15" width="15">']
     }
@@ -80,4 +80,5 @@ def getRatingIcons(player, label):
     iconsHTML = ""
     for i in range(0, int(rating)):
         iconsHTML += ratingTuple[1]
+        print iconsHTML
     return iconsHTML

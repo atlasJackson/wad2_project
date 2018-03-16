@@ -1,10 +1,8 @@
 $(document).ready(function(){
-
     $(".index-content").on("click", "#redirect", function() {
 
         window.location.href = $(this).data("url");
     });
-
 
     $(".game-list-static").on("click", "#filterBtn", function(e){
 
@@ -29,7 +27,6 @@ $(document).ready(function(){
             }
         });
     });
-
 
     $( ".game-player-link" ).click(function() {
         window.location.href = $(this).data("url");

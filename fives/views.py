@@ -44,6 +44,7 @@ def filter_game(request):
     data = {'games_filtered': games_filtered}
 
     return JsonResponse(data)
+    
 
 @login_required
 def create_game(request):
@@ -263,6 +264,19 @@ def delete_game(request, game_custom_slug):
 
     return JsonResponse(data)
 
+def update_pitch(request, game_custom_slug):
+    gameid = request.POST.get('gameid')
+    game = Game.objects.get(game_id=gameid)
+
+    pitch_updated = False
+    if game:
+        game.booked = not game.booked
+        game.save()
+        pitch_updated = True
+
+    data = {'pitch_updated': pitch_updated}
+
+    return JsonResponse(data)
 
 ###############################################
 # User-centric Views

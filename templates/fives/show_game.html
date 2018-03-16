@@ -24,11 +24,13 @@
         Date: {{ game.start|date:"d M Y" }}<br />
         Time: {{ game.start|date:"H:i" }}<br />
         Pitch:
+        <span id="span-pitch-label" data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}">
         {% if game.booked %}
             <span style="color:Green">Booked</span><br />
         {% else %}
             <span style="color:Red">Not Booked</span><br />
         {% endif %}
+        </span>
         Price/person: &#163; {{ game.price }}<br />
         Type: {{ game.game_type|getType }}
     </div>
@@ -78,7 +80,6 @@
                     {% for i in player|ratingAsRange:"likeability" %}
                         <img src="{% static 'img/likes.png' %}" alt="likeability rating" height="15" width="15">
                     {% endfor %}
-                    <!-- {{ player|getRatingIcons:"likeability" }} -->
                 </td>
                 <td>
                     {% for i in player|ratingAsRange:"punctuality" %}
@@ -90,7 +91,7 @@
                 <td style="text-align:right">
                     {% if user != player.user %}
                         <button type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
-                        data-username="{{ player.user.username }}" data-csrf_token="{{ csrf_token }}"" title="remove player">
+                        data-username="{{ player.user.username }}" data-csrf_token="{{ csrf_token }}" title="remove player">
                             <img src="{% static 'img/removeBtn.png' %}" alt="remove player">
                         </button>
                     {% endif %}

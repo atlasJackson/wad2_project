@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.theme.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.structure.min.css' %}">
-
+    <!--    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
 
         {% block js_block %}
         {% endblock %}
@@ -40,6 +40,7 @@
                         <a class="account-a" href="{% url 'login' %}">Login</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'sign_up' %}">Sign up</a>
 					{% endif %}
 				</div>
+
 			</div>
 		</div>
 		<div id="body-wrapper">
@@ -59,7 +60,8 @@
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery.validate.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/fives-ajax.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-
+    <!--    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script> -->
     </body>
 </html>
