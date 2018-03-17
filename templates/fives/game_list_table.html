@@ -27,13 +27,9 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                {% for i in game.host.player|ratingAsRange:"host" %}
+                    <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                {% endfor %}
                 </td>
             </tr>
         {% endfor %}
@@ -43,11 +39,11 @@
         <p>No games match the search criteria.</p>
         {% if user.is_authenticated %}
             <p>
-                Please refine your search, or <a href="{% url 'create_game' %}">create your own game</a>.
+                Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">create</a>your own game.
             </p>
         {% else %}
             <p>
-                Please refine your search, or <a href="{% url 'sign_up' %}">sign up</a> to create your own game.
+                Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'sign_up' %}">sign up</a> to create your own game.
             </p>
         {% endif %}
     {% endif %}

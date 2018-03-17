@@ -23,20 +23,20 @@ class PlayerForm(forms.ModelForm):
 
 class GameForm(forms.ModelForm):
 
-    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type")
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type", widget=forms.Select(attrs={'class':'form-control'}))
 
-    date = forms.DateField()
-    time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'))
-    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration")
+    date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control', 'type':'text'}))
+    time = forms.TimeField(widget=forms.TimeInput(format='%H:%M', attrs={'class':'form-control'}))
+    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration", widget=forms.Select(attrs={'class':'form-control'}))
 
-    street = forms.CharField(max_length=128, label="Street & number")
-    city = forms.CharField(max_length=128, label="City/Town")
-    postcode = forms.CharField(max_length=128, label="Postcode")
+    street = forms.CharField(max_length=128, label="Street & number", widget=forms.TextInput(attrs={'class':'form-control'}))
+    city = forms.CharField(max_length=128, label="City/Town", widget=forms.TextInput(attrs={'class':'form-control'}))
+    postcode = forms.CharField(max_length=128, label="Postcode", widget=forms.TextInput(attrs={'class':'form-control'}))
 
-    price = forms.DecimalField(widget=forms.TextInput(), label="Price/person")
-    booked = forms.BooleanField(widget=forms.CheckboxInput(), initial=False, required=False, label="Pitch booked?")
+    price = forms.DecimalField(widget=forms.TextInput(attrs={'class':'form-control'}), label="Price/person")
+    booked = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':'form-control form-check-input', 'type':'checkbox'}), initial=False, required=False, label="Pitch booked?")
 
-    field_order=['game_type','date','time','suration','street','city','postcode', 'price', 'booked']
+    field_order=['game_type','date','time','duration','street','city','postcode', 'price', 'booked']
 
     class Meta:
         model = Game
@@ -65,4 +65,3 @@ class FilterForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = ('game_type', )
-

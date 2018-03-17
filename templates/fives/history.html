@@ -7,10 +7,10 @@
 {% endblock %}
 
 {% block account_block %}
-<div class="player-tables-wrapper">
+<div class="player-tables-wrapper  border-top pt-3">
         <h2>History</h2>
-        <table class="game-player-table account-game-table">
-            <tr>
+        <table class="table table-striped game-player-table table-hover">
+            <tr class="bg-success text-white">
                 <th>Location</th>
                 <th>Date</th>
                 <th>Time</th>
@@ -23,7 +23,7 @@
             </tr>
 
         {% for game in fullHistory %}
-            <tr id="game-player-link" data-url="{% url 'show_past_game' user.username game.custom_slug %}" >
+            <tr class="game-player-link" data-url="{% url 'show_past_game' user.username game.custom_slug %}" >
                 <td>{{ game.city }}</td>
                 <td>{{ game.start|date:"d M Y" }}</td>
                 <td>{{ game.start|date:"H:i" }}</td>
@@ -52,7 +52,7 @@
         {% endfor %}
         </table>
 
-        <button type="button" id="account-redirect" data-url="{% url 'user_account' player %}">
+        <button class="btn btn-outline-success btn-sm" type="button" id="account-redirect" data-url="{% url 'user_account' player %}">
             Return
         </button>
     </div>

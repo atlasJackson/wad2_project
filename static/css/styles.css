@@ -1,0 +1,49 @@
+table th {
+    line-height: 5px;
+    min-height: 5px;
+    height: 5px;
+    font-weight: normal;
+}
+table tr {
+    line-height: 5px;
+    min-height: 5px;
+    height: 5px;
+}
+
+.jquery_validation_form label.error, span.error, td.django-form-errors {
+    font-size: 11px;
+    font-style: normal;
+    color: red;
+    padding-left: 10px;
+}
+
+.game-player-link {
+    cursor: pointer;
+}
+
+/* index.html */
+.index-header-centered {
+    text-align: center;
+    padding-bottom: 15px;
+}
+.index-host-info {
+    margin-top: 30px;
+    font-size: 11px;
+    font-style: normal;
+    max-width: 600px;
+}
+
+
+/* user_account.html */
+.user-account-info {
+    margin-bottom: 20px;
+}
+.user-account-info ul {
+    list-style-type: none;
+    padding: 0px;
+}
+
+/* show_game.html */
+.game-header-info {
+    font-weight: bold !important;
+}

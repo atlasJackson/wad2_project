@@ -8,7 +8,7 @@
 
 {% block body_block %}
 <div class="game-list-content">
-    <h2>List of Upcoming Games:</h2>
+    <h5>Upcoming Games</h5>
     <div>
         {% if games %}
         <div class="game-players-wrapper">
@@ -50,18 +50,16 @@
             <p>No games match the above criteria.</p>
             {% if user.is_authenticated %}
                 <p>
-                    Please refine your search, or <a href="{% url 'create_game' %}">create your own game</a>.
+                    Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">create</a>your own game.
                 </p>
             {% else %}
                 <p>
-                    Please refine your search, or <a href="{% url 'sign_up' %}">sign up</a> to create your own game.
+                    Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'sign_up' %}">sign up</a> to create your own game.
                 </p>
             {% endif %}
         {% endif %}
     </div>
-<br />
-<br />
-<br />
+
     <div class="game-list-static">
         <div class="game-list-filters">
             Type:
@@ -74,15 +72,15 @@
                 <option value="4">Mixed Competitive</option>
                 <option value="5">Mixed Friendly</option>
             </select>
-
+            &nbsp;&nbsp;&nbsp;
             Duration:
             <select id="filter-duration">
                 <option value="0">---</option>
                 <option value="1">1 hour</option>
                 <option value="2">2 hours</option>
             </select>
-
-            <button type="button" id="filterBtn" data-url="{% url 'filter_game' %}"
+            &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-outline-primary btn-sm" type="button" id="filterBtn" data-url="{% url 'filter_game' %}"
             data-csrf_token="{{ csrf_token }}" >
                 Filter
             </button>

@@ -89,7 +89,14 @@ $(document).ready(function(){
         return value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
     }, 'Enter a valid time (hh:mm)');
 
+    $("#id_date").datepicker({
+        uiLibrary: 'bootstrap4',
+        minDate: 0, // Can't select dates in the past.
+        maxDate: 30, // Can only select dates within 30 days from today.
+        dateFormat: "yy-mm-dd",
+    });
 
+/*
     $("#id_date").datepicker({
         minDate: 0, // Can't select dates in the past.
         maxDate: 30, // Can only select dates within 30 days from today.
@@ -106,6 +113,7 @@ $(document).ready(function(){
             $('#id_date').datepicker('setDate', new Date());
         }
     });
+*/
 
 });
 

@@ -8,19 +8,19 @@
 
 {% block body_block %}
 {% if game %} <!-- The game exists -->
-<div class="game-content">
-    <div class="game-head-wrapper">
-        <div class="game-head-title">
+    <div class="row border-bottom pb-2">
+        <div class="col-9">
             {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;-&nbsp;{{ game.start|date:"d N Y" }}&nbsp;-&nbsp;{{ game.start|date:"H:i" }}
         </div>
-        <div class="game-head-host">
+        <div class="col-3">
             <span title="">{{ game.host.username }}</span>
             {% for i in game.host.player|ratingAsRange:"host" %}
                 <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
             {% endfor %}
         </div>
     </div>
-    <div class="game-info">
+<div class="row border-bottom mt-3 pb-3">
+    <div class="col-4">
         Date: {{ game.start|date:"d M Y" }}<br />
         Time: {{ game.start|date:"H:i" }}<br />
         Pitch:
@@ -34,19 +34,22 @@
         Price/person: &#163; {{ game.price }}<br />
         Type: {{ game.game_type|getType }}
     </div>
-    <div class="game-address">
+    <div class="col-4 border-left">
         Address:<br />
         {{ game.street }}<br />
         {{ game.city }}<br />
         {{ game.postcode }}
     </div>
-    <div class="game-map">
+    <div class="col-2 game-map ">
         <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 300px; height: 150px;">
             <div id="map" >
             </div>
         </div>
     </div>
+</div>
 {% block show_or_rate_block %}
+<div class="row pt-3">
+    <div class="col">
     <div class="game-players-wrapper">
         <table class="table table-striped game-player-table table-hover">
             <tr class="bg-success text-white">
@@ -100,8 +103,13 @@
             </tr>
         {% endfor %}
         </table>
-        <span class="span-free-slots">Free spaces: <strong>{{ game.free_slots }}</strong></span>
+        <div class="container text-right">
+            <span class="span-free-slots">Free spaces: <strong>{{ game.free_slots }}</strong></span>
+        </div>
     </div>
+    </div>
+</div>
+<div class="row">
     <div class="game-player-static">
         <div class="game-player-buttons">
         {% if gameTookPlace %} <!-- The current game lies in the past and took place(all slots were filled). -->
@@ -109,18 +117,18 @@
         {% else %} <!-- The current game lies in the future. -->
             {% if user.is_authenticated %}
                 {% if user == game.host %}
-                    <button type="button" id="deleteBtn" data-gameid="{{ game.game_id }}"
+                    <button class="btn btn-danger btn-sm" type="button" id="deleteBtn" data-gameid="{{ game.game_id }}"
                     data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
                         Delete Game
                     </button>
                 {% else %}
                     {% if user in users %}
-                        <button type="button" id="leaveBtn" data-gameid="{{ game.game_id }}"
+                        <button class="btn btn-danger btn-sm" type="button" id="leaveBtn" data-gameid="{{ game.game_id }}"
                         data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
                             Leave Game
                         </button>
                     {% else %}
-                        <button type="button" id="joinBtn" data-gameid="{{ game.game_id }}"
+                        <button class="btn btn-success btn-sm" type="button" id="joinBtn" data-gameid="{{ game.game_id }}"
                         data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
                             Join Game
                         </button>

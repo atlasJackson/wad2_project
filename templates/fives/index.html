@@ -16,12 +16,12 @@
         {% endif %}
     </div>
 
-    <h5>List of Upcoming Games:</h5>
+    <h6>Upcoming Games</h6>
 
     {% if games %}
     <div class="game-players-wrapper">
         <table class="table table-striped game-player-table table-hover">
-            <tr>
+            <tr class="bg-success text-white">
                 <th>Location</th>
                 <th>Date</th>
                 <th>Time</th>
@@ -42,21 +42,18 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                {% for i in game.host.player|ratingAsRange:"host" %}
+                    <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                {% endfor %}
                 </td>
             </tr>
         {% endfor %}
         </table>
-
-        <button type="button" id="redirect" data-url="{% url 'game_list' %}">
-            View more
-        </button>
+        <div class="container text-right">
+            <button class="btn btn-outline-success btn-sm" type="button" id="redirect" data-url="{% url 'game_list' %}">
+                View more
+            </button>
+        </div>
     </div>
 
     {% else %}
@@ -80,8 +77,8 @@
 
     {% if user.is_authenticated %}
         <div class="index-host-info">
-            <h3>Hosting Information</h3>
-            <p>We at Football Fives Finder would like to help you find the match you desire - whether it be a friendly or competitive fixture, or confined to men's only, women's only or a game of mixed competitors. </p>
+            <h6>Hosting Information</h6>
+            We at Football Fives Finder would like to help you find the match you desire - whether it be a friendly or competitive fixture, or confined to men's only, women's only or a game of mixed competitors.</p>
             <p>However, we cannot verify the credentials of individual users. If players join a game who do not match your given criteria, it is your responsibility to remove them from the game. If you have booked a game and fail to attract the desired number of players, it is also your responsbility to cover the lost funds for renting the pitch.
             </p>
             <p>Thank you for understanding.</p>

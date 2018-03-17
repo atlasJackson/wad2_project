@@ -4,29 +4,27 @@ body {
 }
 
 #body-content {
+    padding-top: 40px;
+}
+.center-content {
     max-width: 960px;
     height: auto;
     margin: 0 auto;
-    padding-top: 40px;
 }
 
+#primary-nav {
+    background-color: #0077b3;
+}
 .navbar {
-    height: 40px;
+    background-color: #0077b3 !important;
+}
+
+.link-account, .link-account a, .link-account a:hover {
+    color: white !important;
+    font-size: 12px;
 }
 
 .footer-span-custom {
     color: grey !important;
     font-size: 12px;
-}
-
-table tr {
-    line-height: 5px;
-    min-height: 5px;
-    height: 5px;
-}
-table th {
-   line-height: 5px;
-   min-height: 5px;
-   height: 5px;
-   background-color: ;
 }

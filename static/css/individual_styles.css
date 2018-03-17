@@ -279,19 +279,5 @@
     padding-left: 10px;
 }
 
-input#create-game {
-    margin-top: 15px;
-    margin-left: 90px;
-    width: auto;
-    height: 25px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: #4CAF50;
-    border: 1px solid #e7e7e7;
-}
 
-input#create-game:hover {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
-}
 /* create_game.html END */

@@ -8,9 +8,8 @@
 
 {% block body_block %}
 {% if user.is_authenticated %}
-<div class="player-content">
-    <div class="player-head-wrapper">
-        <div class="player-info">
+    <div class="row user-account-info">
+        <div class="col-7">
             <h2>{{ player.user.first_name }} {{ player.user.last_name }}</h2>
 
             {% if player.user.email %}
@@ -32,12 +31,12 @@
             </ul>
 
             {% if user == player.user %}
-                <button type="button" id="editButton" data-user="{{ user }}">
+                <button class="btn btn-outline-primary btn-sm" type="button" id="editButton" data-user="{{ user }}">
                         Edit account
                 </button>
             {% endif %}
         </div>
-        <div class="player-ratings">
+        <div class="col-4 border-left">
             <h2>Player Ratings</h2>
             <ul>
                 <li><strong>Skills: </strong>
@@ -81,9 +80,9 @@
         </div>
     </div>
     {% block account_block %}
-    <div class="player-tables-wrapper">
-        <h3>Joined</h3>
-        <table class="table table-striped game-player-table table-hover account-game-table">
+    <div class="player-tables-wrapper border-top pt-3">
+        <h5>Joined</h5>
+        <table class="table table-striped game-player-table table-hover">
             <tr class="bg-success text-white">
                 <th>Location</th>
                 <th>Date</th>
@@ -120,8 +119,8 @@
     </div>
 
     <div class="player-tables-wrapper">
-        <h3>Hosting</h3>
-        <table class="table table-striped game-player-table table-hover account-game-table">
+        <h5>Hosting</h5>
+        <table class="table table-striped game-player-table table-hover">
             <tr class="bg-success text-white">
                 <th>Location</th>
                 <th>Date</th>
@@ -158,8 +157,8 @@
     </div>
 
     <div class="player-tables-wrapper">
-        <h3>History</h3>
-        <table class="table table-striped game-player-table table-hover account-game-table">
+        <h5>History</h5>
+        <table class="table table-striped game-player-table table-hover">
             <tr class="bg-success text-white">
                 <th>Location</th>
                 <th>Date</th>
@@ -203,13 +202,12 @@
         </table>
 
         {% if user == player.user %}
-            <button type="button" id="account-redirect" data-url="{% url 'history' player %}">
+            <button class="btn btn-outline-success btn-sm" type="button" id="account-redirect" data-url="{% url 'history' player %}">
                 View all past matches
             </button>
         {% endif %}
     </div>
     {% endblock %}
-</div>
 {% else %}
 <div class="player-content-unauthorised">
     <p>

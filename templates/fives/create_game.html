@@ -9,29 +9,44 @@
 {% endblock %}
 
 {% block body_block %}
-<div class="content-wrapper-center">
-    <h3>{{ user.first_name }}, create your own game...</h3>
-    <form id="game_form" class="jquery_validation_form" method="post" action="{% url 'create_game' %}">
+<div class="row">
+    <div class="col">
+    </div>
+    <div class="col-5">
+        <h5>{{ user.first_name }}, create your own game...</h5><br/>
+        <form  class="jquery_validation_form" id="game_form" class="jquery_validation_form" method="post" action="{% url 'create_game' %}">
 
-    {% csrf_token %}
+            {% csrf_token %}
+            {% for field in game_form %}
+            <div class="form-group row">
+                <label for="{{ field.label }}" class="col-5 col-form-label">{{ field.label }}</label>
+                <div class="col-7">
+                    {{ field }}
+                </div>
+                <label for="{{ field.errors }}">{{ field.errors }}</label>
+            </div>
+            {% endfor %}
 
-    <table>
-        {% for field in game_form %}
-            <tr style="height:30px;">
-                <td>{{ field.label }}:</td>
-                <td>{{ field }}</td>
-                <td class="django-form-errors">{{ field.errors }}</td>
-            </tr>
-        {% endfor %}
-
-    </table>
-
-    <!-- Provide a button to click to submit form -->
-    <input id="create-game" type="submit" name="submit" value="Create Game" />
-    </form>
-    <p style="font-size:11px; margin-top:40px; width:280px; text-align:center;">
-        Please note that as users are joining a game with the details you supply here, the details cannot be changed after submission.<br />
-        Delete the game and create a new one if circumstances change.<br/>Thank you for understanding.
-    </p>
+<!--
+            <table>
+                {% for field in game_form %}
+                <tr style="height:30px;">
+                    <td>{{ field.label }}:</td>
+                    <td>{{ field }}</td>
+                    <td class="django-form-errors">{{ field.errors }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+-->
+            <!-- Provide a button to click to submit form -->
+            <input class="btn btn-lg btn-primary btn-block" id="create-game" type="submit" name="submit" value="Create Game" />
+        </form>
+        <p style="font-size:11px; margin-top:40px; text-align:center;">
+            Please note that as users are joining a game with the details you supply here, the details cannot be changed after submission.<br />
+            Delete the game and create a new one if circumstances change.<br/>Thank you for understanding.
+        </p>
+    </div>
+    <div class="col">
+    </div>
 </div>
 {% endblock %}
