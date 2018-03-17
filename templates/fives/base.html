@@ -27,7 +27,9 @@
         <div id="primary-nav">
          <div class="container center-content">
                 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-                    <a class="navbar-brand" href="#"></a>
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                            <img src="{% static 'img/logo.png' %}" alt="fives logo" height="50px">
+                    </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -59,10 +61,10 @@
 
         <footer class="footer fixed-bottom bg-dark">
             <div class="container text-center">
-                <span class="text-muted footer-span-custom">
+                <p class="footer-p-custom">
                     Gordon Daffurn&nbsp;&nbsp;|&nbsp;&nbsp;Hangil Ko&nbsp;&nbsp;|&nbsp;&nbsp;Nicola Mössner<br/>
     				Football Fives Finder &copy; 2018
-                </span>
+                </p>
             </div>
         </footer>
 

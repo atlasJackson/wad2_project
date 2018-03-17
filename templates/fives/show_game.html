@@ -9,7 +9,7 @@
 {% block body_block %}
 {% if game %} <!-- The game exists -->
     <div class="row border-bottom pb-2">
-        <div class="col-9">
+        <div class="col-9 game-header-info">
             {{ game.host.first_name }}&nbsp;{{ game.host.last_name }}&nbsp;-&nbsp;{{ game.start|date:"d N Y" }}&nbsp;-&nbsp;{{ game.start|date:"H:i" }}
         </div>
         <div class="col-3">

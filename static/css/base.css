@@ -17,6 +17,7 @@ body {
 }
 .navbar {
     background-color: #0077b3 !important;
+    padding: 0px !important;
 }
 
 .link-account, .link-account a, .link-account a:hover {
@@ -24,7 +25,12 @@ body {
     font-size: 12px;
 }
 
-.footer-span-custom {
-    color: grey !important;
-    font-size: 12px;
+.footer {
+    height: 45px;
+}
+.footer-p-custom {
+    color: grey;
+    font-size: 11px;
+    line-height: 15px;
+    padding-top: 8px;
 }

@@ -39,7 +39,7 @@
         <p>No games match the search criteria.</p>
         {% if user.is_authenticated %}
             <p>
-                Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">create</a>your own game.
+                Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">create</a> your own game.
             </p>
         {% else %}
             <p>

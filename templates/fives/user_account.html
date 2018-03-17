@@ -40,40 +40,24 @@
             <h2>Player Ratings</h2>
             <ul>
                 <li><strong>Skills: </strong>
-                    {% with rating=player.skill|divide:player.num_player_ratings %} <!-- Divides rating by number of ratings -->
-                        {% with ''|center:rating as range %} <!-- Creates a string with length of the value of "rating" -->
-                            {% for i in range %}
-                                <img src="{% static 'img/skill.png' %}" alt="skill rating" height="15" width="15">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                    {% for i in player|ratingAsRange:"skill" %}
+                        <img src="{% static 'img/skill.png' %}" alt="host rating" height="13">
+                    {% endfor %}
                 </li>
                 <li><strong>Likes: </strong>
-                    {% with rating=player.likeability|divide:player.num_player_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/likes.png' %}" alt="likeability rating" height="15" width="15">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                    {% for i in player|ratingAsRange:"likeability" %}
+                        <img src="{% static 'img/likes.png' %}" alt="host rating" height="13">
+                    {% endfor %}
                 </li>
                 <li><strong>Punctuality: </strong>
-                    {% with rating=player.punctuality|divide:player.num_player_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/punctuality.png' %}" alt="puntuality rating" height="15" width="15">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                    {% for i in player|ratingAsRange:"punctuality" %}
+                        <img src="{% static 'img/punctuality.png' %}" alt="host rating" height="13">
+                    {% endfor %}
                 </li>
                 <li><strong>Hosting: </strong>
-                    {% with rating=player.host_rating|divide:player.num_host_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                    {% for i in player|ratingAsRange:"host" %}
+                        <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                    {% endfor %}
                 </li>
             </ul>
 
@@ -105,13 +89,9 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                {% for i in game.host.player|ratingAsRange:"host" %}
+                    <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                {% endfor %}
                 </td>
             </tr>
         {% endfor %}
@@ -143,13 +123,9 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                {% for i in game.host.player|ratingAsRange:"host" %}
+                    <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                {% endfor %}
                 </td>
             </tr>
         {% endfor %}
@@ -168,7 +144,9 @@
                 <th>Price (&#163;)</th>
                 <th>Host</th>
                 <th>Host Rating</th>
-                <th>Rate</th>
+                {% if user == player.user %}
+                    <th>Rate</th>
+                {% endif %}
             </tr>
 
         {% for game in pastGames %}
@@ -182,20 +160,18 @@
                 <td>{{ game.host.username }}</td>
 
                 <td>
-                    {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
-                        {% with ''|center:rating as range %}
-                            {% for i in range %}
-                                <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %}
+                {% for i in game.host.player|ratingAsRange:"host" %}
+                    <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
+                {% endfor %}
                 </td>
 
+                {% if user == player.user %}
                 <td>
-                {% if user == player.user and not game|isRated:user %}
-                    <img src="{% static 'img/rate.png' %}" alt="rate now" height="15">
-                {% endif %}
+                    {% if not game|isRated:user %}
+                    <img src="{% static 'img/rate.png' %}" alt="rate now" title="Rate players" height="15">
+                    {% endif %}
                 </td>
+                {% endif %}
 
             </tr>
         {% endfor %}

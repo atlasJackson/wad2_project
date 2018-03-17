@@ -92,8 +92,8 @@ def create_game(request):
             p = Participation(player=user_player, game=game)
             p.save()
 
-            # Direct the user back to the index page.
-            return index(request)
+            # Direct the user to the view of the newly created game.
+            return HttpResponseRedirect(reverse('show_game', kwargs={'game_custom_slug':game.custom_slug}))
         else:
             # The supplied form contained errors - print them to the terminal.
             print(game_form.errors)

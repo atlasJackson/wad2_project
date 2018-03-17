@@ -4,11 +4,6 @@ table th {
     height: 5px;
     font-weight: normal;
 }
-table tr {
-    line-height: 5px;
-    min-height: 5px;
-    height: 5px;
-}
 
 .jquery_validation_form label.error, span.error, td.django-form-errors {
     font-size: 11px;
