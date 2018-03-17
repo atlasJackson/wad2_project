@@ -1,15 +1,23 @@
 
 SHOW GAME
-    - Male/Female can only join games within certain categories.
+    - Users can't join games that interfere with already joined/hosting games.
 
 EDIT GAME
-    - Keep this or not?
     - Change Pitch status.
 
 CREATE GAME
     - Users can't create games in the past or within two hours.
-    - Datepicker and time field.
+    - Users can't create games if they're already hosting one at the same time.
+    - Time field.
 
-RATE GAME
-    - (Use of formsets for multiple ratings?)
-    - 
+EDIT PROFILE
+    - Edit email address.
+    - Change password.
+    - Other useres, only see games they are hosting.
+
+GAME LIST
+    - Finish filtering
+    _ Implement sorting table
+
+BASE.html
+    - Change active link in navbar.
