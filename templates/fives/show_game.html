@@ -60,7 +60,7 @@
                 <th>Likes</th>
                 <th>Punctuality</th>
                 {% if user == game.host%}
-                    <th style="text-align:right; padding-right:55px;"></th>
+                    <th></th>
                 {% endif %}
             </tr>
         {% for player in participants %}
@@ -91,11 +91,12 @@
                 </td>
 
                 {% if user == game.host %}
-                <td style="text-align:right">
+                <td class="text-right">
                     {% if user != player.user %}
-                        <button type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
+                        <button class="btn btn-outline-danger btn-sm custom-button-height" type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
                         data-username="{{ player.user.username }}" data-csrf_token="{{ csrf_token }}" title="remove player">
-                            <img src="{% static 'img/removeBtn.png' %}" alt="remove player">
+                            Remove
+                            <!--<img src="{% static 'img/removeBtn.png' %}" alt="remove player">-->
                         </button>
                     {% endif %}
                 </td>

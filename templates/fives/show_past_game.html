@@ -9,7 +9,7 @@
 {% block show_or_rate_block %}
 {% if gameTookPlace %}
     {% if user in users %}
-        <div class="game-players-wrapper">
+        <div class="game-players-wrapper pt-3">
             {% if not participation.rated and user.username == player %}
             <form id="rating_form" method="post" action="{% url 'show_past_game' user.username game.custom_slug %}">
             {% csrf_token %}
@@ -42,9 +42,9 @@
             </table>
             <br />
             {% if user != game.host %}
-                Please rate hosting abilities: {{ host_form.host_rating }}<br /><br />
+                Please rate {{ game.host.first_name }}'s hosting abilities: {{ host_form.host_rating }}<br /><br />
             {% endif %}
-            <input id="rate-players" type="submit" name="submit" value="Rate Players" />
+            <input class="btn btn-primary btn-sm" id="rate-players" type="submit" name="submit" value="Rate Players" />
             </form>
             {% else %} <!-- Already rated, show normal game view. -->
             <table class="table table-striped game-player-table table-hover account-game-table">
