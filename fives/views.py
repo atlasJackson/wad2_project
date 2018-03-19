@@ -72,10 +72,14 @@ def create_game(request):
             # Combine date and time for DateTimeField
             date = game_form.cleaned_data["date"]
             time = game_form.cleaned_data["time"]
-
-            #d = datetime.datetime(date.year, date.month, date.day, time.hour, time.minute)
             game.start = datetime.datetime.combine(date, time)
-            #game.start = d
+            # Calculate end (start + duration)
+            game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
+
+            conflictingGames = game_conflicts(request.user.player, game)
+            if conflictingGames:
+                return render(request, 'fives/create_game.html', {'game_form': game_form, 'conflictingGames': conflictingGames})
+
 
             # Get latitiude and longitude from address
             # Source: https://geopy.readthedocs.io/en/1.10.0/
@@ -84,8 +88,6 @@ def create_game(request):
             game.latitude = location.latitude
             game.longitude = location.longitude
 
-            # Calculate end from start and duration
-            game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
 
             # Get host entry from current user
             game.host = request.user
@@ -108,8 +110,6 @@ def create_game(request):
 
 
 def show_game(request, game_custom_slug):
-    context_dict = {}
-
     try:
         # Try to find a game with the given slug.
         game = Game.objects.get(custom_slug=game_custom_slug)
@@ -121,18 +121,15 @@ def show_game(request, game_custom_slug):
         now = datetime.datetime.now(pytz.utc)
         gameTookPlace = True if game.end < now else False
 
+        # Check if there are conflicting games for the current user.
+        conflictingGames = game_conflicts(request.user.player, game)
+
         # Add entities to the context dictionary
-        context_dict['game'] = game
-        context_dict['participants'] = participants
-        context_dict['users'] = users
-        context_dict['gameTookPlace'] = gameTookPlace
+        context_dict = {'game':game, 'participants':participants, 'users':users, 'gameTookPlace': gameTookPlace, 'conflictingGames':conflictingGames}
 
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
-        context_dict['game'] = None
-        context_dict['participants'] = None
-        context_dict['users'] = None
-        context_dict['gameTookPlace'] = None
+        context_dict = {'game':None, 'participants':None, 'users':None, 'gameTookPlace': None, 'conflictingGames':None}
 
     return render(request, 'fives/show_game.html', context=context_dict)
 
@@ -227,7 +224,7 @@ def join_game(request, game_custom_slug):
     user = User.objects.get(username=username)
     player=Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
 
-    # Check for participation in games with confflicting times to the one the user is trying to join.
+    # Check for participation in games with conflicting times to the one the user is trying to join.
     userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
     gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
                     start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
@@ -245,7 +242,7 @@ def join_game(request, game_custom_slug):
                 p = Participation(player=player, game=game)
                 p.save()
                 player_added = True
-        
+
     data = {'player_added': player_added, 'game_conflict': game_conflict}
 
     return JsonResponse(data)
@@ -290,20 +287,6 @@ def delete_game(request, game_custom_slug):
         game_deleted = True
 
     data = {'game_deleted': game_deleted}
-
-    return JsonResponse(data)
-
-def update_pitch(request, game_custom_slug):
-    gameid = request.POST.get('gameid')
-    game = Game.objects.get(game_id=gameid)
-
-    pitch_updated = False
-    if game:
-        game.booked = not game.booked
-        game.save()
-        pitch_updated = True
-
-    data = {'pitch_updated': pitch_updated}
 
     return JsonResponse(data)
 
@@ -447,9 +430,10 @@ def history(request, player):
 
     return render(request, 'fives/history.html', context=context_dict)
 
-# Checks if two datetime objects clash. The end can be the same as the start the other one.
-def clash(datetime_one, datetime_two) {
-    if datetime_one.end <= datetime_two.start or datetime_one.start > datetime_two.end:
-        return False
-    return True
-}
+# Checks if a player has any conflicting games when joining/createing a game.
+def game_conflicts(player, game):
+    # Check for participation in games with conflicting times to the one the user is trying to join/create.
+    userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+    gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(start__gte=game.start, start__lt=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
+                    end__gt=game.start, end__lte=game.end)
+    return gameConflicts

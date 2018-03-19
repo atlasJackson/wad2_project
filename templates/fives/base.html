@@ -4,14 +4,14 @@
 <html>
     <head lang="en">
         <meta charset = "UTF-8" />
+        <!-- Third party css -->
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-        <!--<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">-->
-        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-        <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/individual_styles.css' %}"> -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.theme.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.structure.min.css' %}">
+        <!-- Fives custom css. Import after because we are overwriting styles from bootstrap css files. -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 
         <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
 
@@ -69,12 +69,13 @@
                 </p>
             </div>
         </footer>
-
+        <!-- Fives app scripts -->
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/fives-ajax.js' %}"></script>
+        <!-- Third party scripts -->
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery.validate.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/fives-ajax.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
         <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     </body>
 </html>

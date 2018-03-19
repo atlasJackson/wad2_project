@@ -13,7 +13,7 @@ table td {
     font-size: 11px;
     font-style: normal;
     color: red;
-    padding-left: 10px;
+    padding-left: 0px;
 }
 
 .game-player-link {
@@ -46,8 +46,18 @@ table td {
 .game-header-info {
     font-weight: bold !important;
 }
-.custom-button-height {
+.custom-button-remove {
     padding: 0px 8px 0px 8px;
     font-size: 12px;
     height: 25px;
+}
+.custom-button-booked {
+    padding: 0px 8px 0px 8px;
+    font-size: 10px;
+    height: 20px;
+}
+.custom-button-confl {
+    padding: 2px 8px 0px 8px;
+    font-size: 10px;
+    height: 20px;
 }

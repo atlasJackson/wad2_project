@@ -22,22 +22,21 @@
 <div class="row border-bottom mt-3 pb-3">
     <div class="col-4">
         Date: {{ game.start|date:"d M Y" }}<br />
-        Time: {{ game.start|date:"H:i" }}<br />
+        Time: {{ game.start|date:"H:i" }} - {{ game.end|date:"H:i" }}<br />
         <div class="game-pitch-booked">
             Pitch:
-            <span id="span-pitch-label" data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}">
             {% if game.booked %}
                 <span style="color:Green">Booked</span>
             {% else %}
                 <span style="color:Red">Not Booked</span>
             {% endif %}
             {% if user == game.host and not gameTookPlace %}
-                <button class="btn btn-success btn-sm" type="button" id="editBooking" 
+                <button class="btn btn-outline-warning btn-sm custom-button-booked" type="button" id="editBooking"
                         data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}" >
+                        change
                 </button>
             {% endif %}
             <br />
-            </span>
         </div>
         Price/person: &#163; {{ game.price }}<br />
         Type: {{ game.game_type|getType }}
@@ -101,10 +100,9 @@
                 {% if user == game.host %}
                 <td class="text-right">
                     {% if user != player.user %}
-                        <button class="btn btn-outline-danger btn-sm custom-button-height" type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
+                        <button class="btn btn-outline-danger btn-sm custom-button-remove" type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
                         data-username="{{ player.user.username }}" data-csrf_token="{{ csrf_token }}" title="remove player">
                             Remove
-                            <!--<img src="{% static 'img/removeBtn.png' %}" alt="remove player">-->
                         </button>
                     {% endif %}
                 </td>
@@ -137,10 +135,21 @@
                             Leave Game
                         </button>
                     {% else %}
-                        <button class="btn btn-success btn-sm" type="button" id="joinBtn" data-gameid="{{ game.game_id }}"
-                        data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
-                            Join Game
-                        </button>
+                        {% if conflictingGames %}
+                            <button class="btn btn-success btn-sm" type="button" disabled>Join Game</button><br />
+                            <span class="error">You already have a game scheduled during this time:
+                                {% for game in conflictingGames %}
+                                    <a class="btn btn-lg btn-outline-danger custom-button-confl" href="{% url 'show_game' game.custom_slug %}">
+                                        View Game ({{ game.start|date:"H:i" }}-{{ game.end|date:"H:i" }})
+                                    </a>
+                                {% endfor %}
+                            </span>
+                        {% else %}
+                            <button class="btn btn-success btn-sm" type="button" id="joinBtn" data-gameid="{{ game.game_id }}"
+                            data-username="{{ user.username }}" data-csrf_token="{{ csrf_token }}" >
+                                Join Game
+                            </button>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endif %}
