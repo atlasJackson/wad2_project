@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^game_list/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/join_game/$', views.join_game, name='join_game'),
     url(r'^game_list/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/leave_game/$', views.leave_game, name='leave_game'),
     url(r'^game_list/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/delete_game/$', views.delete_game, name='delete_game'),
+    url(r'^game_list/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/edit_booking/$', views.edit_booking, name='edit_booking'),
 
     url(r'^create_game/$', views.create_game, name='create_game'),
 

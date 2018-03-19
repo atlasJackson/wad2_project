@@ -4,6 +4,31 @@ $(document).ready(function(){
         window.location.href = $(this).data("url");
     });
 
+    // Edit the  pitch booking entry when button is clicked.
+    $(".col-4").on("click", "#editBooking", function(e){
+
+        e.preventDefault();
+
+        // Get url and gameid from element tag IDs.
+        $.ajax({
+            type:"POST",
+            url: "edit_booking/",
+            data: {
+                "gameid": $(this).data("gameid"),
+                csrfmiddlewaretoken: $(this).data("csrf_token"),
+            },
+            dataType: "json",
+            success: function(data) {
+                // Refresh game info on success.
+                $(".game-pitch-booked").load(" .game-pitch-booked", function(){$(this).children().unwrap()});
+            },
+            error: function (rs, e) {
+                alert('Sorry, there was an error.');
+            }
+        });
+    });
+
+    // Filter the game when filter button is clicked. Collects the necessary data from select element tags.
     $(".game-list-static").on("click", "#filterBtn", function(e){
 
         e.preventDefault();
@@ -14,6 +39,8 @@ $(document).ready(function(){
             data: {
                 "game_type": $("#filter-game_type").val(),
                 "duration": $("#filter-duration").val(),
+                "free_slots": $("#filter-free_slots").val(),
+                "price": $("#filter-price").val(),
                 csrfmiddlewaretoken: $(this).data("csrf_token"),
             },
             dataType: "html",
@@ -112,7 +139,7 @@ $(document).ready(function(){
             $('#id_date').datepicker('setDate', new Date());
         }
     });
-
+    
 });
 
 
@@ -128,6 +155,7 @@ function buttonJoinLeaveDelete(button, urlLink) {
         dataType: "json",
         success: function(data) {
             if (data.player_added || data.player_removed) {
+
                 // Refresh player list and button options on success.
                 $(".game-player-table").load(" .game-player-table", function(){button.children().unwrap()});
                 $(".game-player-buttons").load(" .game-player-buttons", function(){button.children().unwrap()});
@@ -135,6 +163,8 @@ function buttonJoinLeaveDelete(button, urlLink) {
 
             } else if (data.game_deleted) {
                 window.location.replace("/");
+            } else if (data.game_conflict) {
+                alert("It appears you already have a game scheduled during this time. Unable to join.");
             } else {
                 alert("Unable to process request. There may not be free spaces left for this game.");
             }

@@ -23,14 +23,22 @@
     <div class="col-4">
         Date: {{ game.start|date:"d M Y" }}<br />
         Time: {{ game.start|date:"H:i" }}<br />
-        Pitch:
-        <span id="span-pitch-label" data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}">
-        {% if game.booked %}
-            <span style="color:Green">Booked</span><br />
-        {% else %}
-            <span style="color:Red">Not Booked</span><br />
-        {% endif %}
-        </span>
+        <div class="game-pitch-booked">
+            Pitch:
+            <span id="span-pitch-label" data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}">
+            {% if game.booked %}
+                <span style="color:Green">Booked</span>
+            {% else %}
+                <span style="color:Red">Not Booked</span>
+            {% endif %}
+            {% if user == game.host and not gameTookPlace %}
+                <button class="btn btn-success btn-sm" type="button" id="editBooking" 
+                        data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}" >
+                </button>
+            {% endif %}
+            <br />
+            </span>
+        </div>
         Price/person: &#163; {{ game.price }}<br />
         Type: {{ game.game_type|getType }}
     </div>
