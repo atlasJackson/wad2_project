@@ -421,3 +421,10 @@ def history(request, player):
     context_dict = {'player': player, 'fullHistory': fullHistory}
 
     return render(request, 'fives/history.html', context=context_dict)
+
+# Checks if two datetime objects clash. The end can be the same as the start the other one.
+def clash(datetime_one, datetime_two) {
+    if datetime_one.end <= datetime_two.start or datetime_one.start > datetime_two.end:
+        return False
+    return True
+}
