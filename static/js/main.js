@@ -155,6 +155,7 @@ function buttonJoinLeaveDelete(button, urlLink) {
         dataType: "json",
         success: function(data) {
             if (data.player_added || data.player_removed) {
+
                 // Refresh player list and button options on success.
                 $(".game-player-table").load(" .game-player-table", function(){button.children().unwrap()});
                 $(".game-player-buttons").load(" .game-player-buttons", function(){button.children().unwrap()});
@@ -162,6 +163,8 @@ function buttonJoinLeaveDelete(button, urlLink) {
 
             } else if (data.game_deleted) {
                 window.location.replace("/");
+            } else if (data.game_conflict) {
+                alert("It appears you already have a game scheduled during this time. Unable to join.");
             } else {
                 alert("Unable to process request. There may not be free spaces left for this game.");
             }

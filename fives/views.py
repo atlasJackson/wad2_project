@@ -220,24 +220,33 @@ def edit_booking(request, game_custom_slug):
 def join_game(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
+    print(game.start)
+    print(game.end)
 
     username = request.POST.get('user')
     user = User.objects.get(username=username)
     player=Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
 
-    if game:
-        if game.free_slots == 0:
-            player_added = False
-        else:
-            game.free_slots -= 1
-            game.save()
-            p = Participation(player=player, game=game)
-            p.save()
-            player_added = True
-    else:
-        player_added = False
+    # Check for participation in games with confflicting times to the one the user is trying to join.
+    userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+    gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
+                    start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
+                    end__gte=game.start, end__lte=game.end)
 
-    data = {'player_added': player_added}
+    game_conflict = True
+    player_added = False
+
+    if game:
+        if not gameConflicts:
+            game_conflict = False
+            if game.free_slots != 0:
+                game.free_slots -= 1
+                game.save()
+                p = Participation(player=player, game=game)
+                p.save()
+                player_added = True
+        
+    data = {'player_added': player_added, 'game_conflict': game_conflict}
 
     return JsonResponse(data)
 
