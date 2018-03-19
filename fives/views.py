@@ -77,16 +77,18 @@ def create_game(request):
             # Calculate end (start + duration)
             game.end = game.start + datetime.timedelta(hours=+game.duration)
 
+            # Prevent games from being created in the past or within two hours from current time, return with appropriate message.
+            game_creation_limit = game.start + datetime.timedelta(hours=-2)
+            if (game_creation_limit < datetime.datetime.now()):
+                return render(request, 'fives/create_game.html', {'game_form': game_form, 'conflictMessage': "You can't create a game in the past or within two hours from now."})
+
+            # Check for conflicting games and return with a list of all games that conflict.
             conflictingGames = game_conflicts(request.user.player, game)
             if conflictingGames:
                 return render(request, 'fives/create_game.html', {'game_form': game_form, 'conflictingGames': conflictingGames})
 
-            # Prevent games from being created in the past or within two hours from current time.
-            game_creation_limit = game.start + datetime.timedelta(hours=-2)
-            if (game_creation_limit < datetime.datetime.now()):
-                return render(request, 'fives/create_game.html', {'game_form': game_form, 'gameTooSoon': True})
 
-            # MERGING MESSED UP SOME CODE HERE, I TRIED TO FIX IT.
+            # MERGING MESSED UP SOME CODE HERE, I TRIED TO FIX IT WITH ABOVE CODE.
                 # Calculate end from start and duration
                 # game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
                 #print(userGameSlugs)

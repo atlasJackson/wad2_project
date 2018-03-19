@@ -24,9 +24,7 @@
             {% endfor %}
         </span><br />
         {% endif %}
-        {% if gameTooSoon %}
-            <span class="error">You can't create a game in the past or within two hours from now.</span><br />
-        {% endif %}
+        <span class="error">{{ conflictMessage }}</span>
         <br />
         <form  class="jquery_validation_form" id="game_form" class="jquery_validation_form" method="post" action="{% url 'create_game' %}">
 
