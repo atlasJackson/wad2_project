@@ -30,7 +30,7 @@
                 <div class="col-7">
                     {{ field }}
                 </div>
-                <label for="{{ field.errors }}">{{ field.errors }}</label>
+                <label class="error">{{ field.errors}}</label>
             </div>
             {% endfor %}
             {% for field in player_form %}
@@ -39,7 +39,7 @@
                 <div class="col-7">
                     {{ field }}
                 </div>
-                <label for="{{ field.errors }}">{{ field.errors }}</label>
+                <label class="error">{{ field.errors}}</label>
             </div>
             {% endfor %}
 

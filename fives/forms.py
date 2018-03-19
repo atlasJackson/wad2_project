@@ -9,7 +9,7 @@ class UserForm(forms.ModelForm):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
     username = forms.CharField(max_length=128, validators=[alphanumeric], widget=forms.TextInput(attrs={'autofocus':'true'}))
-    email = forms.EmailField(validators=[validate_email])
+    email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
     password_confirm = forms.CharField(widget=forms.PasswordInput(), label="Confirm password")
 
@@ -24,7 +24,6 @@ class UserForm(forms.ModelForm):
 
 
 class PlayerForm(forms.ModelForm):
-
     gender = forms.ChoiceField(choices=Player.GENDER_CHOICES, label="Gender")
 
     class Meta:
