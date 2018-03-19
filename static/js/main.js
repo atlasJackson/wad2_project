@@ -14,6 +14,8 @@ $(document).ready(function(){
             data: {
                 "game_type": $("#filter-game_type").val(),
                 "duration": $("#filter-duration").val(),
+                "free_slots": $("#filter-free_slots").val(),
+                "price": $("#filter-price").val(),
                 csrfmiddlewaretoken: $(this).data("csrf_token"),
             },
             dataType: "html",
@@ -112,7 +114,7 @@ $(document).ready(function(){
             $('#id_date').datepicker('setDate', new Date());
         }
     });
-
+    
 });
 
 
