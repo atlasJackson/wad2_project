@@ -1,12 +1,17 @@
 from django import forms
+from django.core.validators import RegexValidator, validate_email
 from django.contrib.auth.models import User
 from fives.models import Player, Game
 import datetime
 
 
 class UserForm(forms.ModelForm):
+    alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+
+    username = forms.CharField(max_length=128, validators=[alphanumeric], widget=forms.TextInput(attrs={'autofocus':'true'}))
+    email = forms.EmailField(validators=[validate_email])
     password = forms.CharField(widget=forms.PasswordInput())
-    passwordCheck = forms.CharField(widget=forms.PasswordInput(), label="Re-enter password")
+    password_confirm = forms.CharField(widget=forms.PasswordInput(), label="Confirm password")
 
     class Meta:
         model = User

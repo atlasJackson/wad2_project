@@ -26,7 +26,7 @@
         {% endif %}
         <span class="error">{{ conflictMessage }}</span>
         <br />
-        <form  class="jquery_validation_form" id="game_form" class="jquery_validation_form" method="post" action="{% url 'create_game' %}">
+        <form class="jquery_validation_form" id="game_form" method="post" action="{% url 'create_game' %}">
 
             {% csrf_token %}
             {% for field in game_form %}
@@ -40,17 +40,6 @@
             {% endfor %}
             <input class="btn btn-lg btn-primary btn-block" id="create-game" type="submit" name="submit" value="Create Game" />
         </form>
-
-        <!-- Display any error messages returned on submission of the form. -->
-    <!--
-        {% if messages %}
-           <script>
-            {% for message in messages %}
-                alert("{{ message }}");
-            {% endfor %}
-           </script>
-        {% endif %}
-    -->
 
         <p style="font-size:11px; margin-top:40px; text-align:center;">
             Please note that as users are joining a game with the details you supply here, the details cannot be changed after submission.<br />
