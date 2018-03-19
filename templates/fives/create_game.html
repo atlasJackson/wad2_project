@@ -24,6 +24,9 @@
             {% endfor %}
         </span><br />
         {% endif %}
+        {% if gameTooSoon %}
+            <span class="error">You can't create a game in the past or within two hours from now.</span><br />
+        {% endif %}
         <br />
         <form  class="jquery_validation_form" id="game_form" class="jquery_validation_form" method="post" action="{% url 'create_game' %}">
 
@@ -41,6 +44,7 @@
         </form>
 
         <!-- Display any error messages returned on submission of the form. -->
+    <!--
         {% if messages %}
            <script>
             {% for message in messages %}
@@ -48,6 +52,7 @@
             {% endfor %}
            </script>
         {% endif %}
+    -->
 
         <p style="font-size:11px; margin-top:40px; text-align:center;">
             Please note that as users are joining a game with the details you supply here, the details cannot be changed after submission.<br />

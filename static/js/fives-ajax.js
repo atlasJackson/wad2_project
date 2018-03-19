@@ -56,7 +56,7 @@ $(document).ready(function(){
 
         window.location.href = $(this).data("url");
     });
-    
+
     $(".game-list-content, .game-player-table").on("click", " .game-player-link", function() {
 
         window.location.href = $(this).data("url");

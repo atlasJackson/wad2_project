@@ -74,65 +74,55 @@ def create_game(request):
             date = game_form.cleaned_data["date"]
             time = game_form.cleaned_data["time"]
             game.start = datetime.datetime.combine(date, time)
-<<<<<<< HEAD
             # Calculate end (start + duration)
-            game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
+            game.end = game.start + datetime.timedelta(hours=+game.duration)
 
             conflictingGames = game_conflicts(request.user.player, game)
             if conflictingGames:
                 return render(request, 'fives/create_game.html', {'game_form': game_form, 'conflictingGames': conflictingGames})
 
-=======
->>>>>>> 0313cd41f25447c2d42caa03cd58ed7ae07cc49f
-
-           # Prevent games from being created in the past or within two hours from current time.
+            # Prevent games from being created in the past or within two hours from current time.
             game_creation_limit = game.start + datetime.timedelta(hours=-2)
-            if not (game_creation_limit < datetime.datetime.now()):
+            if (game_creation_limit < datetime.datetime.now()):
+                return render(request, 'fives/create_game.html', {'game_form': game_form, 'gameTooSoon': True})
+
+            # MERGING MESSED UP SOME CODE HERE, I TRIED TO FIX IT.
                 # Calculate end from start and duration
-                game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
+                # game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
+                #print(userGameSlugs)
+                #gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
+                #                start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
+                #                end__gte=game.start, end__lte=game.end)
+                #print (gameConflicts)
+                #if gameConflicts:
+                #    messages.add_message(request, messages.INFO, 'Conflict detected. Unable to create game.')
+                #    return render(request, 'fives/create_game.html', {'game_form': game_form})
 
-<<<<<<< HEAD
-=======
-                # Check for participation in games with confflicting times to the one the user is trying to create.
-                player=Player.objects.get(user=request.user)
-                userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
->>>>>>> 0313cd41f25447c2d42caa03cd58ed7ae07cc49f
 
-                print(userGameSlugs)
-                gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
-                                start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
-                                end__gte=game.start, end__lte=game.end)
+            # Get latitiude and longitude from address
+            # Source: https://geopy.readthedocs.io/en/1.10.0/
+            geolocator = Nominatim()
+            location = geolocator.geocode(game.street + " " + game.city)
+            game.latitude = location.latitude
+            game.longitude = location.longitude
 
-                print (gameConflicts)
+            # Get host entry from current user
+            game.host = request.user
 
-                if gameConflicts:
-                    messages.add_message(request, messages.INFO, 'Conflict detected. Unable to create game.')
-                    return render(request, 'fives/create_game.html', {'game_form': game_form})
+            # Save the new Game to the database
+            game.save()
 
-                # Get latitiude and longitude from address
-                # Source: https://geopy.readthedocs.io/en/1.10.0/
-                geolocator = Nominatim()
-                location = geolocator.geocode(game.street + " " + game.city)
-                game.latitude = location.latitude
-                game.longitude = location.longitude
+            # Add the user to the list of the game's participants.
+            user_player = Player.objects.get(user=request.user)
+            p = Participation(player=user_player, game=game)
+            p.save()
 
-                # Get host entry from current user
-                game.host = request.user
+            # Direct the user to the view of the newly created game.
+            return HttpResponseRedirect(reverse('show_game', kwargs={'game_custom_slug':game.custom_slug}))
 
-                # Save the new Game to the database
-                game.save()
-
-                # Add the user to the list of the game's participants.
-                user_player = Player.objects.get(user=request.user)
-                p = Participation(player=user_player, game=game)
-                p.save()
-
-                # Direct the user to the view of the newly created game.
-                return HttpResponseRedirect(reverse('show_game', kwargs={'game_custom_slug':game.custom_slug}))
-
-            else:
-                messages.add_message(request, messages.INFO, "Can't create game in past or within two hours.")
-                return render(request, 'fives/create_game.html', {'game_form': game_form})
+            #else:
+            #    messages.add_message(request, messages.INFO, "Can't create game in past or within two hours.")
+            #    return render(request, 'fives/create_game.html', {'game_form': game_form})
 
         else:
             # The supplied form contained errors - print them to the terminal.

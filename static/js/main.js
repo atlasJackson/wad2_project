@@ -8,7 +8,7 @@ $(document).ready(function(){
             street: {required: true, maxlength: 128},
             place: {required: true, maxlength: 128},
             postcode: {required: true, minlength: 5, maxlength: 8},
-            price: {required: true, range: [0, 30]},
+            price: {required: true, range: [0, 99]},
             booked: {required: false},
         },
         messages: {
@@ -23,6 +23,11 @@ $(document).ready(function(){
     $.validator.addMethod('time', function(value, element, param) {
         return value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
     }, 'Enter a valid time (hh:mm)');
+    // Add validation for time, make sure there is no conflict with other games.
+    //$.validator.addMethod('time', function(value, element, param) {
+
+    //    return value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
+    //}, 'It appears you already have a game scheduled during this time.');
 
     $("#id_date").datepicker({
         minDate: 0, // Can't select dates in the past.
