@@ -4,6 +4,31 @@ $(document).ready(function(){
         window.location.href = $(this).data("url");
     });
 
+    // Edit the  pitch booking entry when button is clicked.
+    $(".col-4").on("click", "#editBooking", function(e){
+
+        e.preventDefault();
+
+        // Get url and gameid from element tag IDs.
+        $.ajax({
+            type:"POST",
+            url: "edit_booking/",
+            data: {
+                "gameid": $(this).data("gameid"),
+                csrfmiddlewaretoken: $(this).data("csrf_token"),
+            },
+            dataType: "json",
+            success: function(data) {
+                // Refresh game info on success.
+                $(".game-pitch-booked").load(" .game-pitch-booked", function(){$(this).children().unwrap()});
+            },
+            error: function (rs, e) {
+                alert('Sorry, there was an error.');
+            }
+        });
+    });
+
+    // Filter the game when filter button is clicked. Collects the necessary data from select element tags.
     $(".game-list-static").on("click", "#filterBtn", function(e){
 
         e.preventDefault();

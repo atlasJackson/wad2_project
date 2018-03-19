@@ -205,6 +205,16 @@ def show_past_game(request, player, game_custom_slug):
 
     return render(request, 'fives/show_past_game.html', context=context_dict)
 
+def edit_booking(request, game_custom_slug):
+    gameid = request.POST.get('gameid')
+    game = Game.objects.get(game_id=gameid)
+
+    # Negate booked value.
+    game.booked = not game.booked
+    game.save()
+    data = {"bookingChanged:": True}
+
+    return JsonResponse(data)
 
 @login_required
 def join_game(request, game_custom_slug):
