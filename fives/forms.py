@@ -6,10 +6,16 @@ import datetime
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
+    passwordCheck = forms.CharField(widget=forms.PasswordInput(), label="Re-enter password")
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'email', 'first_name', 'last_name')
+        fields = ('username', 'email', 'first_name', 'last_name', 'password')
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 
 class PlayerForm(forms.ModelForm):
@@ -23,24 +29,29 @@ class PlayerForm(forms.ModelForm):
 
 class GameForm(forms.ModelForm):
 
-    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type", widget=forms.Select(attrs={'class':'form-control'}))
+    game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP, label="Game type")
 
-    date = forms.DateField(widget=forms.TextInput(attrs={'class':'form-control', 'type':'text'}))
-    time = forms.TimeField(widget=forms.TimeInput(format='%H:%M', attrs={'class':'form-control'}))
-    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration", widget=forms.Select(attrs={'class':'form-control'}))
+    date = forms.DateField(widget=forms.TextInput(attrs={'type':'text'}))
+    time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), label="Time (hh:mm)")
+    duration = forms.ChoiceField(choices=Game.DURATION_CHOICES, initial=Game.ONE_HOUR, label="Duration")
 
-    street = forms.CharField(max_length=128, label="Street & number", widget=forms.TextInput(attrs={'class':'form-control'}))
-    city = forms.CharField(max_length=128, label="City/Town", widget=forms.TextInput(attrs={'class':'form-control'}))
-    postcode = forms.CharField(max_length=128, label="Postcode", widget=forms.TextInput(attrs={'class':'form-control'}))
+    street = forms.CharField(max_length=128, label="Street & number")
+    city = forms.CharField(max_length=128, label="City/Town")
+    postcode = forms.CharField(max_length=128, label="Postcode")
 
-    price = forms.DecimalField(widget=forms.TextInput(attrs={'class':'form-control'}), label="Price/person")
-    booked = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':'form-control form-check-input', 'type':'checkbox'}), initial=False, required=False, label="Pitch booked?")
+    price = forms.DecimalField(label="Price/person", initial=0, min_value=0, max_value=20)
+    booked = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':'form-check-input', 'type':'checkbox'}), initial=False, required=False, label="Pitch booked?")
 
     field_order=['game_type','date','time','duration','street','city','postcode', 'price', 'booked']
 
     class Meta:
         model = Game
         exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end', 'custom_slug', 'start')
+
+    def __init__(self, *args, **kwargs):
+        super(GameForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 class RatingForm(forms.ModelForm):
     skill = forms.ChoiceField(choices=Player.RATINGS, initial=Player.THREE)

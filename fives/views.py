@@ -87,20 +87,6 @@ def create_game(request):
             if conflictingGames:
                 return render(request, 'fives/create_game.html', {'game_form': game_form, 'conflictingGames': conflictingGames})
 
-
-            # MERGING MESSED UP SOME CODE HERE, I TRIED TO FIX IT WITH ABOVE CODE.
-                # Calculate end from start and duration
-                # game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
-                #print(userGameSlugs)
-                #gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
-                #                start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
-                #                end__gte=game.start, end__lte=game.end)
-                #print (gameConflicts)
-                #if gameConflicts:
-                #    messages.add_message(request, messages.INFO, 'Conflict detected. Unable to create game.')
-                #    return render(request, 'fives/create_game.html', {'game_form': game_form})
-
-
             # Get latitiude and longitude from address
             # Source: https://geopy.readthedocs.io/en/1.10.0/
             geolocator = Nominatim()
@@ -121,10 +107,6 @@ def create_game(request):
 
             # Direct the user to the view of the newly created game.
             return HttpResponseRedirect(reverse('show_game', kwargs={'game_custom_slug':game.custom_slug}))
-
-            #else:
-            #    messages.add_message(request, messages.INFO, "Can't create game in past or within two hours.")
-            #    return render(request, 'fives/create_game.html', {'game_form': game_form})
 
         else:
             # The supplied form contained errors - print them to the terminal.
@@ -249,10 +231,7 @@ def join_game(request, game_custom_slug):
     player=Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
 
     # Check for participation in games with conflicting times to the one the user is trying to join.
-    userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
-    gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
-                    start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
-                    end__gte=game.start, end__lte=game.end)
+    gameConflicts = game_conflicts(player, game)
 
     game_conflict = True
     player_added = False
