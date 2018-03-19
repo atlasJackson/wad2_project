@@ -82,3 +82,4 @@ def getRatingIcons(player, label):
         iconsHTML += ratingTuple[1]
         print (iconsHTML)
     return iconsHTML
+
