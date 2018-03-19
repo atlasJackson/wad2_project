@@ -1,5 +1,6 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
+{% load fives_filters %}
 
 {% block js_block %}
 {% endblock %}
@@ -41,6 +42,16 @@
             <!-- Provide a button to click to submit form -->
             <input class="btn btn-lg btn-primary btn-block" id="create-game" type="submit" name="submit" value="Create Game" />
         </form>
+
+        <!-- Display any error messages returned on submission of the form. -->
+        {% if messages %}
+           <script>
+            {% for message in messages %}
+                alert("{{ message }}");
+            {% endfor %}
+           </script>
+        {% endif %}
+
         <p style="font-size:11px; margin-top:40px; text-align:center;">
             Please note that as users are joining a game with the details you supply here, the details cannot be changed after submission.<br />
             Delete the game and create a new one if circumstances change.<br/>Thank you for understanding.

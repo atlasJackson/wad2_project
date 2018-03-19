@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -79,20 +80,23 @@ def create_game(request):
            # Prevent games from being created in the past or within two hours from current time.
             game_creation_limit = game.start + datetime.timedelta(hours=-2)
             if not (game_creation_limit < datetime.datetime.now()):
-                
+                # Calculate end from start and duration
                 game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
 
                 # Check for participation in games with confflicting times to the one the user is trying to create.
                 player=Player.objects.get(user=request.user)
-                print(player)
                 userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+
                 print(userGameSlugs)
                 gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
                                 start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
                                 end__gte=game.start, end__lte=game.end)
 
-                if not gameConflicts:
-                    return HttpResponse("Already in a game.")
+                print (gameConflicts)
+
+                if gameConflicts:
+                    messages.add_message(request, messages.INFO, 'Conflict detected. Unable to create game.')
+                    return render(request, 'fives/create_game.html', {'game_form': game_form})
 
                 # Get latitiude and longitude from address
                 # Source: https://geopy.readthedocs.io/en/1.10.0/
@@ -100,9 +104,6 @@ def create_game(request):
                 location = geolocator.geocode(game.street + " " + game.city)
                 game.latitude = location.latitude
                 game.longitude = location.longitude
-
-                # Calculate end from start and duration
-                
 
                 # Get host entry from current user
                 game.host = request.user
@@ -119,7 +120,8 @@ def create_game(request):
                 return HttpResponseRedirect(reverse('show_game', kwargs={'game_custom_slug':game.custom_slug}))
 
             else:
-                return HttpResponse("Can't create game in past or within two hours.")
+                messages.add_message(request, messages.INFO, "Can't create game in past or within two hours.")
+                return render(request, 'fives/create_game.html', {'game_form': game_form})
 
         else:
             # The supplied form contained errors - print them to the terminal.
