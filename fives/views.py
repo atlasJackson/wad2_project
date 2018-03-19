@@ -75,31 +75,52 @@ def create_game(request):
 
             #d = datetime.datetime(date.year, date.month, date.day, time.hour, time.minute)
             game.start = datetime.datetime.combine(date, time)
-            #game.start = d
 
-            # Get latitiude and longitude from address
-            # Source: https://geopy.readthedocs.io/en/1.10.0/
-            geolocator = Nominatim()
-            location = geolocator.geocode(game.street + " " + game.city)
-            game.latitude = location.latitude
-            game.longitude = location.longitude
+           # Prevent games from being created in the past or within two hours from current time.
+            game_creation_limit = game.start + datetime.timedelta(hours=-2)
+            if not (game_creation_limit < datetime.datetime.now()):
+                
+                game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
 
-            # Calculate end from start and duration
-            game.end = datetime.datetime(date.year, date.month, date.day, time.hour + game.duration, time.minute)
+                # Check for participation in games with confflicting times to the one the user is trying to create.
+                player=Player.objects.get(user=request.user)
+                print(player)
+                userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+                print(userGameSlugs)
+                gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(
+                                start__gte=game.start, start__lte=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
+                                end__gte=game.start, end__lte=game.end)
 
-            # Get host entry from current user
-            game.host = request.user
+                if not gameConflicts:
+                    return HttpResponse("Already in a game.")
 
-            # Save the new Game to the database
-            game.save()
+                # Get latitiude and longitude from address
+                # Source: https://geopy.readthedocs.io/en/1.10.0/
+                geolocator = Nominatim()
+                location = geolocator.geocode(game.street + " " + game.city)
+                game.latitude = location.latitude
+                game.longitude = location.longitude
 
-            # Add the user to the list of the game's participants.
-            user_player = Player.objects.get(user=request.user)
-            p = Participation(player=user_player, game=game)
-            p.save()
+                # Calculate end from start and duration
+                
 
-            # Direct the user to the view of the newly created game.
-            return HttpResponseRedirect(reverse('show_game', kwargs={'game_custom_slug':game.custom_slug}))
+                # Get host entry from current user
+                game.host = request.user
+
+                # Save the new Game to the database
+                game.save()
+
+                # Add the user to the list of the game's participants.
+                user_player = Player.objects.get(user=request.user)
+                p = Participation(player=user_player, game=game)
+                p.save()
+
+                # Direct the user to the view of the newly created game.
+                return HttpResponseRedirect(reverse('show_game', kwargs={'game_custom_slug':game.custom_slug}))
+
+            else:
+                return HttpResponse("Can't create game in past or within two hours.")
+
         else:
             # The supplied form contained errors - print them to the terminal.
             print(game_form.errors)
