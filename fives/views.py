@@ -127,8 +127,11 @@ def show_game(request, game_custom_slug):
         now = datetime.datetime.now(pytz.utc)
         gameTookPlace = True if game.end < now else False
 
-        # Check if there are conflicting games for the current user.
-        conflictingGames = game_conflicts(request.user.player, game)
+        if request.user.is_authenticated:
+            # Check if there are conflicting games for the current user.
+            conflictingGames = game_conflicts(request.user.player, game)
+        else:
+            conflictingGames = None
 
         # Add entities to the context dictionary
         context_dict = {'game':game, 'participants':participants, 'users':users, 'gameTookPlace': gameTookPlace, 'conflictingGames':conflictingGames}
@@ -228,7 +231,7 @@ def join_game(request, game_custom_slug):
 
     username = request.POST.get('user')
     user = User.objects.get(username=username)
-    player=Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
+    player = Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
 
     # Check for participation in games with conflicting times to the one the user is trying to join.
     gameConflicts = game_conflicts(player, game)
