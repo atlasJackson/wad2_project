@@ -1,14 +1,6 @@
 
-SHOW GAME
-    - Users can't join games that interfere with already joined/hosting games.
-
-EDIT GAME
-    - Change Pitch status.
-
 CREATE GAME
-    - Users can't create games in the past or within two hours.
-    - Users can't create games if they're already hosting one at the same time.
-    - Time field.
+    - Improved Time selection.
 
 EDIT PROFILE
     - Edit email address.
@@ -16,8 +8,7 @@ EDIT PROFILE
     - Other useres, only see games they are hosting.
 
 GAME LIST
-    - Finish filtering
-    _ Implement sorting table
+    - Implement sorting table
 
 BASE.html
     - Change active link in navbar.
