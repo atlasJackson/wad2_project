@@ -26,6 +26,8 @@ def getGender(list, i):
 @register.filter(name='isRated')
 def isRated(game, user):
     p = Participation.objects.get(game=game, player=user.player)
+    if game.free_slots == 9 and game.host == user: # This is the case if the host was the only player in that game, so he doesn't see an empty rating page with no players to rate.
+        return True # Return True for "already rated".
     return p.rated
 
 @register.filter(name='getType')
@@ -58,28 +60,3 @@ def ratingAsRange(player, label):
     for i in range(0, int(rating)):
         string += " "
     return string
-
-@register.filter(name='getRatingIcons')
-def getRatingIcons(player, label):
-    switcher = {
-        "skill": [player.skill, '<img src="{% static "img/skill.png" %}" alt="skill rating" height="15" width="15">'],
-        "likeability": [player.likeability, '<img src="{% static \'img/likes.png\' %}" alt="likeability rating" height="15" width="15">'],
-        "punctuality": [player.punctuality, '<img src="{% static "img/punctuality.png" %}" alt="puntuality rating" height="15" width="15">'],
-        "host": [player.host_rating, '<img src="{% static "img/punctuality.png" %}" alt="puntuality rating" height="15" width="15">']
-    }
-    ratingTuple = switcher.get(label, (0,''))
-
-    try:
-        if label == "host":
-            rating = round(ratingTuple[0] / (player.num_host_ratings * 1.0))
-        else:
-            rating = round(ratingTuple[0] / (player.num_player_ratings * 1.0))
-    except (ValueError, ZeroDivisionError):
-        rating = 0 # In case a player has no ratings.
-
-    iconsHTML = ""
-    for i in range(0, int(rating)):
-        iconsHTML += ratingTuple[1]
-        print (iconsHTML)
-    return iconsHTML
-

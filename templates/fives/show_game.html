@@ -31,7 +31,7 @@
                 <td class="pl-2">{{ game.start|date:"H:i" }} - {{ game.end|date:"H:i" }}</td>
             </tr>
             <tr>
-                <td><img src="{% static 'img/pitchIcon2.png' %}" alt="pitch icon" height="20"></td>
+                <td><img src="{% static 'img/pitchIcon.png' %}" alt="pitch icon" height="20"></td>
                 <td class="pl-2">
                     <div class="game-pitch-booked">
                         {% if game.booked %}
@@ -59,10 +59,20 @@
         </table>
     </div>
     <div class="col-4 border-left">
-        Address:<br />
-        {{ game.street }}<br />
-        {{ game.city }}<br />
-        {{ game.postcode }}
+        <table>
+            <tr>
+                <td><img src="{% static 'img/streetIcon.png' %}" alt="street icon" height="20"></td>
+                <td class="pl-2">{{ game.street }}</td>
+            </tr>
+            <tr>
+                <td><img src="{% static 'img/cityIcon.png' %}" alt="city icon" height="20"></td>
+                <td class="pl-2">{{ game.city }}</td>
+            </tr>
+            <tr>
+                <td><img src="{% static 'img/postcodeIcon.png' %}" alt="postcode icon" height="20"></td>
+                <td class="pl-2">{{ game.postcode }}</td>
+            </tr>
+        </table>
     </div>
     <div class="col-2 game-map ">
         <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 300px; height: 170px;">
