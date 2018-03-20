@@ -45,46 +45,17 @@
         We can also be contacted through the School of Computing Science.<br /><br />
         <strong>Sir Alwyn Williams Building<br />
         Glasgow<br />
-        G12 8QN</strong>        
+        G12 8QN</strong>
     </div>
     <div class="col-2 game-map ">
-        <div id="about-map-display" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" style="width: 300px; height: 150px;">
+        <div id="map-display" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" style="width: 300px; height: 150px;">
             <div id="about-map" >
             </div>
         </div>
     </div>
 </div>
 
-
-
-
-    <script>
-        var map
-        function initMap() {
-            var mapDisplay = document.getElementById("about-map-display");
-
-            var latitude = mapDisplay.getAttribute("data-latitude");
-            var longitude = mapDisplay.getAttribute("data-longitude");
-            var thisLatLng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
-
-            var mapOptions = {
-                center: thisLatLng,
-                zoom: 15,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-
-            map = new google.maps.Map(mapDisplay, mapOptions);
-
-            var marker = new google.maps.Marker({
-              position: thisLatLng,
-              map: map,
-            });
-        }
-
-    </script>
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw&callback=initMap"
-        async defer>
-    </script>
+<script type="text/javascript" src="{% static 'js/map.js' %}"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw&callback=initMap" async defer></script>
 
 {% endblock %}

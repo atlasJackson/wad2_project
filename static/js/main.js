@@ -1,5 +1,29 @@
 $(document).ready(function(){
 
+
+    // Make use of the Google Maps API to display maps.
+    var map
+    function initMap() {
+        var mapDisplay = document.getElementById("map-display");
+
+        var latitude = mapDisplay.getAttribute("data-latitude");
+        var longitude = mapDisplay.getAttribute("data-longitude");
+        var thisLatLng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+
+        var mapOptions = {
+            center: thisLatLng,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(mapDisplay, mapOptions);
+
+        var marker = new google.maps.Marker({
+          position: thisLatLng,
+          map: map,
+        });
+    }
+
     // Scripts for sign_up template
     $("#user_form").validate({
         rules: {
