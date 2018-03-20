@@ -21,25 +21,42 @@
     </div>
 <div class="row border-bottom mt-3 pb-3">
     <div class="col-4">
-        Date: {{ game.start|date:"d M Y" }}<br />
-        Time: {{ game.start|date:"H:i" }} - {{ game.end|date:"H:i" }}<br />
-        <div class="game-pitch-booked">
-            Pitch:
-            {% if game.booked %}
-                <span style="color:Green">Booked</span>
-            {% else %}
-                <span style="color:Red">Not Booked</span>
-            {% endif %}
-            {% if user == game.host and not gameTookPlace %}
-                <button class="btn btn-outline-warning btn-sm custom-button-booked" type="button" id="editBooking"
-                        data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}" >
-                        change
-                </button>
-            {% endif %}
-            <br />
-        </div>
-        Price/person: &#163; {{ game.price }}<br />
-        Type: {{ game.game_type|getType }}
+        <table class="game-info-table">
+            <tr>
+                <td><img src="{% static 'img/dateIcon.png' %}" alt="date icon" height="20"></td>
+                <td class="pl-2">{{ game.start|date:"d M Y" }}</td>
+            </tr>
+            <tr>
+                <td><img src="{% static 'img/timeIcon.png' %}" alt="time icon" height="20"></td>
+                <td class="pl-2">{{ game.start|date:"H:i" }} - {{ game.end|date:"H:i" }}</td>
+            </tr>
+            <tr>
+                <td><img src="{% static 'img/pitchIcon2.png' %}" alt="pitch icon" height="20"></td>
+                <td class="pl-2">
+                    <div class="game-pitch-booked">
+                        {% if game.booked %}
+                            <span style="color:Green">Booked</span>
+                        {% else %}
+                            <span style="color:Red">Not Booked</span>
+                        {% endif %}
+                        {% if user == game.host and not gameTookPlace %}
+                            <button class="btn btn-outline-warning btn-sm custom-button-booked" type="button" id="editBooking"
+                                    data-gameid="{{ game.game_id }}" data-csrf_token="{{ csrf_token }}" >
+                                    change
+                            </button>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><img src="{% static 'img/priceIcon.png' %}" alt="price icon" height="20"></td>
+                <td class="pl-2">&#163;{{ game.price }}</td>
+            </tr>
+            <tr>
+                <td><img src="{% static 'img/typeIcon.png' %}" alt="type icon" height="20"></td>
+                <td class="pl-2">{{ game.game_type|getType }}</td>
+            </tr>
+        </table>
     </div>
     <div class="col-4 border-left">
         Address:<br />
@@ -48,7 +65,7 @@
         {{ game.postcode }}
     </div>
     <div class="col-2 game-map ">
-        <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 300px; height: 150px;">
+        <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 300px; height: 170px;">
             <div id="map" >
             </div>
         </div>

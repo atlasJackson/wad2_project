@@ -29,18 +29,18 @@ def about_us(request):
     # Source: https://geopy.readthedocs.io/en/1.10.0/
     geolocator = Nominatim()
     location = geolocator.geocode("Sir Alwyn Williams Building, Glasgow")
-    context_dict["latitude"] = location.latitude 
+    context_dict["latitude"] = location.latitude
     context_dict["longitude"] = location.longitude
 
     return render(request, 'fives/about_us.html', context=context_dict)
-    
+
 def game_list(request):
-    games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:30]
+    games = Game.objects.filter(start__gte=datetime.datetime.now()).order_by('start')[:30]
     context_dict = {'games': games}
     return render(request, 'fives/game_list.html', context=context_dict)
 
 def filter_game(request):
-    games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')
+    games = Game.objects.filter(start__gte=datetime.datetime.now()).order_by('start')
     game_type = int(request.POST.get('game_type'))
     duration = int(request.POST.get('duration'))
     free_slots = int(request.POST.get('free_slots'))
