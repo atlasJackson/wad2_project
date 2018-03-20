@@ -24,9 +24,16 @@ def index(request):
 
 def about_us(request):
     context_dict = {}
-    response = render(request, 'fives/about_us.html', context=context_dict)
-    return response
 
+    # Get latitiude and longitude from address
+    # Source: https://geopy.readthedocs.io/en/1.10.0/
+    geolocator = Nominatim()
+    location = geolocator.geocode("Sir Alwyn Williams Building, Glasgow")
+    context_dict["latitude"] = location.latitude 
+    context_dict["longitude"] = location.longitude
+
+    return render(request, 'fives/about_us.html', context=context_dict)
+    
 def game_list(request):
     games = Game.objects.filter(start__gte=datetime.date.today()).order_by('start')[:30]
     context_dict = {'games': games}
