@@ -1,32 +1,47 @@
-{% extends 'fives/base.html' %}
+{% extends 'fives/index.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
     About Us
 {% endblock %}
 
-{% block body_block %}
-<div class="row border-bottom pb-2">
-    <div class="col-9 game-header-info">
-        
-        
-
-    </div>
-    <div class="col-3">
-       
-
-    </div>
+{% block index_block %}
+<div class= "about-us-content">
+    <h3>About Us</h3>
+    <p>
+        Football Fives Finder is the brainchild of University of Glasgow students Gordon Daffurn, Hangil Ko and Nicola Mossner.
+    </p>
+    <p>
+        Our goal was to create a web application that allowed users to find or create five-a-side games of football. Whether it was for a group of individuals struggling to get enough players, or for those who were looking to make new friends through football, we aimed to deliver a service that could suit everyone's needs.
+    </p>
+    <ul>
+        <li>Everyone who visits the site can view the list of games available.</li>
+        <li>The list of games can be filtered by game type, duration, minimum number of free spaces, and maximum price.
+        We hope this provides users the ability to quickly refine the list of games to those that match their requirements.</li>
+        <li>Users are required to register and login to:
+            <ol>
+                <li>Create their own game.</li>
+                <li>Join a game (with available spaces).</li>
+                <li>View other users' accounts.</li>
+            </ol>
+        </li>
+        <li>Players can rate other participants from a game after the game has finished. This can only be done once, in order to
+        improve the integrity of users' ratings.</li>
+        <li>Users who host their own game are responsible for overseeing it. This includes removing players (for any reason they deem necessary), and
+        booking the pitch (if required). More information is available on the homepage once users have logged in.</li>
+    </ul>
 </div>
+<br /><br /><br />
 <div class="row border-bottom mt-3 pb-3">
     <div class="col-4">
-        <h3>Contact Information</h3>
+        <h4>Contact Information</h4>
         <strong>Gordon Daffurn: </strong><br />0801676d@student.gla.ac.uk<br />
         <strong>Hangil Ko: </strong><br />2286274k@student.gla.ac.uk<br />
         <strong>Nicola Mössner: </strong><br />2268685m@student.gla.ac.uk
 
     </div>
     <div class="col-4 border-left">
-        <h3>Address: </h3>
+        <h4>Address: </h4>
         We can also be contacted through the School of Computing Science.<br /><br />
         <strong>Sir Alwyn Williams Building<br />
         Glasgow<br />

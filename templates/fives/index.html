@@ -15,7 +15,7 @@
         <h5>Welcome {{ user.username }}!</h5>
         {% endif %}
     </div>
-
+    {% block index_block %}
     <h6>Upcoming Games</h6>
 
     {% if games %}
@@ -94,5 +94,6 @@
             Sign up
         </a>
     {% endif %}
+    {% endblock %}
 </div>
 {% endblock %}
