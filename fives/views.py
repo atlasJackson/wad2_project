@@ -429,6 +429,18 @@ def user_account(request, player):
 
     return render(request, 'fives/user_account.html', context=context_dict)
 
+@login_required
+def edit_account(request, player):
+    context_dict = {}
+    user = User.objects.get(username=player)
+    player = Player.objects.get(user=user)
+
+    if (user == request.user):
+        return render(request, 'fives/edit_account.html', context=context_dict)
+    else:
+        return HttpResponse("You are not authorised to edit another user's account.")
+
+
 def history(request, player):
     context_dict = {}
     user = User.objects.get(username=player)

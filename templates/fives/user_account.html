@@ -29,9 +29,8 @@
                     {% endif %}
                 </li>
             </ul>
-
             {% if user == player.user %}
-                <button class="btn btn-outline-primary btn-sm" type="button" id="editButton" data-user="{{ user }}">
+                <button class="btn btn-outline-primary btn-sm" type="button" id="edit-account" data-url="{% url 'edit_account' player %}">
                         Edit account
                 </button>
             {% endif %}
