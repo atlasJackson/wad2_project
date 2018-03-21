@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+    /*
+    $("#game_sorttable").tablesorter({
+    });
+    */
 
     // Make use of the Google Maps API to display maps.
     var map

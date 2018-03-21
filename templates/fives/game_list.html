@@ -8,59 +8,8 @@
 
 {% block body_block %}
 <div class="game-list-content">
-    <h5>Upcoming Games</h5>
-    <div>
-        {% if games %}
-        <div class="game-players-wrapper">
-            <table class="table table-striped game-player-table table-hover">
-                <tr class="bg-success text-white">
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Spaces</th>
-                    <th>Type</th>
-                    <th>Price (&#163;)</th>
-                    <th>Host</th>
-                    <th>Host Rating</th>
-                </tr>
-            {% for game in games %}
-                <tr class="game-player-link" data-url="{% url 'show_game' game.custom_slug %}" >
-                    <td>{{ game.city }}</td>
-                    <td>{{ game.start|date:"d M Y" }}</td>
-                    <td>{{ game.start|date:"H:i" }}-{{ game.end|date:"H:i" }}</td>
-                    <td>{{ game.free_slots }}</td>
-                    <td>{{ game.game_type|getType }}</td>
-                    <td>{{ game.price }}</td>
-                    <td>{{ game.host.username }}</td>
 
-                    <td>
-                        {% with rating=game.host.player.host_rating|divide:game.host.player.num_host_ratings %}
-                            {% with ''|center:rating as range %}
-                                {% for i in range %}
-                                    <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
-                                {% endfor %}
-                            {% endwith %}
-                        {% endwith %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </table>
-        </div>
-        {% else %}
-            <p>No games match the above criteria.</p>
-            {% if user.is_authenticated %}
-                <p>
-                    Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">create</a>your own game.
-                </p>
-            {% else %}
-                <p>
-                    Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'sign_up' %}">sign up</a> to create your own game.
-                </p>
-            {% endif %}
-        {% endif %}
-    </div>
-
-    <div class="game-list-static">
+    <div class="game-list-static pb-3 border-bottom">
         <div class="game-list-filters">
             Type:
             <select id="filter-game_type">
@@ -115,8 +64,27 @@
             data-csrf_token="{{ csrf_token }}" >
                 Filter
             </button>
-
         </div>
     </div>
+
+    <div class="pt-3">
+        {% if games %}
+        <div class="game-players-wrapper">
+            {% include 'fives/incl/game_table.html' with title=""  gameList=games ratingCol=False %}
+        </div>
+        {% else %}
+        <p>No games match the above criteria.</p>
+        {% if user.is_authenticated %}
+        <p>
+            Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">create</a>your own game.
+        </p>
+        {% else %}
+        <p>
+            Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'sign_up' %}">sign up</a> to create your own game.
+        </p>
+        {% endif %}
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}

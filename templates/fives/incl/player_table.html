@@ -1,0 +1,55 @@
+{% load staticfiles %}
+{% load fives_filters %}
+
+<table class="table table-striped game-player-table table-hover">
+    <tr class="bg-success text-white">
+        <th>Name</th>
+        <th>Surame</th>
+        <th>Gender</th>
+        <th>Skills</th>
+        <th>Likes</th>
+        <th>Punctuality</th>
+        {% if user == game.host%}
+            <th></th>
+        {% endif %}
+    </tr>
+{% for player in participants %}
+    <tr>
+        <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.first_name }}</td>
+        <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.last_name }}</td>
+        <td>
+            {% if player.gender %}
+                <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
+            {% else %}
+                <img src="{% static 'img/female.png' %}" alt="female" height="14" title="female">
+            {% endif %}
+        </td>
+        <td>
+            {% for i in player|ratingAsRange:"skill" %}
+                <img src="{% static 'img/skill.png' %}" alt="skill rating" height="15" width="15">
+            {% endfor %}
+        </td>
+        <td>
+            {% for i in player|ratingAsRange:"likeability" %}
+                <img src="{% static 'img/likes.png' %}" alt="likeability rating" height="15" width="15">
+            {% endfor %}
+        </td>
+        <td>
+            {% for i in player|ratingAsRange:"punctuality" %}
+                <img src="{% static 'img/punctuality.png' %}" alt="puntuality rating" height="15" width="15">
+            {% endfor %}
+        </td>
+
+        {% if user == game.host %}
+        <td class="text-right">
+            {% if user != player.user %}
+                <button class="btn btn-outline-danger btn-sm custom-button-remove" type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
+                data-username="{{ player.user.username }}" data-csrf_token="{{ csrf_token }}" title="remove player">
+                    Remove
+                </button>
+            {% endif %}
+        </td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>

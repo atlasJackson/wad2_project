@@ -67,7 +67,7 @@ $(document).ready(function(){
         window.location.href = $(this).data("url");
     });
 
-    $(".player-tables-wrapper").on("click", "#account-redirect", function() {
+    $( "#account-redirect" ).click(function() {
 
         window.location.href = $(this).data("url");
     });

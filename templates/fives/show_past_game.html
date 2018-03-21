@@ -48,44 +48,7 @@
             <input class="btn btn-primary btn-sm" id="rate-players" type="submit" name="submit" value="Rate Players" />
             </form>
             {% else %} <!-- Already rated, show normal game view. -->
-            <table class="table table-striped game-player-table table-hover account-game-table">
-                <tr class="bg-success text-white">
-                    <th>Name</th>
-                    <th>Surame</th>
-                    <th>Gender</th>
-                    <th>Skills</th>
-                    <th>Likes</th>
-                    <th>Punctuality</th>
-                </tr>
-            {% for player in participants %}
-                <tr>
-                    <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.first_name }}</td>
-                    <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.last_name }}</td>
-                    <td>
-                        {% if player.gender %}
-                            <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
-                        {% else %}
-                            <img src="{% static 'img/female.png' %}" alt="female" height="14" title="female">
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% for i in player|ratingAsRange:"skill" %}
-                            <img src="{% static 'img/skill.png' %}" alt="host rating" height="13">
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for i in player|ratingAsRange:"likeability" %}
-                            <img src="{% static 'img/likes.png' %}" alt="host rating" height="13">
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for i in player|ratingAsRange:"punctuality" %}
-                            <img src="{% static 'img/punctuality.png' %}" alt="host rating" height="13">
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </table>
+                {% include 'fives/incl/player_table.html' %}
             {% endif %}
         </div>
     {% else %}
