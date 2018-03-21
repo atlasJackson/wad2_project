@@ -70,7 +70,8 @@
     <div class="pt-3">
         {% if games %}
         <div class="game-players-wrapper">
-            {% include 'fives/incl/game_table.html' with title=""  gameList=games ratingCol=False %}
+            
+            {% include 'fives/incl/game_sorttable.html' with title=""  gameList=games ratingCol=False %}
         </div>
         {% else %}
         <p>No games match the above criteria.</p>

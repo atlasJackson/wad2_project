@@ -435,7 +435,7 @@ def edit_account(request, player):
     user = User.objects.get(username=player)
     player = Player.objects.get(user=user)
 
-    if (user == request.user):
+    if (player.user == request.user):
         return render(request, 'fives/edit_account.html', context=context_dict)
     else:
         return HttpResponse("You are not authorised to edit another user's account.")

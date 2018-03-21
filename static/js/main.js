@@ -1,9 +1,76 @@
 $(document).ready(function(){
 
-    /*
+
     $("#game_sorttable").tablesorter({
+        theme : "bootstrap",
+
+        widthFixed: true,
+
+        // widget code contained in the jquery.tablesorter.widgets.js file
+        // use the zebra stripe widget if you plan on hiding any rows (filter widget)
+        // the uitheme widget is NOT REQUIRED!
+        widgets : [ "filter", "zebra" ],
+
+        widgetOptions : {
+            // Delay in milliseconds before the filter widget starts searching; This option prevents searching for
+            // every character while typing and should make searching large tables faster.
+            filter_searchDelay : 300,
+
+            // using the default zebra striping class name, so it actually isn't included in the theme variable above
+            // this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
+            zebra : ["even", "odd"],
+
+            // class names added to columns when sorted
+            columns: [ "primary", "secondary", "tertiary" ],
+
+            // reset filters button
+            filter_reset : ".reset",
+
+            // extra css class name (string or array) added to the filter element (input or select)
+            filter_cssFilter: [
+                'form-control',
+                'form-control',
+                'form-control',
+                'form-control',
+                'form-control',
+                'form-control',
+                'form-control'
+            ],
+
+            // Options for type selection.
+            filter_selectSource: {
+                4 : [ "Men's Competitive", "Men's Friendly", "Women's Competitive",
+                        "Women's Friendly", "Mixed Competitive", "Mixed Friendly" ],
+            },
+
+            // function variables: e = exact text from cell, n = normalized value returned by the column parser, f = search filter input value, i = column index.
+            filter_functions : {
+                // Options for selection of minimum free spaces.
+                3 : {
+                    "1" : function(e, n, f, i, $r, c, data) { return n >= 1; },
+                    "2" : function(e, n, f, i, $r, c, data) { return n >= 2; },
+                    "3" : function(e, n, f, i, $r, c, data) { return n >= 3; },
+                    "4" : function(e, n, f, i, $r, c, data) { return n >= 4; },
+                    "5" : function(e, n, f, i, $r, c, data) { return n >= 5; },
+                    "6" : function(e, n, f, i, $r, c, data) { return n >= 6; },
+                    "7" : function(e, n, f, i, $r, c, data) { return n >= 7; },
+                    "8" : function(e, n, f, i, $r, c, data) { return n >= 8; },
+                    "9" : function(e, n, f, i, $r, c, data) { return n >= 9; },
+                },
+                // Oprions for selection of maximum price.
+                5 : {
+                    "Free" : function(e, n, f, i, $r, c, data) { return n == 0; },
+                    "3" : function(e, n, f, i, $r, c, data) { return n <= 3; },
+                    "5" : function(e, n, f, i, $r, c, data) { return n <= 5; },
+                    "10" : function(e, n, f, i, $r, c, data) { return n <= 10; },
+                    "20" : function(e, n, f, i, $r, c, data) { return n <= 20; },
+                    "50" : function(e, n, f, i, $r, c, data) { return n <= 50; },
+                    "100" : function(e, n, f, i, $r, c, data) { return n <= 100; },
+                }
+            }
+        }
     });
-    */
+
 
     // Make use of the Google Maps API to display maps.
     var map
