@@ -37,6 +37,11 @@ def getType(value):
             return elm[1]
     return "No Type"
 
+@register.filter(name='duration')
+def duration(start, end):
+    dt = end - start
+    return dt.days * 24 + dt.seconds // 3600
+
 # Returns a string of length equal to the player's rating defined by the parameter.
 @register.filter(name='ratingAsRange')
 def ratingAsRange(player, label):

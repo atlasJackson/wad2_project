@@ -206,3 +206,9 @@
 .tablesorter-bootstrap thead .disabled {
     display: none
 }
+.tablesorter-bootstrap select option {
+	color: black;
+}
+.tablesorter-bootstrap select option[value=""]{
+  color: grey;
+}
