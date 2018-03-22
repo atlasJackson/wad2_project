@@ -15,6 +15,26 @@
         <h5>Welcome {{ user.username }}!</h5>
         {% endif %}
     </div>
+    <div class="index-intro-info border-top pt-3 mt-3 border-bottom pb-3 mb-3">
+        <p>
+            Football Fives Finder is a web application used for organizing games of 5-a-side football.
+        </p>
+        <p>
+            Check out a small selection of games below, or click the view more button to traverse the full list of available games. If no games satisfy your needs, then you can also <a href="{% url 'create_game' %}">host your own game</a> (for details, check out the <a href="{% url 'about_us' %}">about us</a> page).<br />
+        </p>
+        <p>
+            After the game is over, check out your 
+            {% if user.is_authenticated %}
+                <a href="{% url 'history' user.player %}">game history</a>
+            {% else %}
+                game history
+            {% endif %}
+            to rate the other game's participants.
+        </p>
+        <p>
+            Let the games begin!
+        </p>
+    </div>
     {% if games %}
         {% include 'fives/incl/game_table.html' with title="Upcoming Games"  gameList=games ratingCol=False %}
         <div class="container text-right">
