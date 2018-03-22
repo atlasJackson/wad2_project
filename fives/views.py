@@ -427,14 +427,13 @@ def user_account(request, player):
 
 @login_required
 def edit_account(request, player):
-    success = False
     user = User.objects.get(username=player)
     player = Player.objects.get(user=user)
+    success = None
 
     if request.method == 'POST':
         user_form = EditUserForm(data=request.POST)
 
-        # If the form is valid.
         if user_form.is_valid():
             user.first_name = user_form.cleaned_data["first_name"]
             user.last_name = user_form.cleaned_data["last_name"]
@@ -451,31 +450,32 @@ def edit_account(request, player):
         # The form will be blank, ready for user input.
         user_form = EditUserForm(initial={'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email,})
 
-    return render(request, 'fives/edit_account.html', {'user': user, 'player': player,'form': user_form, 'success': success})
+    return render(request, 'fives/edit_account.html', {'title': "Edit Account",
+        'form_id': "edit_user_form", 'player': player,'form': user_form, 'success': success})
 
 @login_required
 def change_password(request, player):
-    context_dict = {}
     user = User.objects.get(username=player)
     player = Player.objects.get(user=user)
-    context_dict['player'] = player
+    success = None
 
-    if (player.user == request.user):
-        if request.method == 'POST':
-            form = PasswordChangeForm(request.user, request.POST)
-            if form.is_valid():
-                user = form.save()
-                update_session_auth_hash(request, user)
-                context_dict['success'] = "Your password was updated successfully!"
-                return render(request, 'fives/change_password.html', context=context_dict)
-            else:
-                context_dict['success'] = None
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            success = "Your password was updated successfully!"
+
+            return render(request, 'fives/edit_account.html', {'player': player, 'success': success})
         else:
-            form = PasswordChangeForm(request.user)
+            # Print problems to the terminal.
+            print(form.errors)
+    else:
+        form = PasswordChangeForm(request.user)
 
-        context_dict['form'] = form
-
-    return render(request, 'fives/change_password.html', context=context_dict)
+    return render(request, 'fives/edit_account.html', {'title': "Change Password",
+        'form_id': "change_password_form", 'player': player, 'form': form, 'success': success})
 
 
 def history(request, player):

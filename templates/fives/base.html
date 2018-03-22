@@ -48,7 +48,7 @@
                         </ul>
                         <div class="link-account" id="login-account">
         					{% if user.is_authenticated %}
-                                <a class="{% if urlName == 'user_account' or urlName == 'edit_account' or urlName == 'update_password' %}{% if user.player == player %}active{% endif %}{% endif %}" href="{% url 'user_account' user.username %}">{{ user.username }}</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'logout' %}?next=/fives/">Logout</a>
+                                <a class="{% if urlName == 'user_account' or urlName == 'edit_account' or urlName == 'change_password' %}{% if user.player == player %}active{% endif %}{% endif %}" href="{% url 'user_account' user.username %}">{{ user.username }}</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'logout' %}?next=/fives/">Logout</a>
         					{% else %}
                                 <a href="{% url 'login' %}">Login</a>&nbsp;|&nbsp;<a class="account-a" href="{% url 'sign_up' %}">Sign up</a>
         					{% endif %}

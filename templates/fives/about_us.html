@@ -1,13 +1,18 @@
-{% extends 'fives/index.html' %}
+{% extends 'fives/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
     About Us
 {% endblock %}
 
-{% block index_block %}
-<div class= "about-us-content">
-    <h3>About Us</h3>
+{% block body_block %}
+<div class="float-left">
+    <h5>About Us</h5>
+</div>
+<div class="container text-right">
+        FOOTBALL FIVES FINDER&nbsp;&nbsp;&nbsp;<img class="about-us-logo" src="{% static 'img/favicon.ico' %}" alt="logo" height="20px">
+</div>
+<div class="about-us-content border-top pt-2 mt-2">
     <p>
         Football Fives Finder is the brainchild of University of Glasgow students Gordon Daffurn, Hangil Ko and Nicola Mossner.
     </p>
@@ -31,24 +36,24 @@
         booking the pitch (if required). More information is available on the homepage once users have logged in.</li>
     </ul>
 </div>
-<br /><br /><br />
-<div class="row border-bottom mt-3 pb-3">
+
+<div class="row border-bottom border-top mt-4 pb-3 pt-3 about-us-footer">
     <div class="col-4">
-        <h4>Contact Information</h4>
-        <strong>Gordon Daffurn: </strong><br />0801676d@student.gla.ac.uk<br />
-        <strong>Hangil Ko: </strong><br />2286274k@student.gla.ac.uk<br />
-        <strong>Nicola Mössner: </strong><br />2268685m@student.gla.ac.uk
+        <h5>Contact Information</h5>
+        <p><strong>Gordon Daffurn:</strong><br />0801676d@student.gla.ac.uk</p>
+        <p><strong>Hangil Ko: </strong><br />2286274k@student.gla.ac.uk</p>
+        <p><strong>Nicola Mössner: </strong><br />2268685m@student.gla.ac.uk</p>
 
     </div>
     <div class="col-4 border-left">
-        <h4>Address: </h4>
+        <h5>Address</h5>
         We can also be contacted through the School of Computing Science.<br /><br />
         <strong>Sir Alwyn Williams Building<br />
         Glasgow<br />
         G12 8QN</strong>
     </div>
     <div class="col-2 game-map ">
-        <div id="map-display" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" style="width: 300px; height: 150px;">
+        <div id="map-display" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" style="width: 300px; height: 170px;">
             <div id="about-map" >
             </div>
         </div>

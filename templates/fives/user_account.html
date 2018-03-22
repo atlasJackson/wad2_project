@@ -66,9 +66,11 @@
         </div>
     </div>
     {% block account_block %}
-        {% include 'fives/incl/game_table.html' with title="Joined"  gameList=joinedGames ratingCol=False %}
         {% include 'fives/incl/game_table.html' with title="Hosting"  gameList=hostingGames ratingCol=False %}
-        {% include 'fives/incl/game_table.html' with title="History"  gameList=pastGames ratingCol=True %}
+        {% if user == player.user %}
+            {% include 'fives/incl/game_table.html' with title="Joined"  gameList=joinedGames ratingCol=False %}
+            {% include 'fives/incl/game_table.html' with title="History"  gameList=pastGames ratingCol=True %}
+        {% endif %}
 
         {% if user == player.user %}
             <button class="btn btn-outline-success btn-sm" type="button" id="account-redirect" data-url="{% url 'history' player %}">

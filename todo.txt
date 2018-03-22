@@ -2,13 +2,4 @@
 CREATE GAME
     - Improved Time selection.
 
-EDIT PROFILE
-    - Edit email address.
-    - Change password.
     - Other useres, only see games they are hosting.
-
-GAME LIST
-    - Implement sorting table
-
-BASE.html
-    - Change active link in navbar.

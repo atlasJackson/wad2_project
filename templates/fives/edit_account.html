@@ -1,1 +1,45 @@
-{% include 'fives/incl/edit_user_details.html' with title="Edit Account" form_id="edit_user_form" %}
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+{% load fives_filters %}
+
+{% block js_block %}
+{% endblock %}
+
+{% block title_block %}
+    {{ title }}
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col">
+    </div>
+    <div class="col-5">
+    {% if user == player.user %}
+        {% if success %}
+            {{ success }}<br /><br />
+            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'user_account' player.user.username %}">Back to my Profile</a>
+        {% else %}
+            <form class="jquery_validation_form" id="{{ form_id }}" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group row">
+                    <label for="{{ field.label }}" class="col-4 col-form-label">{{ field.label }}</label>
+                    <div class="col-8">
+                        {{ field|addCss:"form-control" }}
+                    </div>
+                    <label class="error">{{ field.errors }}</label>
+                </div>
+                {% endfor %}
+                <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit" value="Save Changes" />
+            </form>
+            <br />
+            <a class="btn btn-outline-danger btn-block" id="redirect" href="{% url 'user_account' player.user.username %}">Back to my Profile</a>
+        {% endif %}
+    {% else %}
+        <p>You are not authorised to edit another user's account.</p>
+    {% endif %}
+    </div>
+    <div class="col">
+    </div>
+</div>
+{% endblock %}

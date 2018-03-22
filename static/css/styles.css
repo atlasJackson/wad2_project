@@ -35,6 +35,21 @@ table td {
     max-width: 600px;
 }
 
+/* about_us.html */
+.about-us-content {
+    font-size: 14px;
+}
+.about-us-footer {
+    font-size: 14px;
+}
+.about-us-footer p {
+    line-height: 18px;
+    margin: 10px 0px 0px 0px;
+}
+.about-us-logo {
+    border-radius: 25%;
+}
+
 /* user_account.html */
 .user-account-info {
     margin-bottom: 20px;
