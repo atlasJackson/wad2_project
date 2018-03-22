@@ -1,6 +1,5 @@
 from django import template
 from fives.models import Participation, Player, Game
-
 register = template.Library()
 
 @register.filter(name='divide')
