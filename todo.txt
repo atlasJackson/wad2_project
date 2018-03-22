@@ -1,5 +1,0 @@
-
-CREATE GAME
-    - Improved Time selection.
-
-    - Other useres, only see games they are hosting.
