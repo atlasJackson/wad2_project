@@ -2,6 +2,10 @@ from django import template
 from fives.models import Participation, Player, Game
 register = template.Library()
 
+@register.filter(name='addCss')
+def addCss(field, css):
+   return field.as_widget(attrs={"class":css})
+
 @register.filter(name='divide')
 def divide(value, arg):
     try:

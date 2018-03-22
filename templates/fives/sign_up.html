@@ -28,7 +28,7 @@
             <div class="form-group row">
                 <label for="{{ field.label }}" class="col-5 col-form-label">{{ field.label }}</label>
                 <div class="col-7">
-                    {{ field }}
+                    {{ field|addCss:"form-control" }}
                 </div>
                 <label class="error">{{ field.errors }}</label>
             </div>
@@ -37,7 +37,7 @@
             <div class="form-group row">
                 <label for="{{ field.label }}" class="col-5 col-form-label">{{ field.label }}</label>
                 <div class="col-7">
-                    {{ field }}
+                    {{ field|addCss:"form-control" }}
                 </div>
                 <label class="error">{{ field.errors }}</label>
             </div>

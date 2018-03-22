@@ -8,7 +8,7 @@
 
 {% block body_block %}
 {% if user.is_authenticated %}
-    <div class="row user-account-info">
+    <div class="row user-account-info pb-3 border-bottom">
         <div class="col-7">
             <h2>{{ player.user.first_name }} {{ player.user.last_name }}</h2>
 
@@ -30,9 +30,12 @@
                 </li>
             </ul>
             {% if user == player.user %}
-                <button class="btn btn-outline-primary btn-sm" type="button" id="edit-account" data-url="{% url 'edit_account' player %}">
-                        Edit account
-                </button>
+                <a class="btn btn-outline-primary btn-sm custom-button-edit" href="{% url 'edit_account' player %}">
+                    Edit Account
+                </a>
+                <a class="btn btn-outline-primary btn-sm custom-button-edit" href="{% url 'change_password' player %}">
+                    Change Password
+                </a>
             {% endif %}
         </div>
         <div class="col-4 border-left">

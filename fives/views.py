@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect,HttpResponse, JsonResponse
 from django.core.urlresolvers import reverse
@@ -14,7 +15,7 @@ import pytz
 import sys
 
 from fives.models import User, Player, Game, Participation
-from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm, FilterForm
+from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm, FilterForm, EditUserForm
 
 def index(request):
     games = Game.objects.filter(start__gte=datetime.datetime.now()).order_by('start')[:5]
@@ -352,12 +353,7 @@ def sign_up(request):
         player_form = PlayerForm()
 
     # Render the template depending on the context.
-    return render(request,
-                  'fives/sign_up.html',
-                  {'user_form': user_form,
-                  'player_form': player_form,
-                  'registered': registered}
-                  )
+    return render(request, 'fives/sign_up.html', {'user_form': user_form, 'player_form': player_form, 'registered': registered})
 
 def user_login(request):
     # If the request is a HTTP POST, try to pull out the relevant information.
@@ -431,14 +427,55 @@ def user_account(request, player):
 
 @login_required
 def edit_account(request, player):
-    context_dict = {}
+    success = False
     user = User.objects.get(username=player)
     player = Player.objects.get(user=user)
 
-    if (player.user == request.user):
-        return render(request, 'fives/edit_account.html', context=context_dict)
+    if request.method == 'POST':
+        user_form = EditUserForm(data=request.POST)
+
+        # If the form is valid.
+        if user_form.is_valid():
+            user.first_name = user_form.cleaned_data["first_name"]
+            user.last_name = user_form.cleaned_data["last_name"]
+            user.email = user_form.cleaned_data["email"]
+            user.save()
+
+            success = True
+            return render(request, 'fives/user_account.html', {'player': player})
+        else:
+            # Print problems to the terminal.
+            print(user_form.errors)
     else:
-        return HttpResponse("You are not authorised to edit another user's account.")
+        # Not an HTTP POST, so we render our form using a ModelForm instance.
+        # The form will be blank, ready for user input.
+        user_form = EditUserForm(initial={'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email,})
+
+    return render(request, 'fives/edit_account.html', {'user': user, 'player': player,'form': user_form, 'success': success})
+
+@login_required
+def change_password(request, player):
+    context_dict = {}
+    user = User.objects.get(username=player)
+    player = Player.objects.get(user=user)
+    context_dict['player'] = player
+
+    if (player.user == request.user):
+        if request.method == 'POST':
+            form = PasswordChangeForm(request.user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request, user)
+                context_dict['success'] = "Your password was updated successfully!"
+                return render(request, 'fives/change_password.html', context=context_dict)
+            else:
+                context_dict['success'] = None
+        else:
+            form = PasswordChangeForm(request.user)
+
+        context_dict['form'] = form
+
+    return render(request, 'fives/change_password.html', context=context_dict)
 
 
 def history(request, player):

@@ -35,7 +35,6 @@ table td {
     max-width: 600px;
 }
 
-
 /* user_account.html */
 .user-account-info {
     margin-bottom: 20px;
@@ -43,6 +42,11 @@ table td {
 .user-account-info ul {
     list-style-type: none;
     padding: 0px;
+}
+.custom-button-edit {
+    padding: 2px 8px 2px 8px;
+    font-size: 10px;
+    height: 20px;
 }
 
 /* show_game.html */

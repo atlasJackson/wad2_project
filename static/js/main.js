@@ -24,10 +24,37 @@ $(document).ready(function(){
         });
     }
 
-    // Scripts for sign_up template
+    // Validate login form.
+    $("#login_form").validate({
+        rules: {
+            username: { // Must match the name attribute of the input field.
+                required: true,
+                minlength: 4
+            },
+            password: "required"
+        },
+        messages: {
+            username: {
+                required: "Please enter your username",
+                minlength: "Must be at least 4 characters long"
+            },
+            password: "Please enter your password"
+        }
+    });
+
+    // Validate form when editing user details.
+    $("#edit_user_form").validate({
+        rules: {
+            first_name: {required: true, nameFormat: true},
+            last_name: {required: true, nameFormat: true},
+            email: {required: true, email: true}
+        }
+    });
+
+    // Validate registration form.
     $("#user_form").validate({
         rules: {
-            username: {required: true, alphanumeric: true},
+            username: {required: true, alphanumeric: true, minlength: 4},
             email: {required: true, email: true},
             first_name: {required: true, nameFormat: true},
             last_name: {required: true, nameFormat: true},
@@ -50,7 +77,7 @@ $(document).ready(function(){
         return value.match(/^[a-zA-ZäöüÄÖÜéàè\-]+$/);
     }, 'Please only use letters and dashes.');
 
-    // Scripts for create_game template
+    // Validation for create game form.
     $("#game_form").validate({
         rules: {
             date: {},

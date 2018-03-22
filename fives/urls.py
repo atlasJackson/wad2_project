@@ -24,6 +24,7 @@ urlpatterns = [
 
     url(r'^user/(?P<player>[\w\d\-]+\b)/$', views.user_account, name='user_account'),
     url(r'^user/(?P<player>[\w\d\-]+\b)/edit_account/$', views.edit_account, name='edit_account'),
+    url(r'^user/(?P<player>[\w\d\-]+\b)/change_password/$', views.change_password, name='change_password'),
     url(r'^user/(?P<player>[\w\d\-]+\b)/history/$', views.history, name='history'),
     url(r'^user/(?P<player>[\w\d\-]+\b)/(?P<game_custom_slug>[\w\d\-]+\-\d{8}\-\d{4}\b)/$', views.show_past_game, name='show_past_game'),
 ]

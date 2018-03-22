@@ -17,19 +17,12 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
 
-    def __init__(self, *args, **kwargs):
-        super(UserForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
-
 class PlayerForm(forms.ModelForm):
     gender = forms.ChoiceField(choices=Player.GENDER_CHOICES, label="Gender")
 
     class Meta:
         model=Player
         fields = ('gender',)
-
 
 class GameForm(forms.ModelForm):
 
@@ -52,11 +45,6 @@ class GameForm(forms.ModelForm):
         model = Game
         exclude = ('game_id', 'free_slots', 'host', 'latitude', 'longitude', 'end', 'custom_slug', 'start')
 
-    def __init__(self, *args, **kwargs):
-        super(GameForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
 class RatingForm(forms.ModelForm):
     skill = forms.ChoiceField(choices=Player.RATINGS, initial=Player.THREE)
     likeability = forms.ChoiceField(choices=Player.RATINGS, initial=Player.THREE)
@@ -73,8 +61,14 @@ class RateHostForm(forms.ModelForm):
         model = Player
         fields = ('host_rating',)
 
-class FilterForm(forms.ModelForm):
+class EditUserForm(forms.ModelForm):
+    email = forms.EmailField()
 
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+class FilterForm(forms.ModelForm):
     game_type = forms.ChoiceField(choices=Game.GAME_CHOICES, initial=Game.MENS_CP)
 
     class Meta:

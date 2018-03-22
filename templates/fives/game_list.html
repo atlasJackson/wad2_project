@@ -8,84 +8,27 @@
 
 {% block body_block %}
 <div class="game-list-content">
-
-    <div class="game-list-static pb-3 border-bottom">
-        <div class="game-list-filters">
-            Type:
-            <select id="filter-game_type">
-                <option value="9">---</option>
-                <option value="0">Men's Competitive</option>
-                <option value="1">Men's Friendly</option>
-                <option value="2">Women's Competitive</option>
-                <option value="3">Women's Friendly</option>
-                <option value="4">Mixed Competitive</option>
-                <option value="5">Mixed Friendly</option>
-            </select>
-            &nbsp;&nbsp;&nbsp;
-
-            Duration:
-            <select id="filter-duration">
-                <option value="0">---</option>
-                <option value="1">1 hour</option>
-                <option value="2">2 hours</option>
-            </select>
-            &nbsp;&nbsp;&nbsp;
-
-            Minimum Spaces:
-            <select id="filter-free_slots">
-                <option value="0">---</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-            </select>
-            &nbsp;&nbsp;&nbsp;
-
-            Maximum price (&#163;) :
-            <select id="filter-price">
-                <option value="99">---</option>
-                <option value="0">Free</option>
-                <option value="1">1.00</option>
-                <option value="3">3.00</option>
-                <option value="5">5.00</option>
-                <option value="10">10.00</option>
-                <option value="20">20.00</option>
-                <option value="50">50.00</option>
-                <option value="100">100.00</option>
-            </select>
-            &nbsp;&nbsp;&nbsp;
-
-            <button class="btn btn-outline-primary btn-sm" type="button" id="filterBtn" data-url="{% url 'filter_game' %}"
-            data-csrf_token="{{ csrf_token }}" >
-                Filter
-            </button>
-        </div>
-    </div>
-
-    <div class="pt-3">
+    <div class="">
         {% if games %}
         <div class="game-players-wrapper">
-            
             {% include 'fives/incl/game_sorttable.html' with title=""  gameList=games ratingCol=False %}
         </div>
         {% else %}
-        <p>No games match the above criteria.</p>
+        <p>There are no scheduled games.</p>
         {% if user.is_authenticated %}
-        <p>
-            Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">create</a>your own game.
-        </p>
+            <p>
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">Create your own game</a>.
+            </p>
         {% else %}
-        <p>
-            Please refine your search, or <a class="btn btn-outline-primary btn-sm" href="{% url 'sign_up' %}">sign up</a> to create your own game.
-        </p>
+            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">
+                Login
+            </a>
+            or
+            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">
+                Sign up
+            </a>
         {% endif %}
         {% endif %}
     </div>
-
 </div>
 {% endblock %}

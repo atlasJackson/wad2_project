@@ -62,11 +62,6 @@ $(document).ready(function(){
         window.location.href = $(this).data("url");
     });
 
-    $(".col-7").on("click", "#edit-account", function() {
-
-        window.location.href = $(this).data("url");
-    });
-
     $( "#account-redirect" ).click(function() {
 
         window.location.href = $(this).data("url");

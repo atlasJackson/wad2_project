@@ -2,26 +2,6 @@
 {% load staticfiles %}
 
 {% block js_block %}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#login_form").validate({
-                rules: {
-                    username: { // Must match the name attribute of the input field.
-                        required: true,
-                        minlength: 4
-                    },
-                    password: "required"
-                },
-                messages: {
-                    username: {
-                        required: "Please enter your username",
-                        minlength: "Must be at least 4 characters long"
-                    },
-                    password: "Please enter your password"
-                }
-            });
-        });
-    </script>
 {% endblock %}
 
 {% block title_block %}
@@ -37,7 +17,7 @@
         <p>You are already logged in. Click below to return to the homepage.</p>
         <a href="{% url 'index' %}">Home</a>
     {% else %}
-        <form class="form-signin" id="login_form" method="post" action="{% url 'login' %}">
+        <form class="jquery_validation_form" class="form-signin" id="login_form" method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <h2 class="form-signin-heading">Please sign in</h2>
             <label for="username" class="sr-only" >Username</label>
