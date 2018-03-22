@@ -47,8 +47,6 @@ class Player(models.Model):
     def __str__(self):
         return self.user.username
 
-    def __unicode__(self): # For Python 2, use __unicode__too
-        return self.user.username
 
 
 class Game(models.Model):
