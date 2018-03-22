@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block account_block %}
-<div class="player-tables-wrapper border-top pt-3">
+<div class="player-tables-wrapper">
         {% include 'fives/incl/game_table.html' with title="History"  gameList=fullHistory ratingCol=True %}
 
         <button class="btn btn-outline-success btn-sm" type="button" id="account-redirect" data-url="{% url 'user_account' player %}">
