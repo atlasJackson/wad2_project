@@ -74,7 +74,7 @@ $(document).ready(function(){
     }, 'Please only use letters and numbers.');
     // Add validation for name and surname.
     $.validator.addMethod('nameFormat', function(value, element, param) {
-        return value.match(/^[a-zA-ZäöüÄÖÜéàè\-]+$/);
+        return value.match(/^[a-zA-ZäöüÄÖÜéàè" "\-]+$/);
     }, 'Please only use letters and dashes.');
 
     // Validation for create game form.

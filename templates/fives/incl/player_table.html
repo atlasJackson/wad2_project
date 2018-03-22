@@ -9,7 +9,7 @@
         <th>Skills</th>
         <th>Likes</th>
         <th>Punctuality</th>
-        {% if user == game.host%}
+        {% if user == game.host and not gameTookPlace %}
             <th></th>
         {% endif %}
     </tr>
@@ -40,7 +40,7 @@
             {% endfor %}
         </td>
 
-        {% if user == game.host %}
+        {% if user == game.host and not gameTookPlace %}
         <td class="text-right">
             {% if user != player.user %}
                 <button class="btn btn-outline-danger btn-sm custom-button-remove" type="button" id="removeBtn" class="hoverBtn" data-gameid="{{ game.game_id }}"
