@@ -441,7 +441,7 @@ def edit_account(request, player):
             user.save()
 
             success = True
-            return render(request, 'fives/user_account.html', {'player': player})
+            return HttpResponseRedirect(reverse('user_account', kwargs={'player': player}))
         else:
             # Print problems to the terminal.
             print(user_form.errors)
