@@ -7,7 +7,11 @@ from datetime import datetime
 import pytz
 import uuid
 
-### Model Tests
+##############################################################################################################
+### UNIT TESTS FOR MODELS
+##############################################################################################################
+
+### Player Model Tests
 class PlayerMethodTests(TestCase):
     # Test that the string representation of the player returns their username.
     def test_player_string_representation(self):
@@ -44,6 +48,7 @@ def create_player(user, gender=0, host_rating=0, num_host_ratings=0, punctuality
     p.save()
     return p
 
+### Game Model Tests
 class GameMethodTests(TestCase):
     # Test that the string representation of the game returns the concatenation of the host, start date and game id (auto-generated).
     def test_game_string_representation(self):
@@ -77,11 +82,12 @@ def create_game(game_type, free_slots, start, end, duration,
     g.save()
     return g
 
+### Participation Model Tests
 class ParticipationMethodTests(TestCase):
     # Test that the string representation of the participation object returns the concatenation of the player, game and rating.
     def test_participation_string_representation(self):
         test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
-        test_game = create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
+        test_game = create_game(0, 9, "2018-04-28 14:00", "2018-04-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
         test_participation = create_participation(test_game, test_player, 0)
         self.assertEqual(str(test_participation), str(test_participation.player) + " " + str(test_participation.game) + " " + str(test_participation.rated))
 
@@ -91,16 +97,23 @@ def create_participation(game, player, rated):
     p.save()
     return p
 
+##############################################################################################################
+### UNIT TESTS FOR VIEWS
+##############################################################################################################
+
 ### Index View Tests
 class IndexViewTests(TestCase):
+    ## The first two tests are based on the tests in the book Tango With Django; Chapter 18: Automated Testing.
 
+    # If there are no games, the index displays an appropriate message.
     def test_index_view_with_no_games(self):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "There are no scheduled matches.")
         self.assertQuerysetEqual(response.context['games'], [])
 
-    def test_index_view_with_games(self):
+    # If the only games in the database are in the past, then no games should be passed to the index.
+    def test_index_view_with_games_in_past(self):
         test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
         create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
         create_game(1, 9, "2018-02-22 11:00", "2018-02-22 13:00", 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, test_user)
@@ -109,22 +122,40 @@ class IndexViewTests(TestCase):
 
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "There are no scheduled matches.")
+
+        # The games are in the past, so should not be passed through to the index when the games are filtered in the view.
+        num_games = len(response.context['games'])        
+        self.assertEqual(num_games , 0)
+
+    # Test the view when future games are passed to the index template.
+    def test_index_view_with_games_in_future(self):
+        test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
+        create_game(0, 9, "2018-04-28 14:00", "2018-04-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
+        create_game(1, 9, "2018-04-22 11:00", "2018-04-22 13:00", 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, test_user)
+        create_game(2, 9, "2018-04-10 18:00", "2018-04-10 19:00", 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, test_user)
+        create_game(3, 9, "2018-04-15 10:00", "2018-04-15 11:00", 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, test_user)
+
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, 2)
 
-        num_games =len(response.context['games'])
+        # Now the number of games in the context dictionary should be 4.
+        num_games = len(response.context['games'])
         self.assertEqual(num_games , 4)
 
 ### About Us View Tests
-class AboutUsTests(TestCase):
-    def test_latitude_longtitude(self):
+class AboutUsViewTests(TestCase):
+
+    # The about us view should not have any errors. The main check is that the coorindates passed in the context dictionary
+    # will generate the correct location on the map display. 
+    def test_about_us_view(self):
         response = self.client.get(reverse('about_us'))
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['latitude'], [])
-        self.assertQuerysetEqual(response.context['longtitude'], [])
+        self.assertContains(response, "We can also be contacted through the School of Computing Science.")
+
+        # Test the correct coordinates are passed to the view (uses geolocator to get coordinates based on the address).
         geolocator = Nominatim()
         location = geolocator.geocode("Sir Alwyn Williams Building, Glasgow")
-        latitude_loc = response.context['latitude']
-        longtitude_loc = response.context['longitude']
-        self.assertEqual(latitude_loc , 55.8739481)
-        self.assertEqual(longtitude_loc , -4.2918572)
-    
+        self.assertEqual(response.context['latitude'], location.latitude)
+        self.assertEqual(response.context['longitude'], location.longitude)
