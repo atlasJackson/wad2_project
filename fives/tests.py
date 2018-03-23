@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from fives.models import Player, Game, Participation
 from django.test import TestCase
-
+from django.core.urlresolvers import reverse
 from geopy.geocoders import Nominatim
 from datetime import datetime
 import pytz
@@ -90,3 +90,26 @@ def create_participation(game, player, rated):
     p = Participation(game=game, player=player, rated=rated)
     p.save()
     return p
+
+### View Tests
+class IndexViewTests(TestCase):
+
+    def test_index_view_with_no_games(self):
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "There are no scheduled matches.")
+        self.assertQuerysetEqual(response.context['games'], [])
+
+    def test_index_view_with_games(self):
+        test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
+        create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
+        create_game(1, 9, "2018-02-22 11:00", "2018-02-22 13:00", 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, test_user)
+        create_game(2, 9, "2018-02-10 18:00", "2018-02-10 19:00", 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, test_user)
+        create_game(3, 9, "2018-02-15 10:00", "2018-02-15 11:00", 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, test_user)
+
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 2)
+
+        num_games =len(response.context['games'])
+        self.assertEqual(num_games , 4)
