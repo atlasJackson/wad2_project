@@ -85,7 +85,7 @@ $(document).ready(function(){
             street: {required: true, maxlength: 128},
             place: {required: true, maxlength: 128},
             postcode: {required: true, minlength: 5, maxlength: 8},
-            price: {required: true, range: [0, 20]},
+            price: {required: true, range: [0, 100]},
             booked: {required: false},
         },
         messages: {

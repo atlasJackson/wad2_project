@@ -25,33 +25,6 @@ $(document).ready(function(){
         });
     });
 
-    // Filter the game when filter button is clicked. Collects the necessary data from select element tags.
-    $(".game-list-static").on("click", "#filterBtn", function(e){
-
-        e.preventDefault();
-
-        $.ajax({
-            type:"POST",
-            url: $(this).data("url"),
-            data: {
-                "game_type": $("#filter-game_type").val(),
-                "duration": $("#filter-duration").val(),
-                "free_slots": $("#filter-free_slots").val(),
-                "price": $("#filter-price").val(),
-                csrfmiddlewaretoken: $(this).data("csrf_token"),
-            },
-            dataType: "html",
-            success: function(data) {
-                // Refresh game list and filter options on success.
-                $(".game-list-filters").load(" .game-list-filters", function(){$(this).children().unwrap()});
-                $('.game-players-wrapper').html(data);
-            },
-            error: function (rs, e) {
-                alert('Sorry, there was an error.');
-            }
-        });
-    });
-
     $(".index-content").on("click", "#redirect", function() {
 
         window.location.href = $(this).data("url");
