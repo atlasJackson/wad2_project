@@ -36,7 +36,7 @@ class GameForm(forms.ModelForm):
     city = forms.CharField(max_length=128, label="City/Town")
     postcode = forms.CharField(max_length=128, label="Postcode")
 
-    price = forms.DecimalField(label="Price/person", initial=0, min_value=0, max_value=20)
+    price = forms.DecimalField(label="Price/person", initial=0, min_value=0, max_value=100)
     booked = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':'form-check-input', 'type':'checkbox'}), initial=False, required=False, label="Pitch booked?")
 
     field_order=['game_type','date','time','duration','street','city','postcode', 'price', 'booked']
