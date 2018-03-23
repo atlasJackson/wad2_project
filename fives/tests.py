@@ -91,7 +91,7 @@ def create_participation(game, player, rated):
     p.save()
     return p
 
-### View Tests
+### Index View Tests
 class IndexViewTests(TestCase):
 
     def test_index_view_with_no_games(self):
@@ -113,3 +113,18 @@ class IndexViewTests(TestCase):
 
         num_games =len(response.context['games'])
         self.assertEqual(num_games , 4)
+
+### About Us View Tests
+class AboutUsTests(TestCase):
+    def test_latitude_longtitude(self):
+        response = self.client.get(reverse('about_us'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['latitude'], [])
+        self.assertQuerysetEqual(response.context['longtitude'], [])
+        geolocator = Nominatim()
+        location = geolocator.geocode("Sir Alwyn Williams Building, Glasgow")
+        latitude_loc = response.context['latitude']
+        longtitude_loc = response.context['longitude']
+        self.assertEqual(latitude_loc , 55.8739481)
+        self.assertEqual(longtitude_loc , -4.2918572)
+    
