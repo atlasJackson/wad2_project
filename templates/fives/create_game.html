@@ -15,6 +15,7 @@
     </div>
     <div class="col-5">
         <h5>{{ user.first_name }}, create your own game...</h5>
+        <span class="error">{{ message }}</span>
         {% if conflictingGames %}
         <span class="error">You already have a game scheduled during this time:
             {% for game in conflictingGames %}

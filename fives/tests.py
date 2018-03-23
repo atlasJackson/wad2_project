@@ -4,11 +4,12 @@ from django.test import TestCase
 
 from geopy.geocoders import Nominatim
 from datetime import datetime
+import pytz
 import uuid
 
-### Model Tests 
+### Model Tests
 class PlayerMethodTests(TestCase):
-    # Test that the string representation of the player returns their username. 
+    # Test that the string representation of the player returns their username.
     def test_player_string_representation(self):
         test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
         self.assertEqual(str(test_player), test_user.username)
@@ -44,7 +45,7 @@ def create_player(user, gender=0, host_rating=0, num_host_ratings=0, punctuality
     return p
 
 class GameMethodTests(TestCase):
-    # Test that the string representation of the game returns the concatenation of the host, start date and game id (auto-generated). 
+    # Test that the string representation of the game returns the concatenation of the host, start date and game id (auto-generated).
     def test_game_string_representation(self):
         test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
         test_game = create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
@@ -54,8 +55,10 @@ class GameMethodTests(TestCase):
 def create_game(game_type, free_slots, start, end, duration,
             street, city, postcode, price, booked, host):
 
-    start = datetime.strptime(start, '%Y-%m-%d %H:%M')
-    end = datetime.strptime(end, '%Y-%m-%d %H:%M')
+    # The following page helped solve the issue of a runtime warning appearing for using a naive datetime.
+    # https://stackoverflow.com/questions/7065164/how-to-make-an-unaware-datetime-timezone-aware-in-python
+    start = datetime.strptime(start, '%Y-%m-%d %H:%M').replace(tzinfo=pytz.UTC)
+    end = datetime.strptime(end, '%Y-%m-%d %H:%M').replace(tzinfo=pytz.UTC)
 
     g = Game.objects.get_or_create(host=host,
         start=start, end=end, price=price)[0]
@@ -79,7 +82,7 @@ class ParticipationMethodTests(TestCase):
     def test_participation_string_representation(self):
         test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
         test_game = create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
-        test_participation = create_participation(test_game, test_player, 0) 
+        test_participation = create_participation(test_game, test_player, 0)
         self.assertEqual(str(test_participation), str(test_participation.player) + " " + str(test_participation.game) + " " + str(test_participation.rated))
 
 # Helper method to create a participation object.

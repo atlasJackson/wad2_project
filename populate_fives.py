@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from fives.models import Player, Game, Participation
 from geopy.geocoders import Nominatim
 from datetime import datetime
+import pytz
 import uuid
 
 def populate():
@@ -288,7 +289,7 @@ def populate():
                 "price": 0,
                 "booked": 0,
                 "host": "ryanIndustries1946",
-                "participants": 
+                "participants":
                         [("ryanIndustries1946",0),
                         ("realMarioMario",0)],},
 
@@ -708,16 +709,10 @@ def add_game(custom_slug, game_type, free_slots, start, end, duration,
 
     h = User.objects.get(username=host)
 
-    #year, month, day = date.split("-")
-    #date = datetime.date(int(year), int(month), int(day))
-    
-    #start_hour, start_min = start_time.split(":")
-    #end_hour, end_min = end_time.split(":")
-    #start_time = datetime.time(int(start_hour), int(start_min))
-    #end = datetime.time(int(end_hour), int(end_min))
-
-    start = datetime.strptime(start, '%Y-%m-%d %H:%M')
-    end = datetime.strptime(end, '%Y-%m-%d %H:%M')
+    # The following page helped solve the issue of a runtime warning appearing for using a naive datetime.
+    # https://stackoverflow.com/questions/7065164/how-to-make-an-unaware-datetime-timezone-aware-in-python
+    start = datetime.strptime(start, '%Y-%m-%d %H:%M').replace(tzinfo=pytz.UTC)
+    end = datetime.strptime(end, '%Y-%m-%d %H:%M').replace(tzinfo=pytz.UTC)
 
     g = Game.objects.get_or_create(custom_slug=custom_slug, host=h,
         start=start, end=end, price=price)[0]

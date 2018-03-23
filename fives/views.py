@@ -18,7 +18,7 @@ from fives.models import User, Player, Game, Participation
 from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm, FilterForm, EditUserForm
 
 def index(request):
-    games = Game.objects.filter(start__gte=datetime.datetime.now()).order_by('start')[:5]
+    games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')[:5]
     context_dict = {'games': games}
     return render(request, 'fives/index.html', context=context_dict)
 
@@ -35,12 +35,12 @@ def about_us(request):
     return render(request, 'fives/about_us.html', context=context_dict)
 
 def game_list(request):
-    games = Game.objects.filter(start__gte=datetime.datetime.now()).order_by('start')[:30]
+    games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')[:30]
     context_dict = {'games': games}
     return render(request, 'fives/game_list.html', context=context_dict)
 
 def filter_game(request):
-    games = Game.objects.filter(start__gte=datetime.datetime.now()).order_by('start')
+    games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')
     game_type = int(request.POST.get('game_type'))
     duration = int(request.POST.get('duration'))
     free_slots = int(request.POST.get('free_slots'))
@@ -80,13 +80,13 @@ def create_game(request):
             # Combine date and time for DateTimeField
             date = game_form.cleaned_data["date"]
             time = game_form.cleaned_data["time"]
-            game.start = datetime.datetime.combine(date, time)
+            game.start = datetime.datetime.combine(date, time).replace(tzinfo=pytz.UTC)
             # Calculate end (start + duration)
             game.end = game.start + datetime.timedelta(hours=+game.duration)
 
             # Prevent games from being created in the past or within two hours from current time, return with appropriate message.
             game_creation_limit = game.start + datetime.timedelta(hours=-2)
-            if (game_creation_limit < datetime.datetime.now()):
+            if (game_creation_limit < datetime.datetime.now(pytz.utc)):
                 return render(request, 'fives/create_game.html', {'game_form': game_form, 'conflictMessage': "You can't create a game in the past or within two hours from now."})
 
             # Check for conflicting games and return with a list of all games that conflict.
@@ -97,9 +97,12 @@ def create_game(request):
             # Get latitiude and longitude from address
             # Source: https://geopy.readthedocs.io/en/1.10.0/
             geolocator = Nominatim()
-            location = geolocator.geocode(game.street + " " + game.city)
-            game.latitude = location.latitude
-            game.longitude = location.longitude
+            try:
+                location = geolocator.geocode(game.street + " " + game.city)
+                game.latitude = location.latitude
+                game.longitude = location.longitude
+            except AttributeError:
+                return render(request, 'fives/create_game.html', {'game_form': game_form, 'message': "Please provide a valid address."})
 
             # Get host entry from current user
             game.host = request.user
