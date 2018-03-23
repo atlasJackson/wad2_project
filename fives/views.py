@@ -35,34 +35,9 @@ def about_us(request):
     return render(request, 'fives/about_us.html', context=context_dict)
 
 def game_list(request):
-    games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')[:30]
+    games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')
     context_dict = {'games': games}
     return render(request, 'fives/game_list.html', context=context_dict)
-
-def filter_game(request):
-    games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')
-    game_type = int(request.POST.get('game_type'))
-    duration = int(request.POST.get('duration'))
-    free_slots = int(request.POST.get('free_slots'))
-    price = int(request.POST.get('price'))
-    if (game_type != 9):
-        games = games.filter(game_type=game_type)
-    if (duration != 0):
-        games = games.filter(duration=duration)
-    if (free_slots != 0):
-        games = games.filter(free_slots__gte=free_slots)
-    if (price != 99):
-        games = games.filter(price__lte=price)
-
-
-    games[:30]
-    print (games)
-
-    games_filtered = True
-
-    data = {'games_filtered': games_filtered, 'games': games}
-
-    return render(request, 'fives/game_list_table.html', data)
 
 @login_required
 def create_game(request):

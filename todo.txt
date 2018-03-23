@@ -1,0 +1,5 @@
+ - README
+ - Game_list pages
+ - Tests
+ Opt.
+ - Index, show upcoming games for user.

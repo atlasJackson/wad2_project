@@ -1,6 +1,5 @@
 $(document).ready(function(){
 
-
     // Make use of the Google Maps API to display maps.
     var map
     function initMap() {
