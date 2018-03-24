@@ -2,7 +2,9 @@
 
 ### Developed by:
 > Gordon Daffurn 0801676d@student.gla.ac.uk
+
 > Hangil Ko 2286274k@student.gla.ac.uk
+
 > Nicola Mössner 2268685m@student.gla.ac.uk
 
 #### Project URLs
