@@ -196,14 +196,17 @@ class CreateGameTests(TestCase):
     def test_create_game_view_with_login(self):
         test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
         self.client.login(username='test-user-1', password='fivesPass123')
-        response = self.client.get('/fives/create_game/')
+        response = self.client.get('/fives/create_game/', follow=True)
         self.assertContains(response, "create your own game", status_code=200)
 
+##### Need to be fixed
     def test_create_game_view_with_no_conflict(self):
         test_user, test_player = generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
+        self.client.login(username='test-user-1', password='fivesPass123')
+        response = self.client.get(reverse('create_game'), follow =True)
         create_game(0, 9, "2018-04-23 14:00", "2018-04-23 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
-        response = self.client.get('/fives/create_game/', follow=True)
-        self.assertRedirects(response, '/fives/login/test-user-1/fives/create_game/', status_code=302, target_status_code=200)
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/fives/game_list/')
 
     # Creating new game should be prevented if the user has another game during that time
     def test_create_game_view_with_conflict(self):
@@ -216,3 +219,5 @@ class CreateGameTests(TestCase):
 
         num_games = len(response.context['games'])
         self.assertEqual(num_games , 1)
+
+    def test_create_game_within_two_hour(self):
