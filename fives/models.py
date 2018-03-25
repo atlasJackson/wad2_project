@@ -111,12 +111,6 @@ class Game(models.Model):
     def __str__(self):
         return str(self.host) + " " + str(self.start) + " " + str(self.game_id)[:6]
 
-    def clean(self):
-        # Don't allow more than 10 participants in a game.
-        if self.free_slots == 0:
-            # Prevent player adding themselves to the game.
-            print("No slots left")
-
     # This method is called each time a game is saved/created, and the custom_slug is automatically generated.
     def save(self, *args, **kwargs):
         #self.custom_slug = str(self.host.username) + "-" + self.date.strftime("%Y") + self.date.strftime("%m") + self.date.strftime("%d") + "-" + self.start_time.strftime("%H") + self.start_time.strftime("%M")

@@ -1,0 +1,94 @@
+from django.contrib.auth.models import User
+from fives.models import Player, Game, Participation
+from geopy.geocoders import Nominatim
+from datetime import datetime
+import pytz
+import uuid
+
+##############################################################################################################
+### USER/PLAYER HELPER METHODS
+##############################################################################################################
+
+# Helper method to create a user object.
+def create_user(username, password, email, first_name, last_name):
+    u = User.objects.get_or_create(username=username)[0]
+    u.set_password(password)
+    u.email = email
+    u.first_name = first_name
+    u.last_name = last_name
+    u.save()
+    return u
+
+# Helper method to create a player object corresponding to the user passed in as a parameter.
+def create_player(user, gender=0, host_rating=0, num_host_ratings=0, punctuality=0, likeability=0, skill=0, num_player_ratings=0):
+    u = User.objects.get_or_create(username=user)[0]
+    p = Player.objects.get_or_create(user=u)[0]
+    p.gender = gender
+    p.host_rating = host_rating
+    p.num_host_ratings = num_host_ratings
+    p.punctuality = punctuality
+    p.likeability = likeability
+    p.skill = skill
+    p.num_player_ratings = num_player_ratings
+    p.save()
+    return p
+
+# Helper method to return user and player objects.
+def generate_test_user(username, password, email, first_name, last_name):
+    u = create_user(username, password, email, first_name, last_name)
+    p = create_player(u)
+    return u, p
+
+##############################################################################################################
+### GAME HELPER METHODS
+##############################################################################################################
+
+# Helper method to create a game object.
+def create_game(game_type, free_slots, start, end, duration,
+            street, city, postcode, price, booked, host):
+
+    # The following page helped solve the issue of a runtime warning appearing for using a naive datetime.
+    # https://stackoverflow.com/questions/7065164/how-to-make-an-unaware-datetime-timezone-aware-in-python
+    start = datetime.strptime(start, '%Y-%m-%d %H:%M').replace(tzinfo=pytz.UTC)
+    end = datetime.strptime(end, '%Y-%m-%d %H:%M').replace(tzinfo=pytz.UTC)
+
+    g = Game.objects.get_or_create(host=host,
+        start=start, end=end, price=price)[0]
+
+    g.game_type = game_type
+    g.free_slots = free_slots
+    g.duration = duration
+    g.street = street
+    g.city = city
+    g.postcode = postcode
+    geolocator = Nominatim()
+    location = geolocator.geocode(g.street + " " + g.city)
+    g.latitude = location.latitude
+    g.longitude = location.longitude
+    g.booked = booked
+    g.save()
+    return g
+
+# Helper method to populate the database with some test games that have already taken place.  
+def generate_past_test_games(host):
+    create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, host)
+    create_game(1, 9, "2018-02-22 11:00", "2018-02-22 13:00", 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, host)
+    create_game(2, 9, "2018-02-10 18:00", "2018-02-10 19:00", 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, host)
+    create_game(3, 9, "2018-02-15 10:00", "2018-02-15 11:00", 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, host)
+
+# Helper method to populate the database with some test games that have yet to be played.
+def generate_future_test_games(host):
+    create_game(0, 9, "2018-04-28 14:00", "2018-04-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, host)
+    create_game(1, 9, "2018-04-22 11:00", "2018-04-22 13:00", 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, host)
+    create_game(2, 9, "2018-04-10 18:00", "2018-04-10 19:00", 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, host)
+    create_game(3, 9, "2018-04-15 10:00", "2018-04-15 11:00", 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, host)
+
+def generate_past_and_future_test_games(host):
+    generate_past_test_games(host=host)
+    generate_future_test_games(host=host)
+
+# Helper method to create a participation object.
+def create_participation(game, player, rated):
+    p = Participation(game=game, player=player, rated=rated)
+    p.save()
+    return p
