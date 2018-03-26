@@ -1,6 +1,9 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template to show a users account details, ratings, and game involvments.
+-->
 
 {% block title_block %}
     {{ player.user.first_name }} ({{ player.user.username }})
@@ -66,6 +69,7 @@
         </div>
     </div>
     {% block account_block %}
+        <!-- Include tables to show games for the user. If accedding another user's profile, only show his hosting games. -->
         {% include 'fives/incl/game_table.html' with title="Hosting"  gameList=hostingGames ratingCol=False %}
         {% if user == player.user %}
             {% include 'fives/incl/game_table.html' with title="Joined"  gameList=joinedGames ratingCol=False %}

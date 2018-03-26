@@ -1,6 +1,9 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template to show a list of all games with filter/sort functionality.
+-->
 
 {% block title_block %}
     Game List
@@ -11,7 +14,7 @@
     <div class="">
         {% if games %}
         <div class="game-players-wrapper">
-            {% include 'fives/incl/game_sorttable.html' with title=""  gameList=games ratingCol=False %}
+            {% include 'fives/incl/game_sorttable.html' with title=""  gameList=games %}
         </div>
         {% else %}
         <p>There are no scheduled games.</p>

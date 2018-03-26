@@ -1,6 +1,10 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template for registration of new users.
+-->
+
 
 {% block title_block %}
     Sign Up
@@ -44,7 +48,6 @@
             </div>
             {% endfor %}
 
-            <!-- Provide a button to click to submit form -->
             <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit" value="Register" />
             </form>
         {% endif %}

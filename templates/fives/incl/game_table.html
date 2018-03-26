@@ -1,5 +1,10 @@
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template to display a table with games, depending on paramaters passed when included.
+     Paramaters ( title: Heading of the table , gameList: list of games to fill table,
+                  ratingCol: If True, display column with rating information )
+-->
 
 <div class="player-tables-wrapper">
     <h5>{{ title }}</h5>
@@ -11,9 +16,9 @@
                 <th>Time</th>
                 <th>Spaces</th>
                 <th>Type</th>
-                <th>Price (&#163;)</th>
+                <th>Price&nbsp;(&#163;)</th>
                 <th>Host</th>
-                <th class="sorter-false">Host Rating</th>
+                <th class="sorter-false">Host&nbsp;Rating</th>
                 <!-- Checks if the rating column is needed and if the current user is accessing his own account page. -->
                 {% if ratingCol and user == player.user %}
                     <th>Rate</th>
@@ -22,6 +27,7 @@
         </thead>
         <tbody>
             {% for game in gameList %}
+                <!-- if condition to check whether the games are in the past, if so we call a different view to show the game. -->
                 <tr class="game-player-link" data-url="{% if title == "History" %}
                                                             {% url 'show_past_game' user.username game.custom_slug %}
                                                         {% else %}

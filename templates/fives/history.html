@@ -1,6 +1,9 @@
 {% extends 'fives/user_account.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template to show a users full history of games he's participated in.
+-->
 
 {% block title_block %}
     {{ player.user.first_name }} ({{ player.user.username }})

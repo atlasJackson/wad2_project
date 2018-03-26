@@ -1,3 +1,5 @@
+/* javascript used to show a map. */
+
 var map
 function initMap() {
     var mapDisplay = document.getElementById("map-display");

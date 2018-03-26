@@ -1,6 +1,9 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template to display a game with it's details and participating players.
+-->
 
 {% block title_block %}
     {{ game.custom_slug }}
@@ -14,6 +17,7 @@
         </div>
         <div class="col-3">
             <span title="">{{ game.host.username }}</span>
+            <!-- Show a hosts rating with stars -->
             {% for i in game.host.player|ratingAsRange:"host" %}
                 <img src="{% static 'img/star.png' %}" alt="host rating" height="13">
             {% endfor %}
@@ -81,7 +85,7 @@
         </div>
     </div>
 </div>
-{% block show_or_rate_block %}
+{% block show_or_rate_block %} <!-- This block is for the show_past_game template and is overwritten if the game hasn't been rated. -->
 <div class="row pt-3">
     <div class="col">
         <div class="game-players-wrapper">
@@ -95,7 +99,7 @@
 <div class="row">
     <div class="game-player-static">
         <div class="game-player-buttons">
-        {% if not gameTookPlace %} <!-- The current game lies in the future. -->
+        {% if not gameTookPlace %} <!-- The current game lies in the future. In case users enter a url for a game in the past manually. -->
             {% if user.is_authenticated %}
                 {% if user == game.host %}
                     <button class="btn btn-danger btn-sm" type="button" id="deleteBtn" data-gameid="{{ game.game_id }}"
@@ -109,6 +113,7 @@
                             Leave Game
                         </button>
                     {% else %}
+                        <!-- Make user aware of overlaps with other games the user is involved in -->
                         {% if conflictingGames %}
                             <button class="btn btn-success btn-sm" type="button" disabled>Join Game</button><br />
                             <span class="error">You already have a game scheduled during this time:

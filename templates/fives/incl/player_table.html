@@ -1,5 +1,8 @@
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template to display a table of players participating in a game.
+-->
 
 <table class="table table-striped game-player-table table-hover">
     <tr class="bg-success text-white">
@@ -9,15 +12,18 @@
         <th>Skills</th>
         <th>Likes</th>
         <th>Punctuality</th>
+        <!-- Only display "Remove column" when user is the host and the game is in the future. -->
         {% if user == game.host and not gameTookPlace %}
             <th></th>
         {% endif %}
     </tr>
 {% for player in participants %}
     <tr>
+        <!-- Link on name columns to the user profile. -->
         <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.first_name }}</td>
         <td class="game-player-link" data-url="{% url 'user_account' player.user.username %}" >{{ player.user.last_name }}</td>
         <td>
+            <!-- Display appropriate gender symbol. -->
             {% if player.gender %}
                 <img src="{% static 'img/male.png' %}" alt="male" height="12" title="male">
             {% else %}
@@ -40,6 +46,7 @@
             {% endfor %}
         </td>
 
+        <!-- Only display "Remove buttons" when user is the host and the game is in the future. -->
         {% if user == game.host and not gameTookPlace %}
         <td class="text-right">
             {% if user != player.user %}

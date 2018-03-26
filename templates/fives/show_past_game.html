@@ -1,6 +1,10 @@
 {% extends 'fives/show_game.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
+<!--
+     Template to display a game in the past.
+     Show form to rate players or a list of players.
+-->
 
 {% block title_block %}
     {{ game.custom_slug }}
@@ -23,6 +27,7 @@
                     <th>Likeability</th>
                     <th>Punctuality</th>
                 </tr>
+                <!-- Display each form in the formset for each player in the game. -->
                 {{ rating_formset.management_form }}
                 {% for rating_form in rating_formset %}
                     <tr style="height:30px;">
@@ -42,6 +47,7 @@
                 {% endfor %}
             </table>
             <br />
+            <!-- Show form to rate the host, except for the host of the game. -->
             {% if user != game.host %}
                 Please rate {{ game.host.first_name }}'s hosting abilities: {{ host_form.host_rating }}<br /><br />
             {% endif %}
