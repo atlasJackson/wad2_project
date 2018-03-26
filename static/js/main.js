@@ -1,5 +1,14 @@
 $(document).ready(function(){
 
+    // Toggle information div on index page.
+    $("#btn-more-less").click(function() {
+        $("#more-less").slideToggle("slow");
+        var moreLess = $(this).text() == 'Show More' ? 'Show Less' : 'Show More';
+        $(this).text(moreLess);
+        var moreDots = $("#span-more-dots").text() == '[...]' ? '' : '[...]'
+        $("#span-more-dots").text(moreDots);
+    });
+
     // Make use of the Google Maps API to display maps.
     var map
     function initMap() {
@@ -79,7 +88,7 @@ $(document).ready(function(){
     // Validation for create game form.
     $("#game_form").validate({
         rules: {
-            date: {},
+            date: {required: true, date: true},
             time: {required: true, time: true},
             street: {required: true, maxlength: 128},
             place: {required: true, maxlength: 128},
@@ -198,7 +207,7 @@ $(document).ready(function(){
         container: '#pager_GameList', // id of pager, for use of multiple pagers on the same page.
         size: 10, // Initial size of the page (num. of rows).
         savePages : false, // Prevent from loading pagesize from select element.
-        output: '{startRow} – {endRow} / {totalRows}', // Page info for navigation. 
+        output: '{startRow} – {endRow} / {totalRows}', // Page info for navigation.
     });
     $("#game_table_Joined").tablesorter().tablesorterPager({
         container: '#pager_Joined',

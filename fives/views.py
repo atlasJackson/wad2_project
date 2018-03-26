@@ -20,6 +20,15 @@ from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm
 def index(request):
     games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')[:5]
     context_dict = {'games': games}
+
+    # Pass a list of games the user is participating in that take place within 24h.
+    if request.user.is_authenticated:
+        player = Player.objects.get(user=request.user)
+        gameSlugs = [p.game.custom_slug for p in Participation.objects.select_related('game').filter(player=player)]
+        userGames = Game.objects.filter(custom_slug__in=gameSlugs).filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')
+        upcomingUserGames = [g for g in userGames if g.start - datetime.timedelta(hours=24) < datetime.datetime.now(pytz.utc)]
+        context_dict['upcomingUserGames'] = upcomingUserGames
+
     return render(request, 'fives/index.html', context=context_dict)
 
 def about_us(request):
@@ -477,7 +486,7 @@ def history(request, player):
 # Checks if a player has any conflicting games when joining/createing a game.
 def game_conflicts(player, game):
     # Check for participation in games with conflicting times to the one the user is trying to join/create.
-    userGameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+    userGameSlugs = [p.game.custom_slug for p in Participation.objects.select_related('game').filter(player=player)]
     gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(start__gte=game.start, start__lt=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
                     end__gt=game.start, end__lte=game.end)
     return gameConflicts
