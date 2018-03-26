@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from fives.models import Player, Game, Participation
 from geopy.geocoders import Nominatim
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 import uuid
 
@@ -71,17 +71,31 @@ def create_game(game_type, free_slots, start, end, duration,
 
 # Helper method to populate the database with some test games that have already taken place.  
 def generate_past_test_games(host):
-    create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, host)
-    create_game(1, 9, "2018-02-22 11:00", "2018-02-22 13:00", 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, host)
-    create_game(2, 9, "2018-02-10 18:00", "2018-02-10 19:00", 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, host)
-    create_game(3, 9, "2018-02-15 10:00", "2018-02-15 11:00", 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, host)
+    start_datetime, end_datetime = start_and_end_datetime_generator(-240,1)
+    create_game(0, 9, start_datetime, end_datetime, 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, host)
+
+    start_datetime, end_datetime = start_and_end_datetime_generator(-120,2)
+    create_game(1, 9, start_datetime, end_datetime, 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, host)
+
+    start_datetime, end_datetime = start_and_end_datetime_generator(-48,1)
+    create_game(2, 9, start_datetime, end_datetime, 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, host)
+
+    start_datetime, end_datetime = start_and_end_datetime_generator(-24,1)
+    create_game(3, 9, start_datetime, end_datetime, 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, host)
 
 # Helper method to populate the database with some test games that have yet to be played.
 def generate_future_test_games(host):
-    create_game(0, 9, "2018-04-28 14:00", "2018-04-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, host)
-    create_game(1, 9, "2018-04-22 11:00", "2018-04-22 13:00", 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, host)
-    create_game(2, 9, "2018-04-10 18:00", "2018-04-10 19:00", 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, host)
-    create_game(3, 9, "2018-04-15 10:00", "2018-04-15 11:00", 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, host)
+    start_datetime, end_datetime = start_and_end_datetime_generator(240,1)
+    create_game(0, 9, start_datetime, end_datetime, 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, host)
+
+    start_datetime, end_datetime = start_and_end_datetime_generator(120,2)
+    create_game(1, 9, start_datetime, end_datetime, 2, "10 Keith St", "Glasgow", "G11 5DD", 0, 0, host)
+
+    start_datetime, end_datetime = start_and_end_datetime_generator(48,1)
+    create_game(2, 9, start_datetime, end_datetime, 1, "Greendyke St", "Glasgow", "G1 5DB", 2, 1, host)
+
+    start_datetime, end_datetime = start_and_end_datetime_generator(24,1)
+    create_game(3, 9, start_datetime, end_datetime, 1, "33 Scotland St", "Glasgow", "G5 8NB", 10, 1, host)
 
 def generate_past_and_future_test_games(host):
     generate_past_test_games(host=host)
@@ -92,3 +106,29 @@ def create_participation(game, player, rated):
     p = Participation(game=game, player=player, rated=rated)
     p.save()
     return p
+
+##############################################################################################################
+### DATETIME HELPER METHODS
+##############################################################################################################
+
+# Helper method that returns a start date and a start time string from the current time's hour plus the parameter hours from that time.
+def start_date_and_time_generator(hours):
+    now = datetime.now(pytz.UTC)
+    start_datetime = now + timedelta(hours=hours)
+    
+    start_date = start_datetime.strftime('%Y-%m-%d')
+    start_time = start_datetime.strftime('%H:%M')
+
+    return start_date, start_time
+
+# Helper method that returns a start datetime string from the current time's hour plus the parameter hours from that time. 
+# Endtime is calculated from duration.
+def start_and_end_datetime_generator(hours, duration):
+    now = datetime.now(pytz.UTC)
+    start_datetime = now + timedelta(hours=hours)
+    end_datetime = start_datetime + timedelta(hours=+duration)
+    
+    start_datetime = start_datetime.strftime('%Y-%m-%d %H:%M')
+    end_datetime = end_datetime.strftime('%Y-%m-%d %H:%M')
+
+    return start_datetime, end_datetime

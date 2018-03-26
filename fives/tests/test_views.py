@@ -1,4 +1,5 @@
 from django.test import TestCase
+from fives.models import Game
 from django.core.urlresolvers import reverse
 from geopy.geocoders import Nominatim
 import fives.tests.test_helper_methods as th
@@ -107,44 +108,68 @@ class CreateGameViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "create your own game")
 
-
-
-
-        
-###################################################################
-##### Need to be fixed
     def test_create_game_view_with_no_conflict(self):
+        # Add user and login, redirect to create game.
         test_user, test_player = th.generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
         self.client.login(username='test-user-1', password='fivesPass123')
-        response = self.client.get(reverse('create_game'), follow =True)
+        self.client.get(reverse('create_game'), follow =True)
         
-        # This line just adds the game to the database.
-        # To fix it, mimic the client submitting a form with self.client.post()
-        # See here: https://stackoverflow.com/questions/46001747/django-test-client-post-data
-        th.create_game(0, 9, "2018-04-23 14:00", "2018-04-23 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
-        # Then update these with whatever is required.
-        #self.assertEqual(response.status_code, 200)
-        #self.assertRedirects(response, '/fives/game_list/')
+        # https://stackoverflow.com/questions/46001747/django-test-client-post-data
+        start_date, start_time = th.start_date_and_time_generator(10)
+        response = self.client.post(reverse('create_game'), {'game_type': 0, 'date': start_date, 'time': start_time, 'duration': 1, 
+                                                  'street': "66 Bankhead Dr", 'city': "Edinburgh", 'postcode': "EH11 4EQ", 'price': 5, 'booked': 1} )
+
+        self.assertEqual(response.status_code, 302)
+
+        game_custom_slug = Game.objects.all()[0].custom_slug
+        self.assertRedirects(response, ('/fives/game_list/%s/' % game_custom_slug))
 
     # Creating new game should be prevented if the user has another game during that time
     def test_create_game_view_with_conflict(self):
+        # Add user and login, add game and particpation to database, and redirect to create game.
         test_user, test_player = th.generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
-        th.create_game(0, 9, "2018-04-28 16:00", "2018-04-28 18:00", 2, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
         self.client.login(username='test-user-1', password='fivesPass123')
-        response = self.client.get(reverse('create_game'))
-        # Same issue as above,
-        # This line requires self.client.post().
-        th.create_game(0, 9, "2018-04-28 17:00", "2018-04-28 18:00", 1, "10 Keith St", "Glasgow", "G11 6QQ", 0, 0, test_user)
 
-        #self.assertContains(response, "You already have a game scheduled during this time", status_code=302)
+        start_datetime, end_datetime = th.start_and_end_datetime_generator(10,2)
+        th.create_game(0, 9, start_datetime, end_datetime, 2, "10 Keith St", "Glasgow", "G11 6QQ", 0, 0, test_user)
+        game = Game.objects.filter(game_type=0)[0]
+        th.create_participation(game, test_player, 0)
+        
+        self.client.get(reverse('create_game'))
 
-        #num_games = len(response.context['games'])
-        #self.assertEqual(num_games , 1)
+        # Try creating a game with a time conflict.
+        start_date, start_time = th.start_date_and_time_generator(10)
+        response = self.client.post(reverse('create_game'), {'game_type': 0, 'date': start_date, 'time': start_time, 'duration': 1, 
+                                                  'street': "66 Bankhead Dr", 'city': "Edinburgh", 'postcode': "EH11 4EQ", 'price': 5, 'booked': 1} )
 
-    ### DON'T PUSH CODE THAT WON'T RUN, COMMEWNT OUT IF NECESSARY.
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "You already have a game scheduled during this time")
+
+        # Game should not have been added to the database.
+        response = self.client.get(reverse('index'))
+        num_games = len(response.context['games'])
+        self.assertEqual(num_games , 1)
+
+
+    # Creating new game should be prevented if the start time is within two hours.
     def test_create_game_within_two_hour(self):
-        # Added
-        pass
+        # Add user and login, and redirect to create game.
+        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
+        self.client.login(username='test-user-1', password='fivesPass123')        
+        self.client.get(reverse('create_game'))
 
+        # Try creating a game within two hours.
+        start_date, start_time = th.start_date_and_time_generator(1)
+        response = self.client.post(reverse('create_game'), {'game_type': 0, 'date': start_date, 'time': start_time, 'duration': 1, 
+                                                  'street': "66 Bankhead Dr", 'city': "Edinburgh", 'postcode': "EH11 4EQ", 'price': 5, 'booked': 1} )
+
+        # Post unsuccessful, check conflilct message matches content.
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(response.context['conflictMessage'], "You can't create a game in the past or within two hours from now.")
+
+        ## Game should not have been added to the database.
+        response = self.client.get(reverse('index'))
+        num_games = len(response.context['games'])
+        self.assertEqual(num_games , 0)
 
 
