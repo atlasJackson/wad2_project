@@ -18,16 +18,6 @@
         <h5>Welcome {{ user.username }}!</h5>
         {% endif %}
     </div>
-    {% if user.is_authenticated and upcomingUserGames %}
-    <div class="index-UpcomingUserGames">
-        <span>You are playing within the next 24 hours:</span><br />
-        {% for game in upcomingUserGames %}
-            <a class="btn btn-lg btn-outline-primary custom-button-upUsGames" href="{% url 'show_game' game.custom_slug %}">
-                {{ game.city }},&nbsp;{{ game.start|date:"d M" }},&nbsp;{{ game.start|date:"H:i" }}-{{ game.end|date:"H:i" }}
-            </a>
-        {% endfor %}
-    </div>
-    {% endif %}
     <div class="index-intro-info border-top pt-3 mt-3 border-bottom pb-3 mb-3">
         <p>
             Football Fives Finder is a web application used for organizing games of 5-a-side football.&nbsp;<span id="span-more-dots">[...]</span>
@@ -51,10 +41,20 @@
         </div>
         <button id="btn-more-less" class="btn btn-sm btn-outline-dark m-0">Show More</button>
     </div>
+    {% if user.is_authenticated and upcomingUserGames %}
+    <div class="index-UpcomingUserGames border-bottom mb-3 pb-3">
+        <span>You are playing within the next 24 hours:</span><br />
+        {% for game in upcomingUserGames %}
+            <a class="btn btn-lg btn-outline-primary custom-button-upUsGames" href="{% url 'show_game' game.custom_slug %}">
+                {{ game.city }},&nbsp;{{ game.start|date:"d M" }},&nbsp;{{ game.start|date:"H:i" }}-{{ game.end|date:"H:i" }}
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% if games %}
-        {% include 'fives/incl/game_table.html' with title="Upcoming Games"  gameList=games ratingCol=False %}
-        <div class="container text-right">
-            <button class="btn btn-outline-success btn-sm" type="button" id="redirect" data-url="{% url 'game_list' %}">
+        {% include 'fives/incl/game_table.html' with title="Upcoming Games"  gameList=games ratingCol=False withPager=False %}
+        <div class="container text-right p-0">
+            <button class="btn btn-outline-success btn-sm mt-2" type="button" id="redirect" data-url="{% url 'game_list' %}">
                 View more
             </button>
         </div>
@@ -66,13 +66,9 @@
                 <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">Create your own game</a>.
             </p>
         {% else %}
-            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">
-                Login
-            </a>
+            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">Login</a>
             or
-            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">
-                Sign up
-            </a>
+            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">Sign up</a>
         {% endif %}
     </div>
     {% endif %}
@@ -87,14 +83,10 @@
         </div>
     {% else %}
         <br />
-        Login to participate:
-        <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">
-            Login
-        </a>
-        or sign up today
-        <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">
-            Sign up
-        </a>
+        <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">Login</a>
+        to participate, or
+        <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">Sign up</a>
+        today.
     {% endif %}
 </div>
 {% endblock %}

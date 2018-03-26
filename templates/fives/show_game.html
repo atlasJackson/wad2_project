@@ -78,7 +78,7 @@
             </tr>
         </table>
     </div>
-    <div class="col-2 game-map ">
+    <div class="col-2 game-map">
         <div id="map-display" data-latitude="{{ game.latitude }}" data-longitude="{{ game.longitude }}" style="width: 300px; height: 170px;">
             <div id="map" >
             </div>
@@ -87,10 +87,10 @@
 </div>
 {% block show_or_rate_block %} <!-- This block is for the show_past_game template and is overwritten if the game hasn't been rated. -->
 <div class="row pt-3">
-    <div class="col">
+    <div class="col p-0">
         <div class="game-players-wrapper">
             {% include 'fives/incl/player_table.html' %}
-            <div class="container text-right">
+            <div class="container text-right p-0 pt-2">
                 <span class="span-free-slots">Free spaces: <strong>{{ game.free_slots }}</strong></span>
             </div>
         </div>
