@@ -130,7 +130,6 @@ $(document).ready(function(){
         widthFixed: true,
         // widget code contained in the jquery.tablesorter.widgets.js file
         // use the zebra stripe widget if you plan on hiding any rows (filter widget)
-        // the uitheme widget is NOT REQUIRED!
         widgets : [ "filter", "zebra" ],
         widgetOptions : {
             // Delay in milliseconds before the filter widget starts searching; This option prevents searching for
@@ -194,11 +193,12 @@ $(document).ready(function(){
         }
     });
 
+    // Add pager plugin to tables with some custom configuration.
     $("#game_sorttable").tablesorterPager({
-        container: '#pager_GameList',
-        size: 10,
-        savePages : false,
-        output: '{startRow} – {endRow} / {totalRows}',
+        container: '#pager_GameList', // id of pager, for use of multiple pagers on the same page.
+        size: 10, // Initial size of the page (num. of rows).
+        savePages : false, // Prevent from loading pagesize from select element.
+        output: '{startRow} – {endRow} / {totalRows}', // Page info for navigation. 
     });
     $("#game_table_Joined").tablesorter().tablesorterPager({
         container: '#pager_Joined',

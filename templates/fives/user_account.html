@@ -77,8 +77,8 @@
         {% endif %}
 
         {% if user == player.user %}
-            <button class="btn btn-outline-success btn-sm" type="button" id="account-redirect" data-url="{% url 'history' player %}">
-                View all past matches
+            <button class="btn btn-outline-success btn-sm mt-3" type="button" id="account-redirect" data-url="{% url 'history' player %}">
+                View all past games
             </button>
         {% endif %}
     {% endblock %}
