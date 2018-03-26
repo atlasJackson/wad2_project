@@ -136,7 +136,7 @@
 }
 .tablesorter-bootstrap:not(.table-dark) .tablesorter-filter-row input.tablesorter-filter,
 .tablesorter-bootstrap:not(.table-dark) .tablesorter-filter-row select.tablesorter-filter {
-	color: #333;
+	color: grey;
 }
 
 .tablesorter-bootstrap .tablesorter-filter-row .tablesorter-filter.disabled {
