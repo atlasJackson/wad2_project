@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+    /* javascript used for ajax-functionality and also some simple redirections to other views. */
 
     // Edit the  pitch booking entry when button is clicked.
     $(".col-4").on("click", "#editBooking", function(e){

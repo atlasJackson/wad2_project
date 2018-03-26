@@ -1,9 +1,9 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
-
-{% block js_block %}
-{% endblock %}
+<!--
+     Template to create a new game.
+-->
 
 {% block title_block %}
     Create Game
@@ -15,9 +15,12 @@
     </div>
     <div class="col-5">
         <h5>{{ user.first_name }}, create your own game...</h5>
+        <!-- This error message occurs if an invalid address is entered that can't generate a lonigtude/latitude. -->
         <span class="error">{{ message }}</span>
+        <!-- conflictingGames contains games if there is a time overlap with other games. -->
         {% if conflictingGames %}
         <span class="error">You already have a game scheduled during this time:
+            <!-- Display each overlaping game to the user in form of a button. -->
             {% for game in conflictingGames %}
                 <a class="btn btn-lg btn-outline-danger custom-button-confl" href="{% url 'show_game' game.custom_slug %}">
                     View Game ({{ game.start|date:"H:i" }}-{{ game.end|date:"H:i" }})
@@ -27,8 +30,8 @@
         {% endif %}
         <span class="error">{{ conflictMessage }}</span>
         <br />
+        <!-- Display form with labels, fields and error messages -->
         <form class="jquery_validation_form" id="game_form" method="post" action="{% url 'create_game' %}">
-
             {% csrf_token %}
             {% for field in game_form %}
             <div class="form-group row">
@@ -42,7 +45,7 @@
             <input class="btn btn-lg btn-primary btn-block" id="create-game" type="submit" name="submit" value="Create Game" />
         </form>
 
-        <p style="font-size:11px; margin-top:40px; text-align:center;">
+        <p class="create-game-info">
             Please note that as users are joining a game with the details you supply here, the details cannot be changed after submission.<br />
             Delete the game and create a new one if circumstances change.<br/>Thank you for understanding.
         </p>

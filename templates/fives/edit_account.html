@@ -1,9 +1,11 @@
 {% extends 'fives/base.html' %}
 {% load staticfiles %}
 {% load fives_filters %}
-
-{% block js_block %}
-{% endblock %}
+<!--
+     Template to edit account.
+     Used by two views, for changing Name, etc. and for changing the password.
+     The views simply pass in different forms to display.
+-->
 
 {% block title_block %}
     {{ title }}

@@ -196,6 +196,7 @@ def show_past_game(request, player, game_custom_slug):
 
     return render(request, 'fives/show_past_game.html', context=context_dict)
 
+# Enable the user to change the status of the pitch, Booked/Not Booked.
 def edit_booking(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
@@ -468,6 +469,10 @@ def history(request, player):
     context_dict = {'player': player, 'fullHistory': fullHistory}
 
     return render(request, 'fives/history.html', context=context_dict)
+
+###############################################
+# Helper functions
+###############################################
 
 # Checks if a player has any conflicting games when joining/createing a game.
 def game_conflicts(player, game):

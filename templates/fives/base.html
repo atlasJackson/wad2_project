@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+<!--
+     Base template which is extended by most other templates.
+     Defines all inlcuded css/javascript files.
+     Navigation bar, body and footer are defined in the base.
+-->
 
 <html>
     <head lang="en">
@@ -13,7 +18,7 @@
         <!-- Fives custom css. Import after because we are overwriting styles from bootstrap css files. -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-
+        <!-- Favicon to display in the browser's tab for this website. -->
         <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
 
         <title>
@@ -25,6 +30,7 @@
     </head>
 
     <body>
+        <!-- Makes use of bootstrap's navbar classes. -->
         <div id="primary-nav">
          <div class="container center-content">
                 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -34,6 +40,7 @@
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+                    <!-- Get url in the request to set the matching link's css class to active -->
                     {% with request.resolver_match.url_name as urlName %}
                     <div class="collapse navbar-collapse" id="navbarText">
                         <ul class="navbar-nav mr-auto">
@@ -70,6 +77,7 @@
                 </p>
             </div>
         </footer>
+        
         <!-- Third party scripts -->
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery.validate.js' %}"></script>

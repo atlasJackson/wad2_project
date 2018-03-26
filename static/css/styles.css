@@ -1,3 +1,4 @@
+/* General styles, used across different templates. */
 table th {
     line-height: 5px;
     min-height: 5px;
@@ -8,14 +9,12 @@ table td {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
 }
-
 .jquery_validation_form label.error, span.error, td.django-form-errors {
     font-size: 11px;
     font-style: normal;
     color: red;
     padding-left: 0px;
 }
-
 .game-player-table {
     font-size: 14px;
 }
@@ -23,7 +22,7 @@ table td {
     cursor: pointer;
 }
 
-/* index.html */
+/* Styles used in index.html */
 .index-header-centered {
     text-align: center;
     padding-bottom: 15px;
@@ -40,7 +39,7 @@ table td {
     max-width: 600px;
 }
 
-/* about_us.html */
+/* Styles used in about_us.html */
 .about-us-content {
     font-size: 14px;
 }
@@ -55,7 +54,7 @@ table td {
     border-radius: 25%;
 }
 
-/* user_account.html */
+/* Styles used in user_account.html */
 .user-account-info {
     margin-bottom: 20px;
 }
@@ -69,7 +68,7 @@ table td {
     height: 20px;
 }
 
-/* show_game.html */
+/* Styles used in show_game.html */
 .game-header-info {
     font-weight: bold !important;
 }
@@ -88,8 +87,14 @@ table td {
     font-size: 10px;
     height: 20px;
 }
+/* Styles used in create_game.html */
+.create-game-info {
+    font-size: 11px;
+    margin-top: 40px;
+    text-align: center;
+}
 
-/* game_list.html */
+/* Styles used in game_list.html */
 .game-list-filters {
     font-size: 14px;
 }
