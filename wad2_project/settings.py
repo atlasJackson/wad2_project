@@ -67,7 +67,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'fives.context_processors.api_key_processor',
+                'wad2_project.context_processors.api_key_processor',
             ],
         },
     },
@@ -127,7 +127,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR, ]
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyDUX2r2xDl7hy2QUQOyzS7ACOPLUqWWEDw'
+API_KEY_FILE = os.path.join(BASE_DIR, 'wad2_project/api_google.txt')
+with open(API_KEY_FILE, 'r') as f:
+    GOOGLE_API_KEY = f.read().split()[0]
 
 # Media files
 
