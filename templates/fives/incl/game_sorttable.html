@@ -43,11 +43,11 @@
         </tbody>
     </table>
 
-    <div id="pager" class="pager">
+    <div id="pager_GameList" class="pager">
         <form>
             <img src="{% static 'img/pager/first.png' %}" class="first"/>
             <img src="{% static 'img/pager/prev.png' %}" class="prev"/>
-            <span class="pagedisplay" data-pager-output-filtered="{startRow} &ndash; {endRow} / {filteredRows} of {totalRows} total Games"></span>
+            <span class="pagedisplay" data-pager-output-filtered="{startRow} &ndash; {endRow} / {filteredRows} of ({totalRows}) total Games"></span>
             <img src="{% static 'img/pager/next.png' %}" class="next"/>
             <img src="{% static 'img/pager/last.png' %}" class="last"/>
             <select class="pagesize">

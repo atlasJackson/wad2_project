@@ -70,9 +70,9 @@
     </div>
     {% block account_block %}
         <!-- Include tables to show games for the user. If accedding another user's profile, only show his hosting games. -->
-        {% include 'fives/incl/game_table.html' with title="Hosting" gameList=hostingGames ratingCol=False withPager=False %}
+        {% include 'fives/incl/game_table.html' with title="Hosting" gameList=hostingGames ratingCol=False withPager=True %}
         {% if user == player.user %}
-            {% include 'fives/incl/game_table.html' with title="Joined" gameList=joinedGames ratingCol=False withPager=False %}
+            {% include 'fives/incl/game_table.html' with title="Joined" gameList=joinedGames ratingCol=False withPager=True %}
             {% include 'fives/incl/game_table.html' with title="History" gameList=pastGames ratingCol=True withPager=False %}
         {% endif %}
 
