@@ -168,6 +168,7 @@ $(document).ready(function(){
                 },
 
                 // Options for selection of minimum free spaces.
+                // This is repetitious, but as it's only a short line, ther's no point in creating a function and call it for each value.
                 3 : {
                     "1" : function(e, n, f, i, $r, c, data) { return n >= 1; },
                     "2" : function(e, n, f, i, $r, c, data) { return n >= 2; },
