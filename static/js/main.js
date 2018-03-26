@@ -131,8 +131,32 @@ $(document).ready(function(){
         // widget code contained in the jquery.tablesorter.widgets.js file
         // use the zebra stripe widget if you plan on hiding any rows (filter widget)
         // the uitheme widget is NOT REQUIRED!
-        widgets : [ "filter", "zebra" ],
+        widgets : [ "filter", "zebra", "pager" ],
         widgetOptions : {
+            // css class names that are added
+            pager_css: {
+                container   : 'tablesorter-pager',    // class added to make included pager.css file work
+                errorRow    : 'tablesorter-errorRow', // error information row (don't include period at beginning); styled in theme file
+                disabled    : 'disabled'              // class added to arrows @ extremes (i.e. prev/first arrows "disabled" on first page)
+            },
+
+            // jQuery selectors
+            pager_selectors: {
+                container   : '.pager',       // target the pager markup (wrapper)
+                first       : '.first',       // go to first page arrow
+                prev        : '.prev',        // previous page arrow
+                next        : '.next',        // next page arrow
+                last        : '.last',        // go to last page arrow
+                gotoPage    : '.gotoPage',    // go to page selector - select dropdown that sets the current page
+                pageDisplay : '.pagedisplay', // location of where the "output" is displayed
+                pageSize    : '.pagesize'     // page size selector - select dropdown that sets the "size" option
+            },
+
+            pager_output: '{startRow} – {endRow} / {totalRows} Games', // '{page}/{totalPages}'
+
+            // Initial number of visible rows
+            pager_size: 10,
+
             // Delay in milliseconds before the filter widget starts searching; This option prevents searching for
             // every character while typing and should make searching large tables faster.
             filter_searchDelay : 300,
@@ -190,6 +214,45 @@ $(document).ready(function(){
                     "100" : function(e, n, f, i, $r, c, data) { return n <= 100; },
                 }
             }
+        }
+    });
+
+
+    // Add Sorting and Filtering options to sortable game_table.
+    $("#game_table").tablesorter({
+        theme : "bootstrap",
+        widthFixed: false,
+        // widget code contained in the jquery.tablesorter.widgets.js file
+        // use the zebra stripe widget if you plan on hiding any rows (filter widget)
+        // the uitheme widget is NOT REQUIRED!
+        widgets : [ "pager" ],
+        widgetOptions : {
+            // css class names that are added
+            pager_css: {
+                container   : 'tablesorter-pager',    // class added to make included pager.css file work
+                errorRow    : 'tablesorter-errorRow', // error information row (don't include period at beginning); styled in theme file
+                disabled    : 'disabled'              // class added to arrows @ extremes (i.e. prev/first arrows "disabled" on first page)
+            },
+
+            // jQuery selectors
+            pager_selectors: {
+                container   : '.pager',       // target the pager markup (wrapper)
+                first       : '.first',       // go to first page arrow
+                prev        : '.prev',        // previous page arrow
+                next        : '.next',        // next page arrow
+                last        : '.last',        // go to last page arrow
+                gotoPage    : '.gotoPage',    // go to page selector - select dropdown that sets the current page
+                pageDisplay : '.pagedisplay', // location of where the "output" is displayed
+                pageSize    : '.pagesize'     // page size selector - select dropdown that sets the "size" option
+            },
+
+            pager_output: '{startRow} – {endRow} / {totalRows} Games', // '{page}/{totalPages}'
+
+            // starting page of the pager (zero based index)
+            pager_startPage: 0,
+
+            // Initial number of visible rows
+            pager_size: 10,
         }
     });
 

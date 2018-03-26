@@ -10,7 +10,7 @@
         <button class="btn btn-sm btn-outline-warning reset" type="button" name="button">Reset Filters</button>
     </div>
     <h5>{{ title }}</h5>
-    <table class="table table-striped table-hover tablesorter-bootstrap game-player-table" id="game_sorttable">
+    <table class="table tablesorter table-striped table-hover tablesorter-bootstrap game-player-table" id="game_sorttable">
         <thead class="thead-success">
             <tr class="bg-success text-white">
                 <th>Location</th>
@@ -42,4 +42,21 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div id="pager" class="pager">
+        <form>
+            <img src="{% static 'img/pager/first.png' %}" class="first"/>
+            <img src="{% static 'img/pager/prev.png' %}" class="prev"/>
+            <span class="pagedisplay" data-pager-output-filtered="{startRow} &ndash; {endRow} / {filteredRows} of {totalRows} total Games"></span>
+            <img src="{% static 'img/pager/next.png' %}" class="next"/>
+            <img src="{% static 'img/pager/last.png' %}" class="last"/>
+            <select class="pagesize">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="all">All Games</option>
+            </select>
+        </form>
+    </div>
 </div>

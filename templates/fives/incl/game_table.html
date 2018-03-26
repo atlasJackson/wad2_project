@@ -8,20 +8,20 @@
 
 <div class="player-tables-wrapper">
     <h5>{{ title }}</h5>
-    <table class="table table-striped game-player-table table-hover">
+    <table class="table table-striped game-player-table table-hover" id="game_table">
         <thead>
             <tr class="bg-success text-white">
-                <th>Location</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Spaces</th>
-                <th>Type</th>
-                <th>Price&nbsp;(&#163;)</th>
-                <th>Host</th>
+                <th class="sorter-false">Location</th>
+                <th class="sorter-false">Date</th>
+                <th class="sorter-false">Time</th>
+                <th class="sorter-false">Spaces</th>
+                <th class="sorter-false">Type</th>
+                <th class="sorter-false">Price&nbsp;(&#163;)</th>
+                <th class="sorter-false">Host</th>
                 <th class="sorter-false">Host&nbsp;Rating</th>
                 <!-- Checks if the rating column is needed and if the current user is accessing his own account page. -->
                 {% if ratingCol and user == player.user %}
-                    <th>Rate</th>
+                    <th class="sorter-false">Rate</th>
                     {% endif %}
                 </tr>
         </thead>
@@ -56,4 +56,16 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if withPager %}
+    <div id="pager" class="pager text-right">
+        <form>
+            <img src="{% static 'img/pager/first.png' %}" class="first"/>
+            <img src="{% static 'img/pager/prev.png' %}" class="prev"/>
+            <span class="pagedisplay"></span>
+            <img src="{% static 'img/pager/next.png' %}" class="next"/>
+            <img src="{% static 'img/pager/last.png' %}" class="last"/>
+        </form>
+    </div>
+    {% endif %}
+
 </div>

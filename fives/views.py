@@ -393,9 +393,9 @@ def user_account(request, player):
     gameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
 
     joinedGames = Game.objects.filter(custom_slug__in=gameSlugs).exclude(host=user).filter(
-        start__gte=datetime.date.today()).order_by('start')[:20]
+        start__gte=datetime.date.today()).order_by('start')
 
-    hostingGames = Game.objects.filter(host=user).filter(start__gte=datetime.date.today()).order_by('start')[:20]
+    hostingGames = Game.objects.filter(host=user).filter(start__gte=datetime.date.today()).order_by('start')
 
     pastGames = Game.objects.filter(custom_slug__in=gameSlugs).filter(
         start__lt=datetime.date.today()).order_by('-start')[:5]
