@@ -1,10 +1,11 @@
 from django.test import TestCase
-from fives.models import *
 from django.core.urlresolvers import reverse
 from geopy.geocoders import Nominatim
-import fives.tests.test_helper_methods as th
 from django.utils import timezone
 import pytz
+
+from fives.models import *
+import fives.tests.test_helper_methods as th
 
 ### Index View Tests
 class IndexViewTests(TestCase):
@@ -133,9 +134,8 @@ class CreateGameViewTests(TestCase):
         self.client.login(username='test-user-1', password='fivesPass123')
 
         start_datetime, end_datetime = th.start_and_end_datetime_generator(10,2)
-        th.create_game(0, 9, start_datetime, end_datetime, 2, "10 Keith St", "Glasgow", "G11 6QQ", 0, 0, test_user)
-        game = Game.objects.filter(game_type=0)[0]
-        th.create_participation(game, test_player, 0)
+        test_game = th.create_game(0, 9, start_datetime, end_datetime, 2, "10 Keith St", "Glasgow", "G11 6QQ", 0, 0, test_user)
+        th.create_participation(test_game, test_player, 0)
 
         self.client.get(reverse('create_game'))
 
@@ -174,66 +174,100 @@ class CreateGameViewTests(TestCase):
         num_games = len(response.context['games'])
         self.assertEqual(num_games , 0)
 
+    # Creating new game should be prevented if the address is invalid.
+    def test_create_game_with_invalid_address(self):
+        # Add user and login, and redirect to create game.
+        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
+        self.client.login(username='test-user-1', password='fivesPass123')
+        self.client.get(reverse('create_game'))
+
+        # Try creating a game with an invalid address.
+        start_date, start_time = th.start_date_and_time_generator(10)
+        response = self.client.post(reverse('create_game'), {'game_type': 0, 'date': start_date, 'time': start_time, 'duration': 1,
+                                                  'street': "Man on", 'city': "the Moono", 'postcode': "M12 3MM", 'price': 5, 'booked': 1} )
+
+        # Post unsuccessful, check conflilct message matches content.
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(response.context['message'], "Please provide a valid address.")
+
+        ## Game should not have been added to the database.
+        response = self.client.get(reverse('index'))
+        num_games = len(response.context['games'])
+        self.assertEqual(num_games , 0)
+
+
 ### Show Game View Tests
 class ShowGameViewTests(TestCase):
 
-    def test_show_game_with_existing_games(self):
-        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
-        test_game = th.create_game(0, 9, "2018-04-28 14:00", "2018-04-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
-        test_participation = th.create_participation(test_game, test_player, 0)
-
-        game_custom_slug = Game.objects.all()[0].custom_slug
-
-        response = self.client.get('/fives/game_list/%s/' % game_custom_slug)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "name")
-
-    def test_show_game_with_non_existing_games(self):
-        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
-        test_game = th.create_game(0, 9, "2018-04-28 14:00", "2018-04-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
-        test_participation = th.create_participation(test_game, test_player, 0)
-
+    # Database is entry so no game details should be displayed.
+    def test_show_game_with_non_existant_game(self):
         game_custom_slug = 'hello-20180326-2211'
-        response = self.client.get('/fives/game_list/%s/' % game_custom_slug)
+        response = self.client.get(reverse('show_game', kwargs={'game_custom_slug': game_custom_slug}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "The specified game does not exist!")
+
+    # Game is a men's competitive (type=0), so details should be contained in response.
+    def test_show_game_with_existing_game(self):
+        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass123", "testemail@testmail.com", "Test", "User")
+        test_game = th.create_game(0, 9, "2018-04-28 14:00", "2018-04-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user)
+        th.create_participation(test_game, test_player, 0)
+
+        game_custom_slug = Game.objects.all()[0].custom_slug
+        response = self.client.get(reverse('show_game', kwargs={'game_custom_slug': game_custom_slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Competitive")
+
 
 ### Show Past Game View Tests
 class ShowPastGameViewTests(TestCase):
 
-    def test_show_past_game_from_participants(self):
-        # Create 10 more users and players and login as test-user-1
-        test_user1, test_player1 = th.generate_test_user("test-user-1", "fivesPass1", "testemail1@testmail.com", "Test1", "User1")
-        test_user2, test_player2 = th.generate_test_user("test-user-2", "fivesPass2", "testemail2@testmail.com", "Test2", "User2")
-        test_user3, test_player3 = th.generate_test_user("test-user-3", "fivesPass3", "testemail3@testmail.com", "Test3", "User3")
-        test_user4, test_player4 = th.generate_test_user("test-user-4", "fivesPass4", "testemail4@testmail.com", "Test4", "User4")
-        test_user5, test_player5 = th.generate_test_user("test-user-5", "fivesPass5", "testemail5@testmail.com", "Test5", "User5")
-        test_user6, test_player6 = th.generate_test_user("test-user-6", "fivesPass6", "testemail6@testmail.com", "Test6", "User6")
-        test_user7, test_player7 = th.generate_test_user("test-user-7", "fivesPass7", "testemail7@testmail.com", "Test7", "User7")
-        test_user8, test_player8 = th.generate_test_user("test-user-8", "fivesPass8", "testemail8@testmail.com", "Test8", "User8")
-        test_user9, test_player9 = th.generate_test_user("test-user-9", "fivesPass9", "testemail9@testmail.com", "Test9", "User9")
-        test_user10, test_player10 = th.generate_test_user("test-user-10", "fivesPass10", "testemail10@testmail.com", "Test10", "User10")
+    def test_show_past_game_with_non_existant_game(self):
+        # Create test user and login.
+        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass1", "testemail1@testmail.com", "Test", "User")
         self.client.login(username='test-user-1', password='fivesPass1')
 
-        # Let user1 create the past game and let user 2...10 join the game
-        test_game = th.create_game(0, 9, "2018-02-28 14:00", "2018-02-28 15:00", 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, test_user1)
-        th.create_participation(test_game, test_player1, 0)
-        th.create_participation(test_game, test_player2, 0)
-        th.create_participation(test_game, test_player3, 0)
-        th.create_participation(test_game, test_player4, 0)
-        th.create_participation(test_game, test_player5, 0)
-        th.create_participation(test_game, test_player6, 0)
-        th.create_participation(test_game, test_player7, 0)
-        th.create_participation(test_game, test_player8, 0)
-        th.create_participation(test_game, test_player9, 0)
-        th.create_participation(test_game, test_player10, 0)
-
-        game_custom_slug = Game.objects.all()[0].custom_slug
-        player = Player.objects.all()[0].user.username
-        response = self.client.get('/fives/user/%s/%s/' % (player,game_custom_slug))
+        # Try showing details of non-existant past game. 
+        game_custom_slug = 'hello-20180326-2211'
+        response = self.client.get(reverse('show_past_game', kwargs={'player': test_user, 'game_custom_slug': game_custom_slug}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "rating")
+        self.assertContains(response, "The specified game does not exist!")
 
+    def test_show_past_game_rated_by_user(self):
+        # Create test user and login.
+        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass1", "testemail1@testmail.com", "Test", "User")
+        test_user2, test_player2 = th.generate_test_user("test-user-2", "fivesPass2", "testemail2@testmail.com", "Test2", "User2")
+        self.client.login(username='test-user-1', password='fivesPass1')
+        # Create test game and add test user to particpation.
+        start_datetime, end_datetime = th.start_and_end_datetime_generator(-100,2)
+        test_game = th.create_game(0, 9, start_datetime, end_datetime, 2, "10 Keith St", "Glasgow", "G11 6QQ", 0, 1, test_user)
+        th.create_participation(test_game, test_player, 1)
+        th.create_participation(test_game, test_player2, 0)
+
+        game_custom_slug = test_game.custom_slug
+        response = self.client.get(reverse('show_past_game', kwargs={'player': test_user, 'game_custom_slug': game_custom_slug}))
+        self.assertEqual(response.status_code, 200)
+        # Check view contains skill/punc/like images - this will verify test success.
+
+    def test_show_past_game_not_rated_by_user(self):
+        # Create test user and login.
+        test_user, test_player = th.generate_test_user("test-user-1", "fivesPass1", "testemail1@testmail.com", "Test", "User")
+        test_user2, test_player2 = th.generate_test_user("test-user-2", "fivesPass2", "testemail2@testmail.com", "Test2", "User2")
+        self.client.login(username='test-user-1', password='fivesPass1')
+        # Create test game and add test users to particpation.
+        start_datetime, end_datetime = th.start_and_end_datetime_generator(-100,2)
+        test_game = th.create_game(0, 9, start_datetime, end_datetime, 2, "10 Keith St", "Glasgow", "G11 6QQ", 0, 1, test_user)
+        th.create_participation(test_game, test_player, 0)
+        th.create_participation(test_game, test_player2, 0)
+
+        game_custom_slug = test_game.custom_slug
+        response = self.client.get(reverse('show_past_game', kwargs={'player': test_user, 'game_custom_slug': game_custom_slug}))
+        self.assertEqual(response.status_code, 200)
+        # Check view doesn't contain skill/punc/like images - this will verify test success.
+        # Or contains form entry
+
+
+#######################################################################
+####################### DELETE BELOW THIS LINE ########################
 
 ### Edit booking View Tests
 class EditBookingViewTests(TestCase):
