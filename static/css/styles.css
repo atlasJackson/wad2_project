@@ -38,6 +38,25 @@ table td {
     font-style: normal;
     max-width: 600px;
 }
+.index-UpcomingUserGames {
+    font-size: 14px;
+    color: #cc3300;
+}
+.custom-button-upUsGames {
+    padding: 4px 8px 0px 8px;
+    margin-top: 5px;
+    font-size: 14px;
+    height: 30px;
+}
+#more-less {
+    display: none;
+}
+#btn-more-less {
+    padding: 1px 8px 0px 8px;
+    margin-top: 5px;
+    font-size: 12px;
+    height: 20px;
+}
 
 /* Styles used in about_us.html */
 .about-us-content {
@@ -97,4 +116,7 @@ table td {
 /* Styles used in game_list.html */
 .game-list-filters {
     font-size: 14px;
+}
+.all-games-title {
+    bottom: 0px;
 }

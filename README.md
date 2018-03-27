@@ -31,7 +31,7 @@ $ coverage run manage.py test fives.tests
 
 ---
 #### Description
-Our goal for this app was to create a web application that allowed users - from every background with a varierty of needs - to find or create five-a-side games of football.
+Our goal for this app was to create a web application that allowed users - from every background with a variety of needs - to find or create five-a-side games of football.
 
 1. Everyone who visits the site can view the list of games available.
 2. The list of games can be filtered or sorted by game type, minimum number of free spaces, maximum price, location, host's username, and date. It can also be filtered by duration of game, and sorted by starting time.
@@ -46,15 +46,14 @@ Our goal for this app was to create a web application that allowed users - from 
 * Django (1.11.7):
     * https://docs.djangoproject.com/en/2.0/releases/1.11.7/
 * JQuery (& Plugins):
-    * https://jquery.com/ 
+    * https://jquery.com/
     * https://mottie.github.io/tablesorter/docs/
     * https://jqueryvalidation.org/
 * Bootstrap:
-    * https://getbootstrap.com/ 
+    * https://getbootstrap.com/
 * Geopy (1.11.0):
-    * https://geopy.readthedocs.io/en/1.11.0/ 
+    * https://geopy.readthedocs.io/en/1.11.0/
 * Coverage (4.5.1):
     * https://coverage.readthedocs.io/en/coverage-4.5.1/
-* Google Maps Javascript API: 
+* Google Maps Javascript API:
     * https://developers.google.com/maps/documentation/javascript/tutorial
-
