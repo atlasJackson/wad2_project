@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
+from django.conf.urls import url, handler404, handler500
 from django.contrib import admin
 from django.conf.urls import include
 from django.conf.urls.static import static
@@ -25,3 +25,7 @@ urlpatterns = [
     url(r'^fives/', include('fives.urls')),
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Handle 404, 500 errors with a custom view.
+handler404 = views.error_404
+handler500 = views.error_500

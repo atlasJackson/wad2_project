@@ -1,0 +1,15 @@
+{% extends 'fives/base.html' %}
+{% load staticfiles %}
+<!--
+     Default template for "500 Internal Server Error".
+-->
+
+{% block title_block %}
+    URL Not Found
+{% endblock %}
+
+{% block body_block %}
+<div class="index-content">
+    Something has gone wrong. <a href="{% url 'index' %}">Return to the home page</a>.
+</div>
+{% endblock %}

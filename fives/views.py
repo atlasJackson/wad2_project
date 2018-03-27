@@ -494,3 +494,13 @@ def game_conflicts(player, game):
     gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(start__gte=game.start, start__lt=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
                     end__gt=game.start, end__lte=game.end)
     return gameConflicts
+
+###############################################
+# Custom error page
+###############################################
+
+def error_404(request):
+        return render(request,'fives/404.html', {})
+
+def error_500(request):
+        return render(request,'fives/500.html', {})
