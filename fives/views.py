@@ -156,20 +156,21 @@ def show_past_game(request, player, game_custom_slug):
 
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
-        context_dict = {'player': None, 'game': None, 'participants': None, 'users': None, 'gameTookPlace':None, 'participation': None, 'playersToBeRated': None}
+        context_dict = {'game': None}
         return render(request, 'fives/show_past_game.html', context=context_dict)
-        
+
     # Cerate as many formsets as there are players to be rated(not including the player who is giving ratings).
     RatingFormSet = formset_factory(RatingForm, extra=len(playersToBeRated))
 
-    # An HTTP POST?
+    # Check if the request was HTTP POST.
     if request.method == 'POST':
         rating_formset = RatingFormSet(request.POST)
         host_form = RateHostForm(request.POST)
 
-        # Have we been provided with a valid form?
+        # Check if the provided form is valid.
         if rating_formset.is_valid():
             index = 0
+            # Get ratings from corresponding form for each player.
             for rating_form in rating_formset:
                 p = Player.objects.get(user=participants[index].user)
                 p.skill += int(rating_form.cleaned_data.get('skill'))
@@ -180,9 +181,11 @@ def show_past_game(request, player, game_custom_slug):
                 p.save()
                 index += 1
 
+            # Set boolean rated to True, so User can't rate that game again.
             participation.rated = True
             participation.save()
 
+            # Show option to rate the host to all except the host himself.
             if request.user != game.host:
                 if host_form.is_valid():
                     host = Player.objects.get(user=game.host)
