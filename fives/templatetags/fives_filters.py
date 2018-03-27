@@ -2,22 +2,27 @@ from django import template
 from fives.models import Participation, Player, Game
 register = template.Library()
 
+# Add a css class to a field.
 @register.filter(name='addCss')
 def addCss(field, css):
    return field.as_widget(attrs={"class":css})
 
+# Return name for player in the list. Used in template to rate players.
 @register.filter(name='getName')
 def getName(list, i):
     return list[i].user.first_name
 
+# Return surname for player in the list. Used in template to rate players.
 @register.filter(name='getSurname')
 def getSurname(list, i):
     return list[i].user.last_name
 
+# Return gender for player in the list. Used in template to rate players.
 @register.filter(name='getGender')
 def getGender(list, i):
     return list[i].gender
 
+# Return boolean, depending if a user has already rated a game or not.
 @register.filter(name='isRated')
 def isRated(game, user):
     p = Participation.objects.get(game=game, player=user.player)
@@ -25,6 +30,7 @@ def isRated(game, user):
         return True # Return True for "already rated".
     return p.rated
 
+# Return the game type as string representation.
 @register.filter(name='getType')
 def getType(value):
     for elm in Game.GAME_CHOICES:
@@ -32,12 +38,14 @@ def getType(value):
             return elm[1]
     return "No Type"
 
+# Return duration of a game. Used for filtering the game list.
 @register.filter(name='duration')
 def duration(start, end):
     dt = end - start
     return dt.days * 24 + dt.seconds // 3600
 
-# Returns a string of length equal to the player's rating defined by the parameter.
+# Returns a string of length equal to the player's rating defined by the parameter
+# Used in for-loops to display icons for ratings.
 @register.filter(name='ratingAsRange')
 def ratingAsRange(player, label):
     switcher = {
