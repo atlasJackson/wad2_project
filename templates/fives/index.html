@@ -65,10 +65,6 @@
             <p>
                 <a class="btn btn-outline-primary btn-sm" href="{% url 'create_game' %}">Create your own game</a>.
             </p>
-        {% else %}
-            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'login' %}">Login</a>
-            or
-            <a class="btn btn-outline-primary btn-sm" id="redirect" href="{% url 'sign_up' %}">Sign up</a>
         {% endif %}
     </div>
     {% endif %}

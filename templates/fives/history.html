@@ -10,11 +10,14 @@
 {% endblock %}
 
 {% block account_block %}
-<div class="player-tables-wrapper">
+{% if user == player.user %}
+    <div class="player-tables-wrapper">
         {% include 'fives/incl/game_table.html' with title="History" gameList=fullHistory ratingCol=True withPager=True %}
-
         <button class="btn btn-outline-success btn-sm" type="button" id="account-redirect" data-url="{% url 'user_account' player %}">
             Return
         </button>
-</div>
+    </div>
+{% else %}
+    You are not authorised to view another user's history.
+{% endif %}
 {% endblock %}

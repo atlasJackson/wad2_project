@@ -18,13 +18,14 @@ from fives.models import User, Player, Game, Participation
 from fives.forms import UserForm, PlayerForm, GameForm, RatingForm, RateHostForm, FilterForm, EditUserForm
 
 def index(request):
+    # Pass a list of the next five upcoming games.
     games = Game.objects.filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')[:5]
     context_dict = {'games': games}
 
     # Pass a list of games the user is participating in that take place within 24h.
     if request.user.is_authenticated:
         player = Player.objects.get(user=request.user)
-        gameSlugs = [p.game.custom_slug for p in Participation.objects.select_related('game').filter(player=player)]
+        gameSlugs = getGameSlugs(player)
         userGames = Game.objects.filter(custom_slug__in=gameSlugs).filter(start__gte=datetime.datetime.now(pytz.utc)).order_by('start')
         upcomingUserGames = [g for g in userGames if g.start - datetime.timedelta(hours=24) < datetime.datetime.now(pytz.utc)]
         context_dict['upcomingUserGames'] = upcomingUserGames
@@ -111,15 +112,14 @@ def create_game(request):
 
 def show_game(request, game_custom_slug):
     try:
-        # Try to find a game with the given slug.
-        game = Game.objects.get(custom_slug=game_custom_slug)
-        # Retreive a list of all players, and corresponding user entries, participating in the game.
-        participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
-        users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
-
+        # Get game with given slug.
+        game = getGame(game_custom_slug)
+        # Get a list of all players participating in the game.
+        participants = getParticipants(game)
+        # Get user object for each player participating in the game.
+        users = getUserObjects(game)
         # Check if game is in the past.
-        now = datetime.datetime.now(pytz.utc)
-        gameTookPlace = True if game.end < now else False
+        gameTookPlace = gameIsPast(game)
 
         if request.user.is_authenticated:
             # Check if there are conflicting games for the current user.
@@ -139,18 +139,18 @@ def show_game(request, game_custom_slug):
 @login_required
 def show_past_game(request, player, game_custom_slug):
     try:
-        # Try to find a game with the given slug.
-        game = Game.objects.get(custom_slug=game_custom_slug)
-        # Retreive a list of all players(except current user), and corresponding user entries, participating in the game.
-        participants = [p.player for p in Participation.objects.select_related('player').filter(game=game)]
-        users = [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
+        # Get game with given slug.
+        game = getGame(game_custom_slug)
+        # Get a list of all players participating in the game.
+        participants = getParticipants(game)
+        # Get user object for each player participating in the game.
+        users = getUserObjects(game)
+        # Check if game is in the past.
+        gameTookPlace = gameIsPast(game)
         # Retreive a list of all players to be rated, all minus the current user.
         playersToBeRated = [p.player for p in Participation.objects.select_related('player').filter(game=game).exclude(player=request.user.player)]
         # Retreive participation relationship.
         participation = Participation.objects.get(game=game, player=request.user.player)
-        # Check if game is in the past.
-        now = datetime.datetime.now(pytz.utc)
-        gameTookPlace = True if game.end < now else False
 
         context_dict = {'player': player, 'game': game, 'participants': participants, 'users': users, 'gameTookPlace':gameTookPlace, 'participation': participation, 'playersToBeRated': playersToBeRated}
 
@@ -181,11 +181,11 @@ def show_past_game(request, player, game_custom_slug):
                 p.save()
                 index += 1
 
-            # Set boolean rated to True, so User can't rate that game again.
+            # Set boolean rated to True, so user can't rate players for that game again.
             participation.rated = True
             participation.save()
 
-            # Show option to rate the host to all except the host himself.
+            # Get rating for the host, except if the host himself was rating.
             if request.user != game.host:
                 if host_form.is_valid():
                     host = Player.objects.get(user=game.host)
@@ -193,6 +193,7 @@ def show_past_game(request, player, game_custom_slug):
                     host.num_host_ratings += 1
                     host.save()
 
+            # Return to the view, now the user will see the list of players with their ratings, and no form to rate.
             return HttpResponseRedirect(reverse('show_past_game', kwargs={'player':player, 'game_custom_slug':game_custom_slug}))
         else:
             # Print problems to the terminal.
@@ -210,6 +211,7 @@ def show_past_game(request, player, game_custom_slug):
     return render(request, 'fives/show_past_game.html', context=context_dict)
 
 # Enable the user to change the status of the pitch, Booked/Not Booked.
+@login_required
 def edit_booking(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
@@ -225,12 +227,10 @@ def edit_booking(request, game_custom_slug):
 def join_game(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
-    print(game.start)
-    print(game.end)
 
     username = request.POST.get('user')
     user = User.objects.get(username=username)
-    player = Player.objects.get(user=user) # player = Player.objects.get(user=request.user)
+    player = Player.objects.get(user=user)
 
     # Check for participation in games with conflicting times to the one the user is trying to join.
     gameConflicts = game_conflicts(player, game)
@@ -259,7 +259,7 @@ def leave_game(request, game_custom_slug):
 
     username = request.POST.get('user')
     user = User.objects.get(username=username)
-    player=Player.objects.get(user=user)
+    player = Player.objects.get(user=user)
 
     if game:
         p = Participation.objects.get(player=player, game=game)
@@ -278,10 +278,6 @@ def leave_game(request, game_custom_slug):
 def delete_game(request, game_custom_slug):
     gameid = request.POST.get('gameid')
     game = Game.objects.get(game_id=gameid)
-
-    username = request.POST.get('user')
-    user = User.objects.get(username=username)
-    player=Player.objects.get(user=user)
 
     game.delete()
 
@@ -389,8 +385,6 @@ def user_login(request):
         # blank dictionary object...
         return render(request, 'fives/login.html', {})
 
-# Use the login_required() decorator to ensure only those logged in can
-# access the view.
 @login_required
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
@@ -398,12 +392,14 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect(reverse('index'))
 
+# Shows a users account. If not logged in, shows message inviting the user to
+# log in or sign up. Hence "@login_required" is omitted.
 def user_account(request, player):
     context_dict = {}
     user = User.objects.get(username=player)
     player = Player.objects.get(user=user)
 
-    gameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+    gameSlugs = getGameSlugs(player)
 
     joinedGames = Game.objects.filter(custom_slug__in=gameSlugs).exclude(host=user).filter(
         start__gte=datetime.date.today()).order_by('start')
@@ -469,13 +465,14 @@ def change_password(request, player):
     return render(request, 'fives/edit_account.html', {'title': "Change Password",
         'form_id': "change_password_form", 'player': player, 'form': form, 'success': success})
 
-
+# Shows a users history. If not logged in, shows message inviting the user to
+# log in or sign up. Hence "@login_required" is omitted.
 def history(request, player):
     context_dict = {}
     user = User.objects.get(username=player)
     player = Player.objects.get(user=user)
 
-    gameSlugs = [g.game.custom_slug for g in Participation.objects.select_related('game').filter(player=player)]
+    gameSlugs = getGameSlugs(player)
     fullHistory = Game.objects.filter(custom_slug__in=gameSlugs).filter(
         start__lt=datetime.date.today()).order_by('-start')
 
@@ -487,16 +484,37 @@ def history(request, player):
 # Helper functions
 ###############################################
 
+# Get game with the given slug.
+def getGame(gameSlug):
+    return Game.objects.get(custom_slug=gameSlug)
+
+# Get a list of game slugs for each game a player is participating in.
+def getGameSlugs(player):
+    return [p.game.custom_slug for p in Participation.objects.select_related('game').filter(player=player)]
+
+# Get a list of all players participating in a game.
+def getParticipants(game):
+    return [p.player for p in Participation.objects.select_related('player').filter(game=game)]
+
+# Get user objects for each player participating in a game.
+def getUserObjects(game):
+    return [p.player.user for p in Participation.objects.select_related('player').filter(game=game)]
+
+# Check if a game lies in the past.
+def gameIsPast(game):
+    now = datetime.datetime.now(pytz.utc)
+    return True if game.end < now else False
+
 # Checks if a player has any conflicting games when joining/createing a game.
 def game_conflicts(player, game):
     # Check for participation in games with conflicting times to the one the user is trying to join/create.
-    userGameSlugs = [p.game.custom_slug for p in Participation.objects.select_related('game').filter(player=player)]
+    userGameSlugs = getGameSlugs(player)
     gameConflicts = Game.objects.filter(custom_slug__in=userGameSlugs).filter(start__gte=game.start, start__lt=game.end) | Game.objects.filter(custom_slug__in=userGameSlugs).filter(
                     end__gt=game.start, end__lte=game.end)
     return gameConflicts
 
 ###############################################
-# Custom error page
+# Custom error pages
 ###############################################
 
 def error_404(request):
