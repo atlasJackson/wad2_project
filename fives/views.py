@@ -157,6 +157,7 @@ def show_past_game(request, player, game_custom_slug):
     except Game.DoesNotExist:
         # We get here if we couldn't find the specified game
         context_dict = {'player': None, 'game': None, 'participants': None, 'users': None, 'gameTookPlace':None, 'participation': None, 'playersToBeRated': None}
+        return render(request, 'fives/show_past_game.html', context=context_dict)
 
     # Cerate as many formsets as there are players to be rated(not including the player who is giving ratings).
     RatingFormSet = formset_factory(RatingForm, extra=len(playersToBeRated))
