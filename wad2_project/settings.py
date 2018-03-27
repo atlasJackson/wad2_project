@@ -34,13 +34,13 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'f5f.pythonanywhere.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'fives',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fives',
 ]
 
 MIDDLEWARE = [
