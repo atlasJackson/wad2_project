@@ -202,11 +202,13 @@ def show_past_game(request, player, game_custom_slug):
     else:
         # Not an HTTP POST, so we render our forms.
         # These forms will be blank, ready for user input.
-        rating_formset = RatingFormSet()
-        host_form = RateHostForm()
-
-    context_dict['rating_formset'] = rating_formset
-    context_dict['host_form'] = host_form
+        # But first we check if the user has already rated players for this game.
+        if not participation.rated:
+            context_dict['rating_formset'] = RatingFormSet()
+            context_dict['host_form'] = RateHostForm()
+        else:
+            context_dict['rating_formset'] = None
+            context_dict['host_form'] = None
 
     return render(request, 'fives/show_past_game.html', context=context_dict)
 

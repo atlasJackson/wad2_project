@@ -246,7 +246,10 @@ class ShowPastGameViewTests(TestCase):
         game_custom_slug = test_game.custom_slug
         response = self.client.get(reverse('show_past_game', kwargs={'player': test_user, 'game_custom_slug': game_custom_slug}))
         self.assertEqual(response.status_code, 200)
-        # Check view contains skill/punc/like images - this will verify test success.
+        # Check that no formset was passed from view to template. Meaning the user has already rated players for that game.
+        formset = response.context['rating_formset']
+        self.assertEqual(formset, None)
+
 
     def test_show_past_game_not_rated_by_user(self):
         # Create test user and login.
@@ -262,5 +265,6 @@ class ShowPastGameViewTests(TestCase):
         game_custom_slug = test_game.custom_slug
         response = self.client.get(reverse('show_past_game', kwargs={'player': test_user, 'game_custom_slug': game_custom_slug}))
         self.assertEqual(response.status_code, 200)
-        # Check view doesn't contain skill/punc/like images - this will verify test success.
-        # Or contains form entry
+        # Check that a formset was passed from view to the template, giving the user the opportunity ro rate.
+        formset = response.context['rating_formset']
+        self.assertNotEqual(formset, None)
