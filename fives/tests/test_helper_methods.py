@@ -62,7 +62,7 @@ def create_game(game_type, free_slots, start, end, duration,
     g.street = street
     g.city = city
     g.postcode = postcode
-    geolocator = Nominatim()
+    geolocator = Nominatim(scheme='http')
     location = geolocator.geocode(g.street + " " + g.city)
     g.latitude = location.latitude
     g.longitude = location.longitude
@@ -70,7 +70,7 @@ def create_game(game_type, free_slots, start, end, duration,
     g.save()
     return g
 
-# Helper method to populate the database with some test games that have already taken place.  
+# Helper method to populate the database with some test games that have already taken place.
 def generate_past_test_games(host):
     start_datetime, end_datetime = start_and_end_datetime_generator(-240,1)
     create_game(0, 9, start_datetime, end_datetime, 1, "66 Bankhead Dr", "Edinburgh", "EH11 4EQ", 5, 1, host)
@@ -116,19 +116,19 @@ def create_participation(game, player, rated):
 def start_date_and_time_generator(hours):
     now = datetime.now(pytz.UTC)
     start_datetime = now + timedelta(hours=hours)
-    
+
     start_date = start_datetime.strftime('%Y-%m-%d')
     start_time = start_datetime.strftime('%H:%M')
 
     return start_date, start_time
 
-# Helper method that returns a start datetime string from the current time's hour plus the parameter hours from that time. 
+# Helper method that returns a start datetime string from the current time's hour plus the parameter hours from that time.
 # Endtime is calculated from duration.
 def start_and_end_datetime_generator(hours, duration):
     now = datetime.now(pytz.UTC)
     start_datetime = now + timedelta(hours=hours)
     end_datetime = start_datetime + timedelta(hours=+duration)
-    
+
     start_datetime = start_datetime.strftime('%Y-%m-%d %H:%M')
     end_datetime = end_datetime.strftime('%Y-%m-%d %H:%M')
 

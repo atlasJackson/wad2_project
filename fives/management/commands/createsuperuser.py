@@ -1,4 +1,4 @@
-# Source for createsuperuser, 
+# Source for createsuperuser,
 # from https://github.com/django/django/blob/master/django/contrib/auth/management/commands/createsuperuser.py
 
 # Directory structure taken from https://docs.djangoproject.com/en/1.11/howto/custom-management-commands/

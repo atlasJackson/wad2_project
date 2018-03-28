@@ -1,5 +1,5 @@
- - README
- - Game_list pages
- - Tests
+ - README. DONE.
+ - Game_list pages. DONE.
+ - Tests. DONE.
  Opt.
- - Index, show upcoming games for user.
+ - Index, show upcoming games for user. DONE.

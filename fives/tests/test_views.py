@@ -68,7 +68,7 @@ class AboutUsViewTests(TestCase):
         self.assertContains(response, "We can also be contacted through the School of Computing Science.")
 
         # Test the correct coordinates are passed to the view (uses geolocator to get coordinates based on the address).
-        geolocator = Nominatim()
+        geolocator = Nominatim(scheme='http')
         location = geolocator.geocode("Sir Alwyn Williams Building, Glasgow")
         self.assertEqual(response.context['latitude'], location.latitude)
         self.assertEqual(response.context['longitude'], location.longitude)
@@ -226,7 +226,7 @@ class ShowPastGameViewTests(TestCase):
         test_user, test_player = th.generate_test_user("test-user-1", "fivesPass1", "testemail1@testmail.com", "Test", "User")
         self.client.login(username='test-user-1', password='fivesPass1')
 
-        # Try showing details of non-existant past game. 
+        # Try showing details of non-existant past game.
         game_custom_slug = 'hello-20180326-2211'
         response = self.client.get(reverse('show_past_game', kwargs={'player': test_user, 'game_custom_slug': game_custom_slug}))
         self.assertEqual(response.status_code, 200)
@@ -264,4 +264,3 @@ class ShowPastGameViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         # Check view doesn't contain skill/punc/like images - this will verify test success.
         # Or contains form entry
-

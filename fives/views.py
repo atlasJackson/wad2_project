@@ -37,7 +37,7 @@ def about_us(request):
 
     # Get latitiude and longitude from address
     # Source: https://geopy.readthedocs.io/en/1.10.0/
-    geolocator = Nominatim()
+    geolocator = Nominatim(scheme='http')
     location = geolocator.geocode("Sir Alwyn Williams Building, Glasgow")
     context_dict["latitude"] = location.latitude
     context_dict["longitude"] = location.longitude
@@ -81,7 +81,7 @@ def create_game(request):
 
             # Get latitiude and longitude from address
             # Source: https://geopy.readthedocs.io/en/1.10.0/
-            geolocator = Nominatim()
+            geolocator = Nominatim(scheme='http')
             try:
                 location = geolocator.geocode(game.street + " " + game.city)
                 game.latitude = location.latitude

@@ -723,7 +723,7 @@ def add_game(custom_slug, game_type, free_slots, start, end, duration,
     g.street = street
     g.city = city
     g.postcode = postcode
-    geolocator = Nominatim()
+    geolocator = Nominatim(scheme='http')
     location = geolocator.geocode(g.street + " " + g.city)
     g.latitude = location.latitude
     g.longitude = location.longitude
